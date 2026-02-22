@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2020 Roku, Inc. All rights reserved. -->
+<component name="RowListItemComponent" extends="Group">
+    <interface>
+        <field id="itemContent" type="node" onChange="OnContentSet" />
+        <!-- <field id = "itemContent" type = "node"  /> -->
+    </interface>
+    <script type="text/brightscript" uri="RowListItemComponent.brs" />
+    <children>
+        <!-- Set loadWidth/loadHeight and loadDisplayMode for better performance -->
+        <!-- <MaskGroup> -->
+        <!-- <Poster
+                id="poster"
+                uri=""
+                width="224"
+                height="310"
+                loadWidth="224"
+                loadHeight="310"
+                loadDisplayMode="scaleToZoom"
+            /> -->
+        <Group>
+            <Poster
+              id="poster"
+              uri=""
+           
+          />
+            <!-- width="250"
+          height="350" -->
+            <!-- <Label text="" id="vodText" color="0xFFFFFF" font="font:UrbanistSemiBold"  numLines="0"  width="230">
+            <Font role="font" uri="pkg:/images/UrbanistBold.ttf" size="27"  />
+        </Label> -->
+            <!-- <Group id="containerGroup" translation="[0, 230]" horizAlign="center">
+                <Rectangle
+                id="backgroundRect"
+                width="260"
+                height="50" 
+                color="0x000000" 
+            />
+                <Label
+                id="vodText"
+                color="0xFFFFFF"
+                text=""
+                horizAlign="center"
+                vertAlign="center"
+                font="font:UrbanistSemiBold"
+                numLines="2"
+                ellipsisText="…"
+                translation="[0, 0]"
+                width="260"
+            >
+                    <Font role="font" uri="pkg:/images/UrbanistBold.ttf" size="27" />
+                </Label>
+
+                <Label
+                id="name"
+                color="0xFFFFFF"
+                text=""
+                font="font:UrbanistSemiBold"
+                numLines="0"
+                translation="[5, 40]"
+                width="260"
+            >
+                    <Font role="font" uri="pkg:/images/UrbanistBold.ttf" size="26" />
+                </Label>
+            </Group>
+        </Group> -->
+
+
+
+        <Group id="textOverlay" translation="[0, 290]" width="250" height="60">
+       
+            
+            <Label
+              id="vodText"
+              translation="[10, 5]"
+              width="230"
+              color="0xFFFFFF"
+              text=""
+              horizAlign="left"
+              vertAlign="top"
+              font="font:UrbanistSemiBold"
+              numLines="1"
+              ellipsisText="…"
+            >
+              <Font role="font" uri="pkg:/images/UrbanistBold.ttf" size="24" />
+            </Label>
+        
+            <Label
+              id="name"
+              translation="[10, 30]"
+              width="230"
+              color="0xCCCCCC"
+              text=""
+              horizAlign="left"
+              font="font:UrbanistSemiBold"
+              numLines="1"
+              ellipsisText="…"
+            >
+              <Font role="font" uri="pkg:/images/UrbanistBold.ttf" size="22" />
+            </Label>
+          </Group>
+        </Group>
+
+
+
+
+        <!-- <Poster
+            id="cornerMask"
+            uri="pkg:/images/png/shapes/grouptest.png"
+            width="224"
+            height="310" >
+                <Poster
+            id="poster"
+            width="224"
+            height="310"
+            loadWidth="224"
+            loadHeight="310"
+            loadDisplayMode="scaleToZoom"    
+            />
+        </Poster> -->
+        <!-- </MaskGroup> -->
+        <!-- <Poster
+            id="posterBorder"
+            width="226"
+            height="312"
+            loadWidth="226"
+            loadHeight="316"
+            uri=""
+            loadDisplayMode="scaleToZoom"  
+            translation ="[0, 0]"
+        ></Poster> -->
+        <!-- <Group id="posterOverlayGroup" opacity="0">
+            <Poster
+                id="posterOverlay"
+                width="226"
+                height="314"
+                loadWidth="226"
+                loadHeight="314"
+                uri ="pkg:/images/png/shapes/card_active_border.png"
+                loadDisplayMode="scaleToZoom"  
+                translation ="[0, 0]"
+            ></Poster>
+        </Group> -->
+    </children>
+</component>

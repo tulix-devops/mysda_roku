@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="dvr_vod" extends="Group">
+  <script type="text/brightscript" uri="pkg:/components/screens/dvr_vod/dvr_vod.brs" />
+  <script type="text/brightscript" uri="pkg:/source/StaticContent.brs" />
+  <script type="text/brightscript" uri="pkg:/components/helpers/VodEntityHelper.brs" />
+  <script type="text/brightscript" uri="pkg:/components/helpers/CategoryEntityHelper.brs" />
+  <interface>
+    <field id="vodDataEntity" type="array" onChange="updateVodScreen"/>
+    <field id="epgDataEntity" type="array" />
+    <field id="lastFocusedChild" type="integer" />
+    <field id="showFullContent" type="boolean" value="false" alwaysNotify="true" onChange="onShowFullContentChanged"/>
+  </interface>
+  <children>
+    <Group id="itemDetailsGroup" opacity="0.0">
+      <HomePlayer id="vodPlayer"  visible="true" translation="[400, 0]">
+    
+
+      </HomePlayer>
+      <ItemDetails id="vodItemDetails" translation="[20, 0]" visible="true">
+        </ItemDetails>
+    </Group>
+
+    <Group translation="[1730, 90]">
+      <!-- User Email Display -->
+      <Label
+      id="userEmailLabel"
+      translation="[-400, 0]"
+      width="380"
+      height="40"
+      horizAlign="right"
+      color="0xCCCCCCFF"
+      ><Font role="font" uri="pkg:/images/UrbanistRegular.ttf" size="30" />  
+      </Label>
+      
+      <!-- Current Time Display -->
+      <Label
+      id="timeTitle"
+      translation="[0, 0]"
+      width="150"
+      height="40"
+      color="0xFFFFFFFF"
+      ><Font role="font" uri="pkg:/images/UrbanistRegular.ttf" size="36" />  
+      </Label>
+    </Group>
+
+    <Group id="vodContainer" translation="[180, 20]">
+   
+      <Poster
+      id="app_logo"
+      uri="pkg:/images/png/mysdatv-logo.png"
+      width="360"
+      height="191"
+      translation="[0, 0]"
+      loadDisplayMode="noScale"
+      />
+
+      <Label
+      id="descriptionLabel"
+      translation="[0, 215]"
+      text=""
+      visible="false"  
+      width="600"
+      height="40"
+      color="0xFFFFFFFF"
+      ><Font role="font" uri="pkg:/images/UrbanistSemiBold.ttf" size="28"/>  
+      </Label>
+    
+      <MarkupGrid
+          id="vodRowList"
+          translation="[0, 260]"
+          itemComponentName="RowListItemComponent"  
+          itemSize="[320, 190]"
+          numColumns="5"
+          numRows="4"
+          columnSpacing="15"
+          rowSpacing="20"
+          itemSpacing="[25,50]" 
+          rowLabelOffset="[0, 15]"
+          vertFocusAnimationStyle="fixedFocus"
+          focusBitmapBlendColor="0x66CCFF"
+          scrollIndicatorXEnabled="true"
+          scrollIndicatorYEnabled="true"
+      />
+
+    </Group>
+    <Animation
+    id="activateRow"
+    duration="0.3"
+    repeat="false"
+    easeFunction="linear"
+>
+      <Vector2DFieldInterpolator
+        id="translationInterpolator"
+        key="[0.0, 1.0]"
+        keyValue="[ [100, 20], [100, 480] ]"
+        fieldToInterp="vodContainer.translation"
+    />
+    </Animation>
+    <Animation
+id="deactivateRow"
+duration="0.5"
+repeat="false"
+easeFunction="OutQuad"
+>
+      <Vector2DFieldInterpolator
+id="translationInterpolator"
+key="[0.0, 1.0]"
+keyValue="[ [100, 480], [100, 20]  ]"
+fieldToInterp="vodContainer.translation"
+/>
+    </Animation>
+    <Animation
+id="activateItemDetails"
+duration="1"
+repeat="false"
+easeFunction="OutQuad"
+>
+      <FloatFieldInterpolator    id = "opacityInterpolator"   key="[0.0,  1.0]"    keyValue="[0.0, 1.0 ]"       fieldToInterp="itemDetailsGroup.opacity"   />
+    </Animation>
+    <Animation
+id="deactivateItemDetails"
+duration="1"
+repeat="false"
+easeFunction="OutQuad"
+>
+      <FloatFieldInterpolator    id = "opacityInterpolator"   key="[0.0,  1.0]"    keyValue="[ 1.0, 0.0 ]"       fieldToInterp="itemDetailsGroup.opacity"   />
+    </Animation>
+
+    <Animation id="MoveCategoryIn" duration="0.3">
+      <Vector2DFieldInterpolator id="CategoryListIn"
+          key="[0.0, 1.0]"
+          fieldToInterp="vodContainer.translation"
+          keyValue="[[450, 20], [180, 20]]"/>
+      
+  </Animation>
+
+  <Animation id="MoveCategoryOut" duration="0.3">
+      <Vector2DFieldInterpolator id="CategoryListOut"
+          key="[0.0, 1.0]"
+          fieldToInterp="vodContainer.translation"
+          keyValue="[[180, 20], [450, 20]]"/>
+      
+  </Animation>
+  </children>
+</component>

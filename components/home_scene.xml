@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="home_scene" extends="Scene">
+  <script type="text/brightscript" uri="pkg:/components/home_scene.brs" />
+  <script type="text/brightscript" uri="pkg:/source/StaticContent.brs" />
+  <script type="text/brightscript" uri="pkg:/components/helpers/ChannelEntityHelper.brs" />
+  <interface>
+    <!-- <field id="liveChannelsEntity" type="array" onChange="updateLiveChannels"/> -->
+    <field id="navBarUnfocused" type="bool" onChange=""/>
+    <field id="exitApp" type="boolean" value="false" />
+  </interface>
+  <children>
+
+    <!-- <Rectangle
+            id="backgroundRectangle"
+            width="1920" 
+            height="1080"
+            color="#000000" translation="[0, 0]"/> -->
+            <Poster
+            id="gradient"
+            uri="pkg:/images/png/gradient.png"
+            width="1920"
+            height="1080"
+            translation="[0, 0]"
+            ></Poster>
+    <home_screen id ="home_screen" translation="[0, 0]" visible="false" liveChannelData=""/>
+    <live_screen id ="live_screen" translation="[140, 0]" visible="false" />
+    <search_screen id ="search_screen" translation="[140, 0]" visible="false" />
+    <vod_screen id ="vod_screen" translation="[0, 0]" visible="false" />
+    <second_vod id ="second_vod" translation="[0, 0]" visible="false" />
+    <third_vod id ="third_vod" translation="[0, 0]" visible="false" />
+    <dvr_vod id ="dvr_vod" translation="[0, 0]" visible="false" />
+    <saved_screen id ="saved_screen" translation="[140, 0]" visible="false" />
+    <account_screen id ="account_screen" translation="[140, 0]" visible="false" />
+    <!-- <podcast_screen id ="podcast_screen" translation="[140, 0]" visible="false" /> -->
+    <login_screen id ="login_screen" translation="[0, 0]" visible="false" />
+    <LoginInfoScreen id="loginInfoScreen" translation="[0, 0]" visible="false" />
+
+    <DetailsScene id ="detailScene" translation="[0, 0]" visible="false" />
+    <!-- <VideoScreen id="videoPlayerScreen" translation="[0, 0]" visible="false" /> -->
+    <VideoDVRScreen
+    id="videoDVRScreen" translation="[0, 0]" visible="false"
+    ></VideoDVRScreen>
+
+
+
+        <SeasonScreen
+    id="SeasonScreen" translation="[0, 0]" visible="false"
+    ></SeasonScreen>
+    <!-- <SplashPage id="splashPage" translation="[0,0]" visible = "false"/> -->
+
+    <navigation_bar id="navigation_bar" visible="true" />
+
+
+    <!-- <LoginScreen id ="login_screen" translation="[0, 0]" visible="true" /> -->
+  </children>
+</component>

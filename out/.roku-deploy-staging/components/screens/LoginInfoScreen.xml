@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<component name="LoginInfoScreen" extends="Group">
+    <script type="text/brightscript" uri="pkg:/components/screens/LoginInfoScreen.brs" />
+    <children>
+        <!-- mySDAtv Logo -->
+        <Poster
+            id="app_logo"
+            uri="pkg:/images/png/mysdatv-logo.png"
+            width="360"
+            height="191"
+            translation="[455, 20]"
+            loadDisplayMode="noScale" />
+        
+        <Group id="contentGroup" translation="[460, 150]">
+            
+            <!-- Message Text -->
+            <Label 
+                id="messageLabel"
+                text="Unfortunately, because the cost of storage to record 24/7 for every channel is high, we are forced to charge a small subscription to help offset this additional expense. If you would like to enjoy the DVR features of 21 days recordings, download option to share your favorite programs with others and direct access to thousands of programs from church libraries, subscribe now at https://mysdatv.com then come back with your Log In and password to watch any program you may have missed.&#10;&#10;(*If you rather give a tax deduction donation to mySDAtv, you can use the DVR features for one entire year for free).&#10;&#10;*Temporary promotion"
+                width="800"
+                height="600"
+                color="0xDDDDDD"
+                wrap="true"
+                lineSpacing="-5"
+                translation="[50, 120]">
+                <Font role="font" uri="pkg:/images/UrbanistRegular.ttf" size="32" />
+            </Label>
+            
+            <!-- Donation QR Code Image -->
+            <Poster
+                id="donationQR"
+                uri="pkg:/images/png/donation.png"
+                width="320"
+                height="328"
+                loadDisplayMode="scaleToFit"
+                translation="[950, 150]" />
+            
+            <!-- Donation QR Code Label -->
+            <Label 
+                id="donationLabel"
+                text="Donation QR code"
+                width="320"
+                height="50"
+                color="0xFFFFFF"
+                horizAlign="center"
+                vertAlign="center"
+                translation="[950, 490]">
+                <Font role="font" uri="pkg:/images/UrbanistRegular.ttf" size="30" />
+            </Label>
+            
+            <!-- Instructions -->
+            <Label 
+                id="instructionsLabel"
+                text="Press OK to proceed with Login/Logout"
+                width="1120"
+                height="60"
+                color="0x888888"
+                horizAlign="center"
+                vertAlign="center"
+                translation="[0, 780]">
+                <Font role="font" uri="pkg:/images/UrbanistRegular.ttf" size="32" />
+            </Label>
+        </Group>
+    </children>
+</component>

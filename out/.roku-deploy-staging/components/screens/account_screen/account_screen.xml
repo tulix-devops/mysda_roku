@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="account_screen" extends="Group">
+    <script type="text/brightscript" uri="pkg:/components/screens/account_screen/account_screen.brs" />
+    <interface>
+        <field id="accountStatus" type="boolean"/>
+    </interface>
+    <children>
+        <Rectangle
+        width="1920"
+        height="1080"
+        color="#222222"  translation="[0, 0]"/>
+        <!-- <default_poster id="default_poster" translation="[0, 0]" visible="true" /> -->
+        <Group id="titleGroup" translation="[20, 55]" >
+      
+            <Label text="Account Settings" id="accountSettingsName" color="0xFFFFFF" font="font:UrbanistSemiBold" translation="[0, 0]" >
+                <Font role="font" uri="pkg:/images/UrbanistBold.ttf" size="45" />
+            </Label>
+        </Group>
+        <Group id="logoutGroup" translation="[20, 150]" >
+            <!-- Play Button -->
+            <Poster
+            id="logoutIcon"
+            uri="pkg:/images/png/logout.png"
+            width="96"
+            height="96"
+            translation="[0, 0]" 
+            loadDisplayMode="scaleToZoom"
+            />
+            <Label text="Log out" id="logoutText" color="0xFFFFFF" font="font:UrbanistSemiBold" translation="[120, 15]" >
+                <Font role="font" uri="pkg:/images/UrbanistBold.ttf" size="48" />
+            </Label>
+        </Group>
+
+        <Group id="loginGroup" translation="[20, 150]" visible="false">
+            <!-- Play Button -->
+            <Poster
+            id="loginIcon"
+            uri="pkg:/images/png/login.png"
+            width="96"
+            height="96"
+            translation="[0, 0]" 
+            loadDisplayMode="scaleToZoom"
+            />
+            <Label text="Login" id="loginText" color="0xFFFFFF" font="font:UrbanistSemiBold" translation="[120, 15]" >
+                <Font role="font" uri="pkg:/images/UrbanistBold.ttf" size="48" />
+            </Label>
+        </Group>
+    </children>
+</component>

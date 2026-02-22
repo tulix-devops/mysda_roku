@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component name="navigation_bar" extends="Group">
+    <script type="text/brightscript"  uri="pkg:/components/screens/navigation_bar.brs" />
+    <interface>
+        <field id="isVisible" type="boolean" onChange="toggleNavVisibility" />
+        <field id="selectedIndex" type="integer" value="0" />
+        <field id="userLoggedIn" type="boolean" onChange="onUserLoggedIn" />
+    </interface>
+    <children>
+        <Group  id="navGroup" translation="[0, 0]">
+             <LayoutGroup id="liveRow" layoutDirection="horiz"
+             horizAlignment="left"
+             vertAlignment="custom"
+             itemSpacings="0" translation="[20, 260]">
+            </LayoutGroup>
+
+            <!-- Archive Row -->
+            <LayoutGroup id="archiveRow" layoutDirection="horiz" itemSpacings="0" translation="[20, 340]" vertAlignment="custom">
+    
+            </LayoutGroup>
+
+            <!-- DVR Row -->
+            <LayoutGroup id="dvrRow" layoutDirection="horiz" itemSpacings="0" translation="[20, 420]" vertAlignment="custom">
+             
+            </LayoutGroup>
+
+            <!-- Exit Row -->
+            <LayoutGroup id="exitRow" layoutDirection="horiz" itemSpacings="0" translation="[20, 500]" vertAlignment="custom">
+             
+            </LayoutGroup>
+
+            <!-- Logout Row -->
+            <LayoutGroup id="logoutRow" layoutDirection="horiz" itemSpacings="0" translation="[20, 640]" vertAlignment="custom">
+             
+            </LayoutGroup>
+            <Poster uri="pkg:/images/channel-logo.png"
+            height="170" translation="[-60, 0]">
+            </Poster>
+        </Group >
+        <Animation id="expandAnimation" duration="0.3" easeFunction="linear">
+            <Vector2DFieldInterpolator fieldToInterp="navGroup.translation" key="[0.0, 1.0]" keyValue="[ [0, 0], [0, 0] ]" />
+        </Animation>
+        <Animation id="collapseAnimation" duration="0.3" easeFunction="linear">
+            <Vector2DFieldInterpolator fieldToInterp="navGroup.translation" key="[0.0, 1.0]" keyValue="[ [0, 0], [0, 0] ]" />
+        </Animation>
+
+
+
+        <Animation id="shiftLiveRow">
+            <Vector2DFieldInterpolator
+              id="liveRowShift"
+              fieldToInterp="liveRow.translation"
+              key="[0.0, 1.0]"
+              keyValue="[ [20, 300], [370, 300] ]"/>
+          </Animation>
+
+
+          <Animation
+    id="fadeInTelevisionLabel"
+    duration="0.3"
+    easeFunction="linear">
+    <FloatFieldInterpolator
+        fieldToInterp="liveLabel.opacity"
+        key="[0.0, 1.0]"
+        keyValue="[0.0, 1.0]" />
+</Animation>
+
+    </children>
+</component>
