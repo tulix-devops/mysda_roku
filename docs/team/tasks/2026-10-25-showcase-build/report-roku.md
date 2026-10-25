@@ -1,7 +1,7 @@
 # report-roku: showcase-build
 
 ## STATUS
-PARTIAL. The code is complete and passes static checks. Nothing has been verified on a device: the Roku is in use by another session (owner, 2026-10-25), and a device round follows.
+PARTIAL. The code is complete and has been verified on the device (round 1, 2026-10-25) for everything a signed-out viewer can reach. The signed-in flows (log in, the catch-up player, resume, next episode, log out) wait for the owner to type their credentials on the device.
 
 ## BRANCH
 `design/showcase` (owner-approved), from `main` @ 20d8958.
@@ -145,3 +145,53 @@ Knowledge applied:
   - compute-dst-arithmetically-not-via-rodatetime, brightscript-hash-mod-needs-exact-16-bit-halves, source-dir-not-in-component-scope, reserved-words-and-name-collisions;
   - xml-declaration-order-is-z-order, dead-asset-sweep-must-model-concatenated-paths;
   - roku-certification-limits-and-no-publishing-api, text-measurement-and-label-height.
+
+## Device verification (round 1, 2026-10-25)
+Roku Express, fw 15.3.4, 720p panel, 192.168.0.106. The build was deployed with `tools/deploy.ps1` (installed) and walked over ECP with `tools/capture.ps1`. Screenshots are in `screenshots/`: d1-* first look, d2-* after fixes, d3/d4/d5-* after the review fixes. Every capture was read before any claim below.
+
+**Boot**
+- The console shows the three catalogues landing (206 responses: 24 / 16 / 10 channels).
+- `AppLaunchComplete` fires once, Duration 2153 ms.
+- Schedules load lazily, two at a time, all ok.
+- No BrightScript errors in any walk. The one compiler warning (unused parameter) was fixed.
+
+**Screens, all reached and read**
+- Home (C1): hero, On now (frame grabs with logo badge and progress), Channels, In your language.
+- Channel page (C2): today's schedule with REPLAY / LIVE / LATER, plus Earlier this week.
+- Channels (C3): chips, and the Español filter.
+- Radio carousel (C4).
+- Catch-up by series (C5).
+- Account (C8): the tilted wall of grabs, perks, the QR.
+- Capsule open and closed; a title on every screen; the whole logo.
+
+**Focus**
+- Hero ↔ rows (Down / Up); chips ↔ grid.
+- Left at the edge opens the capsule; Back opens the capsule; Back from the channel page returns to Home rows.
+- "Not now" on the dialog returns to the row.
+
+**Playback**, proven with ECP `/query/media-player`
+- Live 3ABN: `state="play"`, `is_live=true`, HLS 1.5 Mbps.
+- Radio 3ABN Radio: `state="play"`, audio aac, video none.
+- Live strip: the first key only reveals the chrome; Left / Right move.
+
+**Deep links**
+- Launch `contentId=9&mediaType=live`: HopeChannel live.
+- roInput `contentId=5` while running: 3ABN Kids Network live, `state="play"`.
+
+**Catch-up gate (signed out):** choosing a recording raises "Log in to watch recordings" with Log in / Not now; the full body text shows.
+
+**Found on the device and fixed** (commit 0ab8b78):
+1. **RowList labels.** The label sits in a band the list reserves above each row's items, about 43 px for a 32-px face. With `rowLabelOffset` y -58, the first label was clipped and the others drew under the cards. Fixed with y 0, and the list's y set to the first label's top.
+2. **Card focus.** A 1.0 → 1.07 lift read as no focus. Now the other cards in the focused row step back (94 %, dimmed) and the focused one lifts to 104 % with a shadow.
+3. **getdvr.php order.** It came OLDEST first; the context brief said newest first. Today ran backwards. Programmes are now sorted explicitly.
+4. **Grab placeholder.** For a programme's first minutes the feed serves one shared grey "play" placeholder at the grab's own URL: identical file, 6542 bytes, same md5 across channels. Grabs are now used only after 10 minutes on air.
+5. **Layout.**
+   - The Account heading was clipped to one line.
+   - The dialog body was clipped: a wrapping Label needs about 40 px per line or it drops lines.
+   - The live hint sat under the lifted strip card.
+
+**Not verified yet:**
+- **Signed-in flows (needs the owner's credentials on the device):** sign-in, check-purchase, the catch-up player (seek, ±10, resume, next episode, end of stream), log out.
+- **Error states:** what a viewer sees when a stream fails.
+- **The Nuevo Tiempo stall** from Phase 1.
+- **Memory over a long session.**

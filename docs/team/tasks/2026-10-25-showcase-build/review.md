@@ -151,3 +151,26 @@ Knowledge applied:
   - rotating-refresh-tokens-need-session-generations, session-gate-invalidates-item-level-public-rules.
 
 Knowledge contradicted: none
+
+
+## Outcome (dev, 2026-10-25, commit 0ab8b78)
+**Fixed:**
+- C1 (rows take focus when they land);
+- C2 (Try again returns focus to the page);
+- C3 (pendingPlay cleared by a new play, deep link or screen; playerHost declared before the modals);
+- C4 (statusCode guarded);
+- C5 (alwaysNotify on spec / result / deepLink);
+- C6 (explicit `vertFocusAnimationStyle="fixedFocus"`; Up from row 0 to the hero verified on the device);
+- C7 (player black from the theme, `cVideo`);
+- C9 (next episode on the same channel);
+- C10 (position events ignored until the new stream plays);
+- C11 (wording);
+- C13 (capsule focus follows the destination).
+
+**Left as follow-ups:**
+- C8: an unbounded schedule queue and no failure cache.
+- C12: on a deep-link launch, `AppLaunchComplete` fires before playback starts.
+- C14: dead fields.
+- C15: the live tag can go stale between minute ticks.
+
+Static after the fixes: check-scope clean; brighterscript 0 diagnostics. The device walk is in report-roku.md.
