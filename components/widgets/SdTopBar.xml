@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  SdTopBar - the mySDAtv logo (cut from mysdatv_logo.png by
+  tools/build-assets.ps1 and authored at the size it is drawn) on every
+  screen's top band, plus an optional heading under it (WPALive's WpTopBar).
+
+  It lives in the SCREEN's content group rather than in the rail, so it
+  slides with the page when the rail opens and the page keeps one left
+  margin.
+-->
+<component name="SdTopBar" extends="Group">
+  <script type="text/brightscript" uri="pkg:/components/widgets/SdTopBar.brs" />
+  <interface>
+    <field id="heading" type="string" onChange="onHeadingSet" />
+  </interface>
+  <children>
+    <Poster id="wordmark" uri="pkg:/images/png/brand/wordmark_top.png" width="207" height="108"
+            loadWidth="207" loadHeight="108" translation="[0, -18]" />
+
+    <Label id="headingLabel" text="" translation="[0, 102]" width="1200" height="66"
+           vertAlign="center" color="0xFFFFFFFF" visible="false">
+      <Font role="font" uri="pkg:/images/fonts/Manrope-ExtraBold.ttf" size="54" />
+    </Label>
+  </children>
+</component>

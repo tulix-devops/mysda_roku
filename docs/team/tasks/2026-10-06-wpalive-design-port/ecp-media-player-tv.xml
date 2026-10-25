@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<player state="play" error="false">
+	<plugin id="dev" name="mySDAtv" bandwidth="24618698 bps" />
+	<format audio="aac_adts" video="mpeg4_10b" captions="none" drm="none" container="hls" />
+	<buffering target="0" max="1000" current="1000" />
+	<new_stream speed="128000 bps" />
+	<position>9136 ms</position>
+	<duration>25025 ms</duration>
+	<is_live blocked="false">true</is_live>
+	<status_message />
+	<stream_segment media_sequence="1399719" time="5005" bitrate="1530000" segment_type="mux" width="0" height="0" />
+</player>

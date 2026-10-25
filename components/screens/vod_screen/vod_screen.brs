@@ -69,20 +69,29 @@ sub onShowFullContentChanged()
   
   
   sub startExpandAnimation()
-    animation = m.top.findNode("MoveCategoryIn")
-    if animation <> invalid
-        
-        animation.control = "start"
-    end if
-  end sub
-  
-  sub startCollapseAnimation()
-    animation = m.top.findNode("MoveCategoryOut")
-    if animation <> invalid
-      
-        animation.control = "start"
-    end if
-  end sub
+    ' showFullContent = the rail COLLAPSED: the page slides back to its own
+    ' layout (content at x 160). WPALive contract T4: the rail moves the
+    ' page and never re-lays it.
+    slidePage("MoveCategoryIn", 160)
+end sub
+
+sub startCollapseAnimation()
+    ' The rail OPENED: the page slides right by the rail's growth (320).
+    slidePage("MoveCategoryOut", 480)
+end sub
+
+' Slides vodContainer to x from WHERE IT IS, so a reversal half-way does
+' not jump to an end.
+sub slidePage(animId as string, x as integer)
+    animation = m.top.findNode(animId)
+    container = m.top.findNode("vodContainer")
+    if animation = invalid or container = invalid then return
+    m.top.findNode("MoveCategoryIn").control = "stop"
+    m.top.findNode("MoveCategoryOut").control = "stop"
+    interp = animation.getChild(0)
+    interp.keyValue = [container.translation, [x, 0]]
+    animation.control = "start"
+end sub
 
 
 sub fetchCategoryData()
@@ -194,6 +203,8 @@ sub initializeCachedVodScreenData()
             rowItemFocus: false,
             data: vodData,
             isLiveChannel: false,
+            sdPadLeft: 30,
+            sdPadTop: 20,
             focusable: true
         })
         m.totalItems = m.totalItems + 1
@@ -275,6 +286,8 @@ sub initializeVodScreen()
                 rowItemFocus: false,
                 data: vodData,
                 isLiveChannel: false,
+                sdPadLeft: 30,
+                sdPadTop: 20,
                 focusable: true
             })
             m.totalItems = m.totalItems + 1
@@ -626,7 +639,11 @@ function onKeyEvent(key as string, press as boolean) as boolean
             m.rowList.itemFocused = m.lastFocusedItem
         end if
     else if (press = false or press = true) and key = "back" then
-        vodListRow.setFocus(true)
+        ' Back from the content opens the rail (WPALive Back contract); Back
+        ' again from the rail asks to exit the channel.
+        navScreen = m.global.findNode("navigation_bar")
+        navScreen.isVisible = true
+        navScreen.setFocus(true)
         ' unFocusActiveVODRowItem()
         ' m.navBar = m.global.findNode("navigation_bar")
         ' m.navBar.setFocus(true)

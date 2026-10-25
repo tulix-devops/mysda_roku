@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>A6 DVR recordings</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&amp;family=Inter:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 1920px; height: 1080px; position: relative; overflow: hidden; background: #0B1222; background-image: radial-gradient(ellipse 1500px 900px at 230px -60px, #1F2A44 0%, #141C30 45%, #0B1222 100%); color: #FFFFFF; font-family: Inter, sans-serif">
+
+  <img src="/_blob/ec7c10bad0117787e03b001592d65bba" alt="mySDAtv" style="position: absolute; left: 160px; top: 30px; width: 207px; height: 108px">
+  <div style="position: absolute; left: 160px; top: 150px; display: flex; align-items: center; gap: 22px">
+    <div style="width: 93px; height: 66px; border-radius: 10px; background: #FFFFFF; display: flex; align-items: center; justify-content: center"><img src="/_blob/242bd1a56c08d0855ef8ca15fcbcd4ef" alt="" style="width: 84px; height: 60px; object-fit: contain"></div>
+    <h1 style="margin: 0; font-family: Manrope, sans-serif; font-weight: 800; font-size: 54px; line-height: 66px">3ABN · DVR</h1>
+  </div>
+  <div style="position: absolute; right: 60px; top: 48px; width: 420px; height: 60px; border-radius: 12px; background: #151E33; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; box-sizing: border-box">
+    <span style="font-family: Manrope, sans-serif; font-weight: 700; font-size: 30px">3:20 PM</span>
+    <span style="font-size: 21px; color: #B4BCCB">Sunday, Oct 5</span>
+  </div>
+
+  <div style="position: absolute; left: 160px; top: 300px; width: 420px; display: flex; flex-direction: column; gap: 4px">
+    <sc-for list="{{days}}" as="d" hint-placeholder-count="9">
+      <div style="height: 66px; border-radius: 12px; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; background: {{d.bg}}; color: {{d.fg}}; font-family: {{d.font}}; font-weight: 700; font-size: 29px">
+        <span>{{d.label}}</span><span style="width: 12px; height: 12px; border-radius: 6px; background: {{d.dot}}"></span>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="position: absolute; left: 660px; top: 246px; font-weight: 700; font-size: 24px; color: #B4BCCB">TODAY · SUNDAY, OCT 5 · 37 PROGRAMMES</div>
+  <div style="position: absolute; left: 660px; top: 300px; width: 1200px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px 12px">
+    <sc-for list="{{recs}}" as="r" hint-placeholder-count="6">
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <div style="position: relative; height: 219px; border-radius: 14px; overflow: hidden; background: {{r.plate}}; transform: scale({{r.scale}}); transform-origin: bottom left; box-shadow: {{r.glow}}; opacity: {{r.dim}}">
+          <sc-if value="{{r.hasThumb}}" hint-placeholder-val="{{true}}">
+            <img src="{{r.thumb}}" alt="" style="width: 100%; height: 100%; object-fit: cover">
+          </sc-if>
+          <sc-if value="{{r.future}}" hint-placeholder-val="{{false}}">
+            <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center"><img src="/_blob/242bd1a56c08d0855ef8ca15fcbcd4ef" alt="" style="width: 150px; height: 107px; object-fit: contain; opacity: 0.5"></div>
+          </sc-if>
+          <div style="position: absolute; right: 10px; bottom: 10px; height: 32px; padding: 0 10px; border-radius: 8px; background: {{r.badgeBg}}; display: flex; align-items: center; font-weight: 700; font-size: 18px">{{r.badge}}</div>
+        </div>
+        <div style="font-weight: 600; font-size: 25px; color: {{r.titleColor}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.title}}</div>
+        <div style="font-weight: 500; font-size: 22px; color: #B4BCCB">{{r.time}}</div>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1920,"height":1080}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const day = (label, state) => ({
+      label,
+      bg: state === 'selected' ? 'transparent' : 'transparent',
+      fg: state === 'selected' ? '#FAD35A' : '#FFFFFF',
+      dot: state === 'selected' ? '#FAD35A' : 'transparent',
+      font: state === 'selected' ? 'Manrope, sans-serif' : 'Inter, sans-serif'
+    });
+    const rest = { scale: 0.92, glow: 'none', dim: 0.84, titleColor: '#FFFFFF' };
+    const lit = { scale: 1, glow: '0 0 0 3px rgba(240,38,43,0.35), 0 0 46px 6px rgba(240,38,43,0.45)', dim: 1, titleColor: '#F0262B' };
+    const rec = (thumb, title, time, badge, opts) => Object.assign({}, rest, {
+      thumb: thumb ? '/_blob/' + thumb : '', hasThumb: !!thumb, future: !thumb, plate: thumb ? '#151E33' : '#E9ECF2',
+      title, time, badge, badgeBg: 'rgba(11,18,34,0.85)'
+    }, opts || {});
+    return {
+      days: [day('Today', 'selected'), day('Yesterday'), day('Fri, Oct 3'), day('Thu, Oct 2'), day('Wed, Oct 1'), day('Tue, Sep 30'), day('Mon, Sep 29'), day('Sun, Sep 28'), day('Sat, Sep 27')],
+      recs: [
+        rec('917133d468c5f2657305a93b11198669', 'ACTION 4 LIFE', '2:00 – 2:28 PM', '28 MIN', lit),
+        rec('677cf0801d486ffa412e4bf103d043d0', 'A WOLF IN SHEEP’S CLOTHING', '2:30 – 2:58 PM', '28 MIN'),
+        rec('c4daed39c492a92a3a5a2eeb01619e11', '3ABN TODAY BIBLE Q&A', 'On now · 3:00 – 3:55 PM', '● LIVE', { badgeBg: '#F0262B' }),
+        rec('', '3ABN KIDS CAMP KITCHEN FUN', 'Later · 4:00 PM', 'UP NEXT'),
+        rec('', 'TINY TOTS KITCHEN', 'Later · 4:30 PM', 'LATER'),
+        rec('5153cbede4e2f6dc430a26bf44642cb4', '3ABN HOMECOMING', '3:00 – 3:45 AM', '45 MIN')
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

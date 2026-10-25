@@ -1,51 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  DVREpisodeItem - one recording (or the channel's Live entry) in the DVR
+  overlay's grid. Redesign 2026-10-06: it works out the picture, the title
+  and the time from the recording exactly as before, and hands them to the
+  channel's one tile (SdTile) to draw, forwarding the grid's focus.
+-->
 <component name="DVREpisodeItem" extends="Group">
-    <interface>
-      <field id="itemContent" type="node" onChange="updateContent" />
-    </interface>
-  
+  <interface>
+    <field id="itemContent" type="node" onChange="updateContent" />
+    <field id="focusPercent" type="float" onChange="onFocusChanged" />
+    <field id="gridHasFocus" type="boolean" onChange="onFocusChanged" />
+  </interface>
+
   <children>
-    <!-- Background Rectangle -->
-    <Rectangle
-      id="background"
-      width="380"
-      height="310"
-      color="0x1A1A1AFF"  
-      translation="[0, 0]"
-    />
-  
-    <!-- Thumbnail Image -->
-    <Poster id="thumb" width="360" height="202" translation="[10, 10]" />
-    
-    <!-- Title below thumbnail -->
-    <Label
-      id="title"
-      translation="[10, 216]"
-      width="360"
-      height="40"
-      color="0xFFFFFFFF"
-      visible="true"
-      horizAlign="left"
-      vertAlign="top"
-      wrap="true"
-      maxLines="2"
-      lineSpacing="-2"
-      font="font:SmallSystemFont"
-    />
-    
-    <!-- Time below title -->
-    <Label
-      id="meta"
-      translation="[10, 260]"
-      width="360"
-      height="35"
-      color="0xCCCCCCFF"
-      font="font:SmallSystemFont"
-      visible="true"
-      horizAlign="left"
-      vertAlign="top"
-    />
-    
+    <SdTile id="tile" />
   </children>
-  
-    <script type="text/brightscript" uri="DVREpisodeItem.brs" />
-  </component>
+
+  <script type="text/brightscript" uri="pkg:/components/widgets/DVREpisodeItem.brs" />
+</component>

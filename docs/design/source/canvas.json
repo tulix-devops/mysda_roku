@@ -1,0 +1,646 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "A1-Television.dc.html": {
+      "h": 1080,
+      "page": "lineup",
+      "title": "A1 · Television (launch screen)",
+      "w": 1920,
+      "x": 0,
+      "y": 0
+    },
+    "A2-Languages.dc.html": {
+      "h": 1080,
+      "page": "lineup",
+      "title": "A2 · TV Languages (rail open)",
+      "w": 1920,
+      "x": 2000,
+      "y": 0
+    },
+    "A3-Radios.dc.html": {
+      "h": 1080,
+      "page": "lineup",
+      "title": "A3 · Radios",
+      "w": 1920,
+      "x": 4000,
+      "y": 0
+    },
+    "A4-RadioPlaying.dc.html": {
+      "h": 1080,
+      "page": "lineup",
+      "title": "A4 · Radio playing",
+      "w": 1920,
+      "x": 6000,
+      "y": 0
+    },
+    "A5-DVR.dc.html": {
+      "h": 1080,
+      "page": "lineup",
+      "title": "A5 · DVR channels",
+      "w": 1920,
+      "x": 0,
+      "y": 1200
+    },
+    "A6-DVRRecordings.dc.html": {
+      "h": 1080,
+      "page": "lineup",
+      "title": "A6 · DVR recordings (one channel)",
+      "w": 1920,
+      "x": 2000,
+      "y": 1200
+    },
+    "A7-LivePlayer.dc.html": {
+      "h": 1080,
+      "page": "lineup",
+      "title": "A7 · Live player overlay",
+      "w": 1920,
+      "x": 4000,
+      "y": 1200
+    },
+    "A8-Account.dc.html": {
+      "h": 1080,
+      "page": "lineup",
+      "title": "A8 · Account / login",
+      "w": 1920,
+      "x": 6000,
+      "y": 1200
+    },
+    "B1-Guide.dc.html": {
+      "h": 1080,
+      "page": "guide",
+      "title": "B1 · TV Guide (launch screen)",
+      "w": 1920,
+      "x": 0,
+      "y": 0
+    },
+    "B2-LanguagesGuide.dc.html": {
+      "h": 1080,
+      "page": "guide",
+      "title": "B2 · Languages guide",
+      "w": 1920,
+      "x": 2000,
+      "y": 0
+    },
+    "B3-Radio.dc.html": {
+      "h": 1080,
+      "page": "guide",
+      "title": "B3 · Radio",
+      "w": 1920,
+      "x": 4000,
+      "y": 0
+    },
+    "B4-Catchup.dc.html": {
+      "h": 1080,
+      "page": "guide",
+      "title": "B4 · Catch-up (the guide, backwards)",
+      "w": 1920,
+      "x": 6000,
+      "y": 0
+    },
+    "B5-Programme.dc.html": {
+      "h": 1080,
+      "page": "guide",
+      "title": "B5 · Programme detail",
+      "w": 1920,
+      "x": 0,
+      "y": 1200
+    },
+    "B6-PlayerMiniGuide.dc.html": {
+      "h": 1080,
+      "page": "guide",
+      "title": "B6 · Player · mini guide (Up/Down)",
+      "w": 1920,
+      "x": 2000,
+      "y": 1200
+    },
+    "B7-PlayerInfo.dc.html": {
+      "h": 1080,
+      "page": "guide",
+      "title": "B7 · Player · info bar (OK)",
+      "w": 1920,
+      "x": 4000,
+      "y": 1200
+    },
+    "B8-Account.dc.html": {
+      "h": 1080,
+      "page": "guide",
+      "title": "B8 · Account / login",
+      "w": 1920,
+      "x": 6000,
+      "y": 1200
+    },
+    "C1-Home.dc.html": {
+      "h": 1080,
+      "page": "showcase",
+      "title": "C1 · Home (launch screen)",
+      "w": 1920,
+      "x": 0,
+      "y": 0
+    },
+    "C2-Channel.dc.html": {
+      "h": 1080,
+      "page": "showcase",
+      "title": "C2 · Channel page (live + its DVR)",
+      "w": 1920,
+      "x": 2000,
+      "y": 0
+    },
+    "C3-Channels.dc.html": {
+      "h": 1080,
+      "page": "showcase",
+      "title": "C3 · All channels (TV + languages)",
+      "w": 1920,
+      "x": 4000,
+      "y": 0
+    },
+    "C4-Radio.dc.html": {
+      "h": 1080,
+      "page": "showcase",
+      "title": "C4 · Radio",
+      "w": 1920,
+      "x": 6000,
+      "y": 0
+    },
+    "C5-Catchup.dc.html": {
+      "h": 1080,
+      "page": "showcase",
+      "title": "C5 · Catch-up by series",
+      "w": 1920,
+      "x": 0,
+      "y": 1200
+    },
+    "C6-PlayerLive.dc.html": {
+      "h": 1080,
+      "page": "showcase",
+      "title": "C6 · Live player · channel strip",
+      "w": 1920,
+      "x": 2000,
+      "y": 1200
+    },
+    "C7-PlayerCatchup.dc.html": {
+      "h": 1080,
+      "page": "showcase",
+      "title": "C7 · Catch-up player · transport",
+      "w": 1920,
+      "x": 4000,
+      "y": 1200
+    },
+    "C8-Account.dc.html": {
+      "h": 1080,
+      "page": "showcase",
+      "title": "C8 · Account / login",
+      "w": 1920,
+      "x": 6000,
+      "y": 1200
+    },
+    "Main.dc.html": {
+      "h": 1080,
+      "page": "overview",
+      "title": "Overview · three directions and the data behind them",
+      "w": 1920,
+      "x": 0,
+      "y": 0
+    },
+    "N1a-IconColumn.dc.html": {
+      "h": 1080,
+      "page": "shownav",
+      "title": "N1 · Icon column, at rest",
+      "w": 1920,
+      "x": 0,
+      "y": 0
+    },
+    "N1b-IconColumn-Open.dc.html": {
+      "h": 1080,
+      "page": "shownav",
+      "title": "N1 · Icon column, focus in the rail",
+      "w": 1920,
+      "x": 2000,
+      "y": 0
+    },
+    "N2a-Capsule.dc.html": {
+      "h": 1080,
+      "page": "shownav",
+      "title": "N2 · Floating capsule, at rest",
+      "w": 1920,
+      "x": 0,
+      "y": 1200
+    },
+    "N2b-Capsule-Open.dc.html": {
+      "h": 1080,
+      "page": "shownav",
+      "title": "N2 · Floating capsule, focus in the rail",
+      "w": 1920,
+      "x": 2000,
+      "y": 1200
+    },
+    "N3a-Sidebar.dc.html": {
+      "h": 1080,
+      "page": "shownav",
+      "title": "N3 · Labelled sidebar, focus on the page",
+      "w": 1920,
+      "x": 0,
+      "y": 2400
+    },
+    "N3b-Sidebar-Focus.dc.html": {
+      "h": 1080,
+      "page": "shownav",
+      "title": "N3 · Labelled sidebar, focus in the rail",
+      "w": 1920,
+      "x": 2000,
+      "y": 2400
+    },
+    "A-Alpha-InkEmber.dc.html": {
+      "h": 1080,
+      "page": "lineup",
+      "title": "A-α · Ink and ember (rail open)",
+      "w": 1920,
+      "x": 0,
+      "y": 2600
+    },
+    "A-Beta-BrandRibbon.dc.html": {
+      "h": 1080,
+      "page": "lineup",
+      "title": "A-β · Brand ribbon (rail open)",
+      "w": 1920,
+      "x": 2000,
+      "y": 2600
+    },
+    "A-Gamma-DockTiles.dc.html": {
+      "h": 1080,
+      "page": "lineup",
+      "title": "A-γ · Dock tiles (rail at rest)",
+      "w": 1920,
+      "x": 4000,
+      "y": 2600
+    },
+    "B-Pill.dc.html": {
+      "h": 1080,
+      "page": "guide",
+      "title": "B-1 · Pill controls, soft cells",
+      "w": 1920,
+      "x": 0,
+      "y": 2600
+    },
+    "B-Soft.dc.html": {
+      "h": 1080,
+      "page": "guide",
+      "title": "B-2 · Soft 16 px",
+      "w": 1920,
+      "x": 2000,
+      "y": 2600
+    },
+    "B-Capsule.dc.html": {
+      "h": 1080,
+      "page": "guide",
+      "title": "B-3 · Capsule everything",
+      "w": 1920,
+      "x": 4000,
+      "y": 2600
+    },
+    "AX1-Television.dc.html": {
+      "h": 1080,
+      "page": "lineupalpha",
+      "title": "A1 · Television",
+      "w": 1920,
+      "x": 0,
+      "y": 0
+    },
+    "AX2-Languages.dc.html": {
+      "h": 1080,
+      "page": "lineupalpha",
+      "title": "A2 · TV Languages (rail open)",
+      "w": 1920,
+      "x": 2000,
+      "y": 0
+    },
+    "AX3-Radios.dc.html": {
+      "h": 1080,
+      "page": "lineupalpha",
+      "title": "A3 · Radios",
+      "w": 1920,
+      "x": 4000,
+      "y": 0
+    },
+    "AX4-RadioPlaying.dc.html": {
+      "h": 1080,
+      "page": "lineupalpha",
+      "title": "A4 · Radio playing",
+      "w": 1920,
+      "x": 6000,
+      "y": 0
+    },
+    "AX5-DVR.dc.html": {
+      "h": 1080,
+      "page": "lineupalpha",
+      "title": "A5 · DVR channels",
+      "w": 1920,
+      "x": 0,
+      "y": 1200
+    },
+    "AX6-DVRRecordings.dc.html": {
+      "h": 1080,
+      "page": "lineupalpha",
+      "title": "A6 · DVR recordings",
+      "w": 1920,
+      "x": 2000,
+      "y": 1200
+    },
+    "AX7-LivePlayer.dc.html": {
+      "h": 1080,
+      "page": "lineupalpha",
+      "title": "A7 · Live player",
+      "w": 1920,
+      "x": 4000,
+      "y": 1200
+    },
+    "AX8-Account.dc.html": {
+      "h": 1080,
+      "page": "lineupalpha",
+      "title": "A8 · Account (rail open)",
+      "w": 1920,
+      "x": 6000,
+      "y": 1200
+    },
+    "BN1-RailLabels.dc.html": {
+      "h": 1080,
+      "page": "guide",
+      "title": "B · Nav 1 · Rail with labels",
+      "w": 1920,
+      "x": 0,
+      "y": 4000
+    },
+    "BN2-GoldCapsule.dc.html": {
+      "h": 1080,
+      "page": "guide",
+      "title": "B · Nav 2 · Gold capsule",
+      "w": 1920,
+      "x": 2000,
+      "y": 4000
+    },
+    "BN3-DockTiles.dc.html": {
+      "h": 1080,
+      "page": "guide",
+      "title": "B · Nav 3 · Dock tiles",
+      "w": 1920,
+      "x": 4000,
+      "y": 4000
+    },
+    "BN4-BottomDock.dc.html": {
+      "h": 1080,
+      "page": "guide",
+      "title": "B · Nav 4 · Bottom dock",
+      "w": 1920,
+      "x": 0,
+      "y": 5600
+    },
+    "BN5-HeroMenu.dc.html": {
+      "h": 1080,
+      "page": "guide",
+      "title": "B · Nav 5 · Hero menu",
+      "w": 1920,
+      "x": 2000,
+      "y": 5600
+    },
+    "BN6-MenuSheet.dc.html": {
+      "h": 1080,
+      "page": "guide",
+      "title": "B · Nav 6 · Menu sheet (open)",
+      "w": 1920,
+      "x": 4000,
+      "y": 5600
+    },
+    "BN7-TitleDropdown.dc.html": {
+      "h": 1080,
+      "page": "guide",
+      "title": "B · Nav 7 · Title dropdown (open)",
+      "w": 1920,
+      "x": 0,
+      "y": 6800
+    },
+    "BN8-EdgeStrip.dc.html": {
+      "h": 1080,
+      "page": "guide",
+      "title": "B · Nav 8 · Edge strip",
+      "w": 1920,
+      "x": 2000,
+      "y": 6800
+    },
+    "BG1a-Spine.dc.html": {
+      "h": 1080,
+      "page": "guiderethink",
+      "title": "G1 · Category spine, focus in the guide",
+      "w": 1920,
+      "x": 0,
+      "y": 0
+    },
+    "BG1b-Spine-Filter.dc.html": {
+      "h": 1080,
+      "page": "guiderethink",
+      "title": "G1 · Category spine, focus on Español",
+      "w": 1920,
+      "x": 2000,
+      "y": 0
+    },
+    "BG2a-ChannelList.dc.html": {
+      "h": 1080,
+      "page": "guiderethink",
+      "title": "G2 · Channel list + day timeline",
+      "w": 1920,
+      "x": 0,
+      "y": 1200
+    },
+    "BG2b-ChannelList-Replay.dc.html": {
+      "h": 1080,
+      "page": "guiderethink",
+      "title": "G2 · Channel list + day timeline, a replay focused",
+      "w": 1920,
+      "x": 2000,
+      "y": 1200
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-10-06T01:30:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "page": "overview",
+    "view": "canvas"
+  },
+  "notes": {
+    "guideTitle": {
+      "kind": "title1",
+      "maxW": 7920,
+      "page": "guide",
+      "text": "B · Guide: a TV guide first, catch-up is the guide scrolled backwards",
+      "w": 240,
+      "x": 0,
+      "y": -320
+    },
+    "lineupTitle": {
+      "kind": "title1",
+      "maxW": 7920,
+      "page": "lineup",
+      "text": "A · Lineup: the rail and channel grids, evolved from today's build (My red)",
+      "w": 240,
+      "x": 0,
+      "y": -320
+    },
+    "showcaseTitle": {
+      "kind": "title1",
+      "maxW": 7920,
+      "page": "showcase",
+      "text": "C · Showcase: a streaming home of rows, live and catch-up side by side",
+      "w": 240,
+      "x": 0,
+      "y": -320
+    },
+    "shownavTitle": {
+      "kind": "title1",
+      "maxW": 3920,
+      "page": "shownav",
+      "text": "C · Showcase: left navigation options",
+      "x": 0,
+      "y": -320
+    },
+    "lineupOptions": {
+      "kind": "title1",
+      "maxW": 5920,
+      "page": "lineup",
+      "text": "A · new background and navigation options",
+      "x": 0,
+      "y": 2280
+    },
+    "guideOptions": {
+      "kind": "title1",
+      "maxW": 5920,
+      "page": "guide",
+      "text": "B · softer shape options",
+      "x": 0,
+      "y": 2280
+    },
+    "alphaTitle": {
+      "kind": "title1",
+      "maxW": 7920,
+      "page": "lineupalpha",
+      "text": "A · Lineup α: Ink and ember on every screen",
+      "x": 0,
+      "y": -320
+    },
+    "guideNav": {
+      "kind": "title1",
+      "maxW": 5920,
+      "page": "guide",
+      "text": "B · left navigation options (pill shapes)",
+      "x": 0,
+      "y": 3680
+    },
+    "guideNav2": {
+      "kind": "title1",
+      "maxW": 5920,
+      "page": "guide",
+      "text": "B · five more navigation options",
+      "x": 0,
+      "y": 5280
+    },
+    "rethinkTitle": {
+      "kind": "title1",
+      "maxW": 3920,
+      "page": "guiderethink",
+      "text": "B · Guide: the guide is the navigation",
+      "x": 0,
+      "y": -320
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "A1-Television.dc.html",
+    "A2-Languages.dc.html",
+    "A3-Radios.dc.html",
+    "A4-RadioPlaying.dc.html",
+    "A5-DVR.dc.html",
+    "A6-DVRRecordings.dc.html",
+    "A7-LivePlayer.dc.html",
+    "A8-Account.dc.html",
+    "B1-Guide.dc.html",
+    "B2-LanguagesGuide.dc.html",
+    "B3-Radio.dc.html",
+    "B4-Catchup.dc.html",
+    "B5-Programme.dc.html",
+    "B6-PlayerMiniGuide.dc.html",
+    "B7-PlayerInfo.dc.html",
+    "B8-Account.dc.html",
+    "C1-Home.dc.html",
+    "C2-Channel.dc.html",
+    "C3-Channels.dc.html",
+    "C4-Radio.dc.html",
+    "C5-Catchup.dc.html",
+    "C6-PlayerLive.dc.html",
+    "C7-PlayerCatchup.dc.html",
+    "C8-Account.dc.html",
+    "N1a-IconColumn.dc.html",
+    "N1b-IconColumn-Open.dc.html",
+    "N2a-Capsule.dc.html",
+    "N2b-Capsule-Open.dc.html",
+    "N3a-Sidebar.dc.html",
+    "N3b-Sidebar-Focus.dc.html",
+    "A-Alpha-InkEmber.dc.html",
+    "A-Beta-BrandRibbon.dc.html",
+    "A-Gamma-DockTiles.dc.html",
+    "B-Pill.dc.html",
+    "B-Soft.dc.html",
+    "B-Capsule.dc.html",
+    "AX1-Television.dc.html",
+    "AX2-Languages.dc.html",
+    "AX3-Radios.dc.html",
+    "AX4-RadioPlaying.dc.html",
+    "AX5-DVR.dc.html",
+    "AX6-DVRRecordings.dc.html",
+    "AX7-LivePlayer.dc.html",
+    "AX8-Account.dc.html",
+    "BN1-RailLabels.dc.html",
+    "BN2-GoldCapsule.dc.html",
+    "BN3-DockTiles.dc.html",
+    "BN4-BottomDock.dc.html",
+    "BN5-HeroMenu.dc.html",
+    "BN6-MenuSheet.dc.html",
+    "BN7-TitleDropdown.dc.html",
+    "BN8-EdgeStrip.dc.html",
+    "BG1a-Spine.dc.html",
+    "BG1b-Spine-Filter.dc.html",
+    "BG2a-ChannelList.dc.html",
+    "BG2b-ChannelList-Replay.dc.html"
+  ],
+  "pages": [
+    {
+      "id": "overview",
+      "name": "Overview"
+    },
+    {
+      "id": "lineup",
+      "name": "A · Lineup"
+    },
+    {
+      "id": "guide",
+      "name": "B · Guide"
+    },
+    {
+      "id": "showcase",
+      "name": "C · Showcase"
+    },
+    {
+      "id": "shownav",
+      "name": "C · Navigation"
+    },
+    {
+      "id": "lineupalpha",
+      "name": "A · Lineup α"
+    },
+    {
+      "id": "guiderethink",
+      "name": "B · Guide rethink"
+    }
+  ],
+  "title": "mySDAtv design directions"
+}

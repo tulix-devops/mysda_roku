@@ -1,4 +1,23 @@
 <?xml version="1.0" encoding="utf-8" ?>
+<!--
+  dvr_vod - "DVR": one grid of the catalogue, in the WPALive layout
+  (redesign 2026-10-06; the four grid screens share this layout - vod_screen,
+  second_vod, third_vod, dvr_vod - and differ only in their feed and heading).
+
+  Laid out ONCE, for the COLLAPSED rail: the page content starts at x 160 and
+  runs to 1860 (1700 wide). The open rail slides vodContainer right by 320
+  (slidePage in the .brs) and never re-lays it.
+
+  Grid: five 330x195 tiles across (5 x 330 + 4 x 12 = 1698). The grid sits 30
+  left and 20 up of the tiles (each tile is padded back by sdPadLeft 30 /
+  sdPadTop 20 on its content node) and the last column spacing is 60: a
+  MarkupGrid cuts items at its own content box, and the focus glow reaches 30
+  past a tile (knowledge/dev-roku/markupgrid-clips-at-content-box).
+
+  Node ids the .brs reads are kept: vodContainer, vodRowList,
+  descriptionLabel, timeTitle, userEmailLabel, the itemDetails group and the
+  MoveCategoryIn/Out animations.
+-->
 <component name="dvr_vod" extends="Group">
   <script type="text/brightscript" uri="pkg:/components/screens/dvr_vod/dvr_vod.brs" />
   <script type="text/brightscript" uri="pkg:/source/StaticContent.brs" />
@@ -12,134 +31,65 @@
   </interface>
   <children>
     <Group id="itemDetailsGroup" opacity="0.0">
-      <HomePlayer id="vodPlayer"  visible="true" translation="[400, 0]">
-    
-
-      </HomePlayer>
-      <ItemDetails id="vodItemDetails" translation="[20, 0]" visible="true">
-        </ItemDetails>
+      <HomePlayer id="vodPlayer" visible="true" translation="[400, 0]" />
+      <ItemDetails id="vodItemDetails" translation="[20, 0]" visible="true" />
     </Group>
 
-    <Group translation="[1730, 90]">
-      <!-- User Email Display -->
-      <Label
-      id="userEmailLabel"
-      translation="[-400, 0]"
-      width="380"
-      height="40"
-      horizAlign="right"
-      color="0xCCCCCCFF"
-      ><Font role="font" uri="pkg:/images/UrbanistRegular.ttf" size="30" />  
-      </Label>
-      
-      <!-- Current Time Display -->
-      <Label
-      id="timeTitle"
-      translation="[0, 0]"
-      width="150"
-      height="40"
-      color="0xFFFFFFFF"
-      ><Font role="font" uri="pkg:/images/UrbanistRegular.ttf" size="36" />  
-      </Label>
+    <!-- The legacy clock and e-mail line: still written by the .brs, no
+         longer shown (SdClock below keeps the time current). -->
+    <Group visible="false">
+      <Label id="userEmailLabel" text="" />
+      <Label id="timeTitle" text="" />
     </Group>
 
-    <Group id="vodContainer" translation="[180, 20]">
-   
-      <Poster
-      id="app_logo"
-      uri="pkg:/images/png/mysdatv-logo.png"
-      width="360"
-      height="191"
-      translation="[0, 0]"
-      loadDisplayMode="noScale"
-      />
+    <Group id="vodContainer" translation="[160, 0]">
+      <SdTopBar id="topBar" translation="[0, 48]" heading="DVR" />
 
-      <Label
-      id="descriptionLabel"
-      translation="[0, 215]"
-      text=""
-      visible="false"  
-      width="600"
-      height="40"
-      color="0xFFFFFFFF"
-      ><Font role="font" uri="pkg:/images/UrbanistSemiBold.ttf" size="28"/>  
-      </Label>
-    
+      <!-- The focused tile's title is in its caption now; the old
+           "title - on mySDAtv" line is kept for the .brs, never shown. -->
+      <Group visible="false">
+        <Label id="descriptionLabel" text="" />
+      </Group>
+
       <MarkupGrid
           id="vodRowList"
-          translation="[0, 260]"
-          itemComponentName="RowListItemComponent"  
-          itemSize="[320, 190]"
+          translation="[-30, 238]"
+          itemComponentName="SdTile"
+          itemSize="[330, 252]"
+          itemSpacing="[12, 18]"
+          columnSpacings="[12, 12, 12, 12, 60]"
           numColumns="5"
-          numRows="4"
-          columnSpacing="15"
-          rowSpacing="20"
-          itemSpacing="[25,50]" 
-          rowLabelOffset="[0, 15]"
-          vertFocusAnimationStyle="fixedFocus"
-          focusBitmapBlendColor="0x66CCFF"
-          scrollIndicatorXEnabled="true"
-          scrollIndicatorYEnabled="true"
-      />
-
+          numRows="3"
+          drawFocusFeedback="false"
+          vertFocusAnimationStyle="fixedFocus" />
     </Group>
-    <Animation
-    id="activateRow"
-    duration="0.3"
-    repeat="false"
-    easeFunction="linear"
->
-      <Vector2DFieldInterpolator
-        id="translationInterpolator"
-        key="[0.0, 1.0]"
-        keyValue="[ [100, 20], [100, 480] ]"
-        fieldToInterp="vodContainer.translation"
-    />
+
+    <SdClock id="sdClock" translation="[1440, 48]" />
+
+    <!-- Legacy animations, kept for the .brs; not started on any live path. -->
+    <Animation id="activateRow" duration="0.3" repeat="false" easeFunction="linear">
+      <Vector2DFieldInterpolator key="[0.0, 1.0]" keyValue="[ [160, 0], [160, 0] ]" fieldToInterp="vodContainer.translation" />
     </Animation>
-    <Animation
-id="deactivateRow"
-duration="0.5"
-repeat="false"
-easeFunction="OutQuad"
->
-      <Vector2DFieldInterpolator
-id="translationInterpolator"
-key="[0.0, 1.0]"
-keyValue="[ [100, 480], [100, 20]  ]"
-fieldToInterp="vodContainer.translation"
-/>
+    <Animation id="deactivateRow" duration="0.3" repeat="false" easeFunction="linear">
+      <Vector2DFieldInterpolator key="[0.0, 1.0]" keyValue="[ [160, 0], [160, 0] ]" fieldToInterp="vodContainer.translation" />
     </Animation>
-    <Animation
-id="activateItemDetails"
-duration="1"
-repeat="false"
-easeFunction="OutQuad"
->
-      <FloatFieldInterpolator    id = "opacityInterpolator"   key="[0.0,  1.0]"    keyValue="[0.0, 1.0 ]"       fieldToInterp="itemDetailsGroup.opacity"   />
+    <Animation id="activateItemDetails" duration="1" repeat="false" easeFunction="outQuad">
+      <FloatFieldInterpolator key="[0.0, 1.0]" keyValue="[0.0, 0.0]" fieldToInterp="itemDetailsGroup.opacity" />
     </Animation>
-    <Animation
-id="deactivateItemDetails"
-duration="1"
-repeat="false"
-easeFunction="OutQuad"
->
-      <FloatFieldInterpolator    id = "opacityInterpolator"   key="[0.0,  1.0]"    keyValue="[ 1.0, 0.0 ]"       fieldToInterp="itemDetailsGroup.opacity"   />
+    <Animation id="deactivateItemDetails" duration="1" repeat="false" easeFunction="outQuad">
+      <FloatFieldInterpolator key="[0.0, 1.0]" keyValue="[0.0, 0.0]" fieldToInterp="itemDetailsGroup.opacity" />
     </Animation>
 
-    <Animation id="MoveCategoryIn" duration="0.3">
-      <Vector2DFieldInterpolator id="CategoryListIn"
-          key="[0.0, 1.0]"
-          fieldToInterp="vodContainer.translation"
-          keyValue="[[450, 20], [180, 20]]"/>
-      
-  </Animation>
-
-  <Animation id="MoveCategoryOut" duration="0.3">
-      <Vector2DFieldInterpolator id="CategoryListOut"
-          key="[0.0, 1.0]"
-          fieldToInterp="vodContainer.translation"
-          keyValue="[[180, 20], [450, 20]]"/>
-      
-  </Animation>
+    <!-- The page slide beside the rail: 0.18 s closing, 0.22 s opening,
+         outCubic, the rail's own timing. keyValue is rewritten from the
+         current position each time (slidePage). -->
+    <Animation id="MoveCategoryIn" duration="0.18" repeat="false" easeFunction="outCubic">
+      <Vector2DFieldInterpolator id="CategoryListIn" key="[0.0, 1.0]"
+          keyValue="[ [480, 0], [160, 0] ]" fieldToInterp="vodContainer.translation" />
+    </Animation>
+    <Animation id="MoveCategoryOut" duration="0.22" repeat="false" easeFunction="outCubic">
+      <Vector2DFieldInterpolator id="CategoryListOut" key="[0.0, 1.0]"
+          keyValue="[ [160, 0], [480, 0] ]" fieldToInterp="vodContainer.translation" />
+    </Animation>
   </children>
 </component>

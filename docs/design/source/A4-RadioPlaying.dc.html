@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>A4 Radio playing</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&amp;family=Inter:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 1920px; height: 1080px; position: relative; overflow: hidden; background: #0B1222; background-image: radial-gradient(ellipse 1200px 800px at 520px 420px, #1F2A44 0%, #0B1222 70%); color: #FFFFFF; font-family: Inter, sans-serif">
+
+  <div style="position: absolute; left: 160px; top: 186px; width: 640px; height: 454px; border-radius: 24px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 80px 10px rgba(240,38,43,0.22)">
+    <img src="/_blob/2888c735f196e4ced270258e4bd0be07" alt="3ABN Radio" style="width: 560px; height: 398px; object-fit: contain">
+  </div>
+
+  <div style="position: absolute; left: 880px; top: 210px; width: 900px; display: flex; flex-direction: column; gap: 22px">
+    <div style="display: flex; align-items: center; gap: 14px">
+      <div style="height: 40px; padding: 0 16px; border-radius: 9px; background: #F0262B; display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 22px; letter-spacing: 1px"><span style="width: 10px; height: 10px; border-radius: 5px; background: #FFFFFF"></span>LIVE</div>
+      <span style="font-size: 24px; color: #FAD35A; font-weight: 600">Radio · English</span>
+    </div>
+    <h1 style="margin: 0; font-family: Manrope, sans-serif; font-weight: 800; font-size: 76px; line-height: 1.05">3ABN Radio</h1>
+    <div style="display: flex; align-items: flex-end; gap: 8px; height: 72px">
+      <sc-for list="{{bars}}" as="b" hint-placeholder-count="24">
+        <div style="width: 12px; border-radius: 6px; background: {{b.c}}; height: {{b.h}}"></div>
+      </sc-for>
+    </div>
+    <p style="margin: 0; font-size: 26px; color: #B4BCCB; line-height: 1.5">Playing now. The picture stays on this card while you listen; the screen dims after two minutes.</p>
+    <div style="display: flex; gap: 18px; margin-top: 12px">
+      <div style="height: 72px; padding: 0 34px; border-radius: 14px; background: #F0262B; display: flex; align-items: center; gap: 14px; font-weight: 700; font-size: 27px; box-shadow: 0 0 0 6px #FFFFFF">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="#FFFFFF"><rect x="5" y="4" width="5.5" height="18" rx="1.5"/><rect x="15.5" y="4" width="5.5" height="18" rx="1.5"/></svg>Pause</div>
+      <div style="height: 72px; padding: 0 34px; border-radius: 14px; background: #212C47; display: flex; align-items: center; font-weight: 700; font-size: 27px">All stations</div>
+    </div>
+  </div>
+
+  <div style="position: absolute; left: 160px; top: 760px; font-family: Manrope, sans-serif; font-weight: 700; font-size: 32px">Up next on Up / Down</div>
+  <div style="position: absolute; left: 160px; top: 822px; display: flex; gap: 20px">
+    <sc-for list="{{strip}}" as="s" hint-placeholder-count="6">
+      <div style="width: 254px; height: 180px; border-radius: 14px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; opacity: {{s.o}}; box-shadow: {{s.ring}}">
+        <img src="{{s.logo}}" alt="" style="width: 230px; height: 163px; object-fit: contain">
+      </div>
+    </sc-for>
+  </div>
+  <div style="position: absolute; right: 60px; top: 48px; width: 420px; height: 60px; border-radius: 12px; background: #151E33; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; box-sizing: border-box">
+    <span style="font-family: Manrope, sans-serif; font-weight: 700; font-size: 30px">3:20 PM</span>
+    <span style="font-size: 21px; color: #B4BCCB">Sunday, Oct 5</span>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1920,"height":1080}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const hs = [28, 46, 62, 40, 70, 52, 34, 58, 72, 44, 30, 54, 66, 38, 48, 70, 56, 32, 42, 64, 50, 36, 60, 26];
+    const s = (id, on) => ({ logo: '/_blob/' + id, o: on ? 1 : 0.7, ring: on ? '0 0 0 4px #FAD35A' : 'none' });
+    return {
+      bars: hs.map((h, i) => ({ h: h + 'px', c: i < 9 ? '#F0262B' : '#27324E' })),
+      strip: [
+        s('2888c735f196e4ced270258e4bd0be07', true), s('dfe63e8c017361de0001a951b2020d2e'), s('7a52b253fa820b19ca2052f34366480f'),
+        s('c3213fdf92f289d37c4272c832a8e8dd'), s('5208d441840f2b0e53a315bbda40e0db'), s('c72a58266bbb3eeb731eaa768070d32a')
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

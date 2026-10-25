@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>B8 Account</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&amp;family=Barlow:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 1920px; height: 1080px; position: relative; overflow: hidden; background: #050B1E; color: #FFFFFF; font-family: Barlow, sans-serif">
+
+  <div style="position: absolute; left: 0; top: 0; width: 1920px; height: 104px; display: flex; align-items: center; padding: 0 64px; box-sizing: border-box; gap: 56px; border-bottom: 1px solid #1C2E55">
+    <img src="/_blob/ec7c10bad0117787e03b001592d65bba" alt="mySDAtv" style="width: 150px; height: 78px">
+    <div style="display: flex; gap: 44px; flex-grow: 1">
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="5">
+        <div style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 34px; letter-spacing: 1px; color: {{t.fg}}; padding: 8px 0; border-bottom: 4px solid {{t.line}}">{{t.label}}</div>
+      </sc-for>
+    </div>
+    <div style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 34px">3:20 PM <span style="color: #A9B6CF; font-weight: 600">SUN OCT 5</span></div>
+  </div>
+
+  <div style="position: absolute; left: 64px; top: 150px; width: 820px; height: 860px; border-radius: 16px; background: #0B1733; padding: 48px; box-sizing: border-box; display: flex; flex-direction: column; gap: 22px">
+    <h1 style="margin: 0; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 60px; line-height: 1">LOG IN FOR CATCH-UP</h1>
+    <p style="margin: 0; font-size: 25px; line-height: 1.5; color: #A9B6CF">Use the email and password of your mysdatv.com subscription.</p>
+    <label style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px">
+      <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 24px; color: #A9B6CF">EMAIL</span>
+      <div style="height: 76px; border-radius: 8px; background: #FAD35A; color: #050B1E; display: flex; align-items: center; padding: 0 22px; font-weight: 600; font-size: 28px">[YOUR EMAIL] · OK to type</div>
+    </label>
+    <label style="display: flex; flex-direction: column; gap: 10px">
+      <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 24px; color: #A9B6CF">PASSWORD</span>
+      <div style="height: 76px; border-radius: 8px; background: #10203F; display: flex; align-items: center; padding: 0 22px; font-weight: 600; font-size: 28px; color: #A9B6CF">••••••••</div>
+    </label>
+    <div style="height: 76px; border-radius: 8px; background: #10203F; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 28px; margin-top: 12px">Log in</div>
+    <p style="margin: 0; font-size: 22px; line-height: 1.5; color: #7D8BA6">Live channels, languages and radio stay free without an account.</p>
+  </div>
+
+  <div style="position: absolute; left: 924px; top: 150px; width: 932px; display: flex; flex-direction: column; gap: 24px">
+    <div style="border-radius: 16px; background: #0B1733; padding: 40px 44px; display: flex; flex-direction: column; gap: 16px">
+      <div style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 40px">WHAT CATCH-UP GIVES YOU</div>
+      <sc-for list="{{perks}}" as="p" hint-placeholder-count="3">
+        <div style="display: flex; gap: 16px; align-items: center; font-size: 26px; font-weight: 600"><span style="width: 12px; height: 12px; border-radius: 3px; background: #FAD35A; flex-shrink: 0"></span>{{p}}</div>
+      </sc-for>
+    </div>
+    <div style="border-radius: 16px; background: #0B1733; padding: 36px 44px; display: flex; gap: 36px; align-items: center">
+      <div style="width: 280px; height: 280px; border-radius: 10px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><img src="/_blob/ade3e22c8d4e928c90c54e00fb911009" alt="Donation QR code" style="width: 256px; height: 256px; object-fit: contain"></div>
+      <div style="display: flex; flex-direction: column; gap: 12px">
+        <div style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 38px; color: #FAD35A">OR GIVE INSTEAD</div>
+        <p style="margin: 0; font-size: 25px; line-height: 1.5; color: #DDE3EE">A tax-deductible donation to mySDAtv unlocks catch-up for a whole year. Scan with your phone. Temporary promotion.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1920,"height":1080}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      tabs: [
+        { label: 'GUIDE', fg: '#A9B6CF', line: 'transparent' }, { label: 'LANGUAGES', fg: '#A9B6CF', line: 'transparent' },
+        { label: 'RADIO', fg: '#A9B6CF', line: 'transparent' }, { label: 'CATCH-UP', fg: '#A9B6CF', line: 'transparent' },
+        { label: 'ACCOUNT', fg: '#FFFFFF', line: '#FAD35A' }
+      ],
+      perks: ['Scroll the guide back 21 days and play anything', 'Start a live programme over from the top', 'Every episode of a series in one row']
+    };
+  }
+}
+</script>
+</body>
+</html>

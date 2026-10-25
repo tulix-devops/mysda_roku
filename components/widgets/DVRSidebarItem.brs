@@ -1,26 +1,38 @@
 sub init()
-    m.top.observeField("focused", "onFocused")
+    SdEnsureGlobals()
+    m.t = SdTheme()
+    m.pill = m.top.findNode("pill")
     m.label = m.top.findNode("label")
-  end sub
-  
-  sub updateContent()
-    content = m.top.itemContent
+    m.dot = m.top.findNode("dot")
+    onFocusChanged()
+end sub
 
-    print content
-    print "DVRSideBarItem.brs content"
+sub updateContent()
+    content = m.top.itemContent
     if content <> invalid and content.title <> invalid
-      m.label.text = content.title
+        m.label.text = content.title
     else
-      m.label.text = ""
+        m.label.text = ""
     end if
-  end sub
-  
-  sub onFocused()
-    if m.top.hasFocus()
-      m.background.color = "0x6633FFAA"  ' focus highlight
-      m.label.color = "0xFFFFFF"
+end sub
+
+' Every branch assigns every node: a list recycles its items.
+sub onFocusChanged()
+    inHand = (m.top.focusPercent > 0.5)
+    if inHand and m.top.listHasFocus = true
+        m.pill.blendColor = m.t.cNavFocus
+        m.label.color = m.t.cOnNavFocus
+        m.label.font = SdFont(m.t.fDisplay, 30)
+        m.dot.blendColor = m.t.cClear
+    else if inHand
+        m.pill.blendColor = m.t.cClear
+        m.label.color = m.t.cSelected
+        m.label.font = SdFont(m.t.fDisplay, 30)
+        m.dot.blendColor = m.t.cSelected
     else
-      m.background.color = "0x00000000"
-      m.label.color = "0xCCCCCC"
+        m.pill.blendColor = m.t.cClear
+        m.label.color = m.t.cText
+        m.label.font = SdFont(m.t.fSemi, 29)
+        m.dot.blendColor = m.t.cClear
     end if
-  end sub
+end sub

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>B5 Programme detail</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&amp;family=Barlow:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 1920px; height: 1080px; position: relative; overflow: hidden; background: #050B1E; color: #FFFFFF; font-family: Barlow, sans-serif">
+  <img src="/_blob/07c58215b9f879d07074321905f8dd66" alt="" style="position: absolute; inset: 0; width: 1920px; height: 1080px; object-fit: cover; filter: blur(40px); opacity: 0.35; transform: scale(1.1)">
+  <div style="position: absolute; inset: 0; background: linear-gradient(90deg, rgba(5,11,30,0.96) 0%, rgba(5,11,30,0.8) 60%, rgba(5,11,30,0.6) 100%)"></div>
+
+  <div style="position: absolute; left: 64px; top: 40px; display: flex; align-items: center; gap: 18px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 28px; color: #A9B6CF">
+    <svg width="32" height="32" viewBox="0 0 40 40" fill="none" stroke="#A9B6CF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M24 10l-10 10 10 10"/></svg>CATCH-UP · SAT OCT 4
+  </div>
+
+  <div style="position: absolute; left: 64px; top: 130px; width: 480px; height: 270px; border-radius: 12px; overflow: hidden; background: #000000">
+    <img src="/_blob/07c58215b9f879d07074321905f8dd66" alt="" style="width: 100%; height: 100%; object-fit: cover">
+  </div>
+  <div style="position: absolute; left: 600px; top: 130px; width: 1256px; display: flex; flex-direction: column; gap: 16px">
+    <div style="display: flex; align-items: center; gap: 16px">
+      <div style="width: 98px; height: 70px; border-radius: 8px; background: #FFFFFF; display: flex; align-items: center; justify-content: center"><img src="/_blob/242bd1a56c08d0855ef8ca15fcbcd4ef" alt="" style="width: 88px; height: 62px; object-fit: contain"></div>
+      <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 30px; color: #FAD35A">3ABN</span>
+    </div>
+    <h1 style="margin: 0; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 80px; line-height: 1">THE CARTER REPORT</h1>
+    <div style="font-size: 28px; color: #A9B6CF">Saturday, Oct 4 · 5:00 – 5:29 PM · 29 min · recorded</div>
+    <div style="display: flex; gap: 16px; margin-top: 18px">
+      <div style="height: 72px; padding: 0 36px; border-radius: 8px; background: #FAD35A; color: #050B1E; display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 28px">
+        <svg width="24" height="24" viewBox="0 0 24 24"><path d="M6 3l15 9-15 9z" fill="#050B1E"/></svg>Play</div>
+      <div style="height: 72px; padding: 0 36px; border-radius: 8px; background: #10203F; display: flex; align-items: center; font-weight: 700; font-size: 28px">See it in the guide</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px; font-size: 22px; color: #A9B6CF; margin-top: 6px">
+      <svg width="24" height="24" viewBox="0 0 28 28" fill="none" stroke="#FAD35A" stroke-width="2.6" stroke-linecap="round"><rect x="6" y="12" width="16" height="12" rx="3"/><path d="M9.5 12V9a4.5 4.5 0 0 1 9 0v3"/></svg>
+      Recordings play for DVR subscribers · log in from Account
+    </div>
+  </div>
+
+  <div style="position: absolute; left: 64px; top: 560px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 38px">MORE OF THE CARTER REPORT <span style="color: #A9B6CF; font-weight: 600; font-size: 28px">· 30 recordings in the last 21 days</span></div>
+  <div style="position: absolute; left: 64px; top: 626px; display: flex; gap: 16px">
+    <sc-for list="{{eps}}" as="e" hint-placeholder-count="5">
+      <div style="width: 340px; display: flex; flex-direction: column; gap: 10px">
+        <div style="width: 340px; height: 191px; border-radius: 8px; overflow: hidden; background: #10203F; display: flex; align-items: center; justify-content: center; box-shadow: {{e.ring}}">
+          <sc-if value="{{e.hasThumb}}" hint-placeholder-val="{{true}}"><img src="{{e.thumb}}" alt="" style="width: 100%; height: 100%; object-fit: cover"></sc-if>
+          <sc-if value="{{e.noThumb}}" hint-placeholder-val="{{false}}"><span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 30px; color: #A9B6CF">{{e.day}}</span></sc-if>
+        </div>
+        <div style="font-weight: 700; font-size: 24px">{{e.day}}</div>
+        <div style="font-weight: 500; font-size: 20px; color: #A9B6CF">{{e.time}}</div>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1920,"height":1080}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const ep = (day, time, thumb, on) => ({ day, time, thumb: thumb ? '/_blob/' + thumb : '', hasThumb: !!thumb, noThumb: !thumb, ring: on ? '0 0 0 4px #FAD35A' : 'none' });
+    return {
+      eps: [
+        ep('Sat, Oct 4', '5:00 – 5:29 PM · this one', '07c58215b9f879d07074321905f8dd66', true),
+        ep('Sat, Oct 4', '5:30 – 5:59 PM'),
+        ep('Wed, Oct 1', '6:00 – 6:29 PM', 'baf69888e1507df3a205effe8c2920b3'),
+        ep('Wed, Oct 1', '4:30 – 4:59 AM'),
+        ep('Tue, Sep 30', '11:30 – 11:59 AM')
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

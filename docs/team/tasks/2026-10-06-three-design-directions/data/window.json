@@ -1,0 +1,274 @@
+{
+ "3abn2_kids_live": [
+  {
+   "t": "KIDS PRAISE",
+   "s": "19:30",
+   "e": "19:58",
+   "d": 29,
+   "th": "https://livetv.mysdatv.com/img/thumb/3abn2_kids_live/20261006003000.jpg?1791235354"
+  },
+  {
+   "t": "3ABN KIDS CAMP BIBLE BUZZ",
+   "s": "20:00",
+   "e": "20:14",
+   "d": 15,
+   "th": "https://livetv.mysdatv.com/img/thumb/3abn2_kids_live/20261006010000.jpg?1791235354"
+  },
+  {
+   "t": "3ABN KIDS CAMP CREATION CRAFTS",
+   "s": "20:15",
+   "e": "20:29",
+   "d": 15,
+   "th": "https://livetv.mysdatv.com/img/thumb/3abn2_kids_live/20261006011500.jpg?1791235354"
+  },
+  {
+   "t": "BIBLE TREASURES",
+   "s": "20:30",
+   "e": "20:44",
+   "d": 15,
+   "th": "https://livetv.mysdatv.com/img/thumb/3abn2_kids_live/20261006013000.jpg?1791235354"
+  },
+  {
+   "t": "KIDS CAMP CRITTERS & CREATION",
+   "s": "20:45",
+   "e": "20:59",
+   "d": 15,
+   "th": "https://livetv.mysdatv.com/img/thumb/3abn2_kids_live/20261006014500.jpg?1791235354"
+  },
+  {
+   "t": "AMAZING ADVENTURES",
+   "s": "21:00",
+   "e": "21:58",
+   "d": 59,
+   "th": "https://livetv.mysdatv.com/img/thumb/3abn2_kids_live/20261006020000.jpg?1791235354"
+  }
+ ],
+ "3abn2_lat_live": [
+  {
+   "t": "SALVACIÓN EN SEÑALES Y SÍMBOLOS",
+   "s": "19:00",
+   "e": "19:58",
+   "d": 59,
+   "th": "https://livetv.mysdatv.com/img/thumb/3abn2_lat_live/20261006000000.jpg?1791235372"
+  },
+  {
+   "t": "LO QUE JESUS DIJO A LOS CRISTIANOS DEL NUEVO TESTA",
+   "s": "20:00",
+   "e": "20:58",
+   "d": 59,
+   "th": "https://livetv.mysdatv.com/img/thumb/3abn2_lat_live/20261006010000.jpg?1791235372"
+  },
+  {
+   "t": "ULTIMATE PRESCRIPTION",
+   "s": "21:00",
+   "e": "21:14",
+   "d": 15,
+   "th": "https://livetv.mysdatv.com/img/thumb/3abn2_lat_live/20261006020000.jpg?1791235372"
+  },
+  {
+   "t": "VALORA Y MEJORA TU SALUD",
+   "s": "21:15",
+   "e": "21:29",
+   "d": 15,
+   "th": "https://livetv.mysdatv.com/img/thumb/3abn2_lat_live/20261006021500.jpg?1791235372"
+  },
+  {
+   "t": "CIENCIA 360º",
+   "s": "21:30",
+   "e": "21:58",
+   "d": 29,
+   "th": "https://livetv.mysdatv.com/img/thumb/3abn2_lat_live/20261006023000.jpg?1791235372"
+  }
+ ],
+ "3abn2_live": [
+  {
+   "t": "UNLOCKING BIBLE PROPHECY",
+   "s": "19:00",
+   "e": "19:56",
+   "d": 56,
+   "th": "https://livetv.mysdatv.com/img/thumb/3abn2_live/20261006000000.jpg?1791235328"
+  },
+  {
+   "t": "3ABN TODAY BIBLE Q&A",
+   "s": "20:00",
+   "e": "20:55",
+   "d": 56,
+   "th": "https://livetv.mysdatv.com/img/thumb/3abn2_live/20261006010000.jpg?1791235328"
+  },
+  {
+   "t": "SUMMER CAMP MEETING",
+   "s": "21:00",
+   "e": "21:57",
+   "d": 58,
+   "th": "https://livetv.mysdatv.com/img/thumb/3abn2_live/20261006020000.jpg?1791235328"
+  }
+ ],
+ "3abn2_pro_live": [
+  {
+   "t": "PIONEER MEDIA",
+   "s": "19:00",
+   "e": "19:58",
+   "d": 58,
+   "th": "https://livetv.mysdatv.com/img/thumb/3abn2_pro_live/20261006000000.jpg?1791235334"
+  },
+  {
+   "t": "SALVATION IN SYMBOLS AND SIGNS",
+   "s": "20:00",
+   "e": "20:28",
+   "d": 29,
+   "th": "https://livetv.mysdatv.com/img/thumb/3abn2_pro_live/20261006010000.jpg?1791235334"
+  },
+  {
+   "t": "TIMELESS HEALING INSIGHTS",
+   "s": "20:30",
+   "e": "20:58",
+   "d": 29,
+   "th": "https://livetv.mysdatv.com/img/thumb/3abn2_pro_live/20261006013000.jpg?1791235334"
+  },
+  {
+   "t": "3ABN SABBATH SCHOOL PANEL",
+   "s": "21:00",
+   "e": "21:59",
+   "d": 60,
+   "th": "https://livetv.mysdatv.com/img/thumb/3abn2_pro_live/20261006020000.jpg?1791235334"
+  }
+ ],
+ "amazingfacts": [
+  {
+   "t": "Program",
+   "s": "19:00",
+   "e": "20:00",
+   "d": 60,
+   "th": "https://livetv.mysdatv.com/img/thumb/amazingfacts/20261006000000.jpg?1791235346"
+  },
+  {
+   "t": "Program",
+   "s": "20:00",
+   "e": "21:00",
+   "d": 60,
+   "th": "https://livetv.mysdatv.com/img/thumb/amazingfacts/20261006010000.jpg?1791235346"
+  },
+  {
+   "t": "Program",
+   "s": "21:00",
+   "e": "22:00",
+   "d": 60,
+   "th": "https://livetv.mysdatv.com/img/thumb/amazingfacts/20261006020000.jpg?1791235346"
+  }
+ ],
+ "goodnewstv": [
+  {
+   "t": "Program",
+   "s": "19:00",
+   "e": "20:00",
+   "d": 60,
+   "th": "https://livetv.mysdatv.com/img/thumb/goodnewstv/20261006000000.jpg?1791235364"
+  },
+  {
+   "t": "Program",
+   "s": "20:00",
+   "e": "21:00",
+   "d": 60,
+   "th": "https://livetv.mysdatv.com/img/thumb/goodnewstv/20261006010000.jpg?1791235364"
+  },
+  {
+   "t": "Program",
+   "s": "21:00",
+   "e": "22:00",
+   "d": 60,
+   "th": "https://livetv.mysdatv.com/img/thumb/goodnewstv/20261006020000.jpg?1791235364"
+  }
+ ],
+ "hopechannel": [
+  {
+   "t": "Program",
+   "s": "19:00",
+   "e": "20:00",
+   "d": 60,
+   "th": "https://livetv.mysdatv.com/img/thumb/hopechannel/20261006000000.jpg?1791235341"
+  },
+  {
+   "t": "Program",
+   "s": "20:00",
+   "e": "21:00",
+   "d": 60,
+   "th": "https://livetv.mysdatv.com/img/thumb/hopechannel/20261006010000.jpg?1791235341"
+  },
+  {
+   "t": "Program",
+   "s": "21:00",
+   "e": "22:00",
+   "d": 60,
+   "th": "https://livetv.mysdatv.com/img/thumb/hopechannel/20261006020000.jpg?1791235341"
+  }
+ ],
+ "itiswrittentv": [
+  {
+   "t": "Program",
+   "s": "19:00",
+   "e": "20:00",
+   "d": 60,
+   "th": "https://livetv.mysdatv.com/img/thumb/itiswrittentv/20261006000000.jpg?1791235351"
+  },
+  {
+   "t": "Program",
+   "s": "20:00",
+   "e": "21:00",
+   "d": 60,
+   "th": "https://livetv.mysdatv.com/img/thumb/itiswrittentv/20261006010000.jpg?1791235351"
+  },
+  {
+   "t": "Program",
+   "s": "21:00",
+   "e": "22:00",
+   "d": 60,
+   "th": "https://livetv.mysdatv.com/img/thumb/itiswrittentv/20261006020000.jpg?1791235351"
+  }
+ ],
+ "llbnarabic": [
+  {
+   "t": "Program",
+   "s": "19:00",
+   "e": "20:00",
+   "d": 60,
+   "th": "https://livetv.mysdatv.com/img/thumb/llbnarabic/20261006000000.jpg?1791235379"
+  },
+  {
+   "t": "Program",
+   "s": "20:00",
+   "e": "21:00",
+   "d": 60,
+   "th": "https://livetv.mysdatv.com/img/thumb/llbnarabic/20261006010000.jpg?1791235379"
+  },
+  {
+   "t": "Program",
+   "s": "21:00",
+   "e": "22:00",
+   "d": 60,
+   "th": "https://livetv.mysdatv.com/img/thumb/llbnarabic/20261006020000.jpg?1791235379"
+  }
+ ],
+ "novotempo": [
+  {
+   "t": "Program",
+   "s": "19:00",
+   "e": "20:00",
+   "d": 60,
+   "th": "https://livetv.mysdatv.com/img/thumb/novotempo/20261006000000.jpg?1791235369"
+  },
+  {
+   "t": "Program",
+   "s": "20:00",
+   "e": "21:00",
+   "d": 60,
+   "th": "https://livetv.mysdatv.com/img/thumb/novotempo/20261006010000.jpg?1791235369"
+  },
+  {
+   "t": "Program",
+   "s": "21:00",
+   "e": "22:00",
+   "d": 60,
+   "th": "https://livetv.mysdatv.com/img/thumb/novotempo/20261006020000.jpg?1791235369"
+  }
+ ]
+}

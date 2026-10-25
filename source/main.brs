@@ -40,6 +40,13 @@ sub main(args as dynamic)
 	
 	end if
 
+	' Back from the rail sets sdExitApp after a confirmation (navigation_bar);
+	' the loop below returns on it, which closes the channel. A GLOBAL field:
+	' an observer on the scene's own exitApp field never delivered to this
+	' port on fw 15.3.4 (measured 2026-10-06).
+	m.global.addField("sdExitApp", "boolean", true)
+	m.global.observeField("sdExitApp", m.port)
+
 	homeScene = screen.createScene("home_scene")
 	homeScene.signalBeacon("AppDialogInitiate")
 	homeScene.signalBeacon("AppDialogComplete")
@@ -59,7 +66,7 @@ sub main(args as dynamic)
 		end if
 		if msgType = "roSGNodeEvent" then
 			field = msg.getField()
-			if field = "exitApp" then
+			if field = "exitApp" or field = "sdExitApp" then
 				return
 			end if
 		end if

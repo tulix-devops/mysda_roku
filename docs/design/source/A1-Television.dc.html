@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>A1 Television</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&amp;family=Inter:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 1920px; height: 1080px; position: relative; overflow: hidden; background: #0B1222; background-image: radial-gradient(ellipse 1500px 900px at 230px -60px, #1F2A44 0%, #141C30 45%, #0B1222 100%); color: #FFFFFF; font-family: Inter, sans-serif">
+
+  <div style="position: absolute; left: 0; top: 0; width: 120px; height: 1080px">
+    <img src="/_blob/626310db1af1e2cf0f2088632ef8c777" alt="" style="position: absolute; left: 30px; top: 36px; width: 60px; height: 60px">
+    <div style="position: absolute; left: 40px; top: 186px; display: flex; flex-direction: column; gap: 30px">
+      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="#FAD35A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="12" width="30" height="20" rx="3.5"/><path d="M14 36h12M15 5l5 6 5-6"/></svg>
+      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="#C4CAD6" stroke-width="3" stroke-linecap="round"><circle cx="20" cy="20" r="15"/><ellipse cx="20" cy="20" rx="7" ry="15"/><path d="M5 20h30M8 12.5h24M8 27.5h24"/></svg>
+      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="#C4CAD6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 13a14 14 0 1 1-2 9"/><path d="M4.5 8l2.1 7.3 7-2.3M20 12v8l6 3.5"/></svg>
+      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="#C4CAD6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="14" width="32" height="21" rx="3.5"/><circle cx="14.5" cy="24.5" r="5.5"/><path d="M25 21h6M25 27.5h6M9 14l21-9"/></svg>
+    </div>
+    <svg style="position: absolute; left: 40px; top: 456px" width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="#C4CAD6" stroke-width="3" stroke-linecap="round"><circle cx="20" cy="12.5" r="6.5"/><path d="M7 34c0-7.5 5.5-11.5 13-11.5S33 26.5 33 34"/></svg>
+  </div>
+
+  <img src="/_blob/ec7c10bad0117787e03b001592d65bba" alt="mySDAtv" style="position: absolute; left: 160px; top: 30px; width: 207px; height: 108px">
+  <h1 style="position: absolute; left: 160px; top: 150px; margin: 0; font-family: Manrope, sans-serif; font-weight: 800; font-size: 54px; line-height: 66px">Television</h1>
+
+  <div style="position: absolute; right: 60px; top: 48px; width: 420px; height: 60px; border-radius: 12px; background: #151E33; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; box-sizing: border-box">
+    <span style="font-family: Manrope, sans-serif; font-weight: 700; font-size: 30px">3:20 PM</span>
+    <span style="font-size: 21px; color: #B4BCCB">Sunday, Oct 5</span>
+  </div>
+
+  <div style="position: absolute; right: 60px; top: 160px; display: flex; gap: 12px">
+    <sc-for list="{{chips}}" as="c" hint-placeholder-count="6">
+      <div style="height: 48px; padding: 0 22px; border-radius: 24px; display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 22px; background: {{c.bg}}; color: {{c.fg}}">{{c.label}}<span style="font-weight: 500; opacity: 0.7">{{c.n}}</span></div>
+    </sc-for>
+  </div>
+
+  <div style="position: absolute; left: 160px; top: 270px; width: 1700px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 46px 20px">
+    <sc-for list="{{tiles}}" as="t" hint-placeholder-count="15">
+      <div style="display: flex; flex-direction: column; gap: 12px">
+        <div style="height: 230px; border-radius: 14px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; transform: scale({{t.scale}}); transform-origin: bottom left; box-shadow: {{t.glow}}; opacity: {{t.dim}}">
+          <img src="{{t.logo}}" alt="" style="width: 290px; height: 206px; object-fit: contain">
+        </div>
+        <div style="font-weight: 600; font-size: 27px; color: {{t.titleColor}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{t.title}}</div>
+        <div style="display: flex; align-items: center; gap: 10px; font-weight: 500; font-size: 22px; color: #B4BCCB; white-space: nowrap; overflow: hidden">
+          <span style="width: 10px; height: 10px; border-radius: 5px; background: #F0262B; flex-shrink: 0"></span>
+          <span style="overflow: hidden; text-overflow: ellipsis">{{t.now}}</span>
+        </div>
+        <div style="height: 4px; border-radius: 2px; background: #27324E; width: 100%">
+          <div style="height: 4px; border-radius: 2px; background: #F0262B; width: {{t.pct}}"></div>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1920,"height":1080}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const rest = { scale: 0.92, glow: 'none', dim: 0.84, titleColor: '#FFFFFF' };
+    const lit = { scale: 1, glow: '0 0 0 3px rgba(240,38,43,0.35), 0 0 46px 6px rgba(240,38,43,0.45)', dim: 1, titleColor: '#F0262B' };
+    const t = (logo, title, now, pct, focused) => Object.assign({ logo: '/_blob/' + logo, title, now, pct }, focused ? lit : rest);
+    return {
+      chips: [
+        { label: 'All', n: '24', bg: '#FAD35A', fg: '#0B1222' },
+        { label: '3ABN', n: '8', bg: '#212C47', fg: '#FFFFFF' },
+        { label: 'LLBN', n: '3', bg: '#212C47', fg: '#FFFFFF' },
+        { label: 'Good News', n: '2', bg: '#212C47', fg: '#FFFFFF' },
+        { label: 'Better', n: '3', bg: '#212C47', fg: '#FFFFFF' },
+        { label: 'More', n: '8', bg: '#212C47', fg: '#FFFFFF' }
+      ],
+      tiles: [
+        t('242bd1a56c08d0855ef8ca15fcbcd4ef', '3ABN', '3ABN TODAY BIBLE Q&A', '36%', true),
+        t('e40d84f762578caed15688344a03391c', '3ABN Proclaim', 'REVELATION OF JESUS CHRIST', '35%'),
+        t('3cd27ca3e7d58e9a1aa8273e9c19caa4', '3ABN Kids Network', 'TINY TOTS WORSHIP', '36%'),
+        t('8a4ae2c264a612734dc50b5aabb7da57', 'HopeChannel', 'Live now · 3-4 PM', '33%'),
+        t('e2f268b5a36bee5d8c269ca003c3de9e', 'It is Written TV', 'Live now · 3-4 PM', '33%'),
+        t('6ec2f978278a61060737b8b22d12c18e', 'Amazing Facts', 'Live now · 3-4 PM', '33%'),
+        t('163b3b93da32b56730990408244fbfaa', 'Good News TV', 'Live now · 3-4 PM', '33%'),
+        t('53ee2f0dc851bf2f516b0ec5f1913e5a', 'Mission TV', 'Live now · 3-4 PM', '33%'),
+        t('501848ecd4f1f5a9f0595e8a81d8ee24', 'Better Life TV', 'Live now · 3-4 PM', '33%'),
+        t('9376ee23051be9567615604d253e34b5', 'LLBN His Light', 'Live now · 3-4 PM', '33%'),
+        t('ac33539872f309774ed2c59e614fa491', '3ABN Dare to Dream', 'Live now', '0%'),
+        t('c31a9a4cf6a1cb56481abcf3a2065b43', '3ABN Praise Him', 'Live now', '0%')
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

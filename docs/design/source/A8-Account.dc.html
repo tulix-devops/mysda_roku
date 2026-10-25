@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>A8 Account</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&amp;family=Inter:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 1920px; height: 1080px; position: relative; overflow: hidden; background: #0B1222; background-image: radial-gradient(ellipse 1500px 900px at 230px -60px, #1F2A44 0%, #141C30 45%, #0B1222 100%); color: #FFFFFF; font-family: Inter, sans-serif">
+
+  <div style="position: absolute; left: 0; top: 0; width: 440px; height: 1080px; border-right: 1px solid #27324E; box-sizing: border-box">
+    <img src="/_blob/626310db1af1e2cf0f2088632ef8c777" alt="" style="position: absolute; left: 30px; top: 36px; width: 60px; height: 60px">
+    <div style="position: absolute; left: 108px; top: 42px; font-family: Manrope, sans-serif; font-weight: 800; font-size: 36px; line-height: 48px"><span style="color: #F0262B">my</span><span style="color: #FAD35A">SDA</span><span style="color: #0981FB">tv</span></div>
+    <div style="position: absolute; left: 24px; top: 176px; width: 392px; display: flex; flex-direction: column; gap: 4px">
+      <sc-for list="{{rail}}" as="r" hint-placeholder-count="5">
+        <div style="height: 66px; border-radius: 12px; background: {{r.bg}}; display: flex; align-items: center; gap: 18px; padding: 0 16px; margin-top: {{r.gap}}; color: #FFFFFF; font-weight: {{r.weight}}; font-size: 29px">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="{{r.icon}}"/></svg>
+          {{r.label}}
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <img src="/_blob/ec7c10bad0117787e03b001592d65bba" alt="mySDAtv" style="position: absolute; left: 480px; top: 30px; width: 207px; height: 108px">
+  <h1 style="position: absolute; left: 480px; top: 150px; margin: 0; font-family: Manrope, sans-serif; font-weight: 800; font-size: 54px; line-height: 66px">DVR access</h1>
+
+  <div style="position: absolute; left: 480px; top: 258px; width: 840px; display: flex; flex-direction: column; gap: 26px">
+    <div style="display: flex; flex-direction: column; gap: 14px">
+      <sc-for list="{{perks}}" as="p" hint-placeholder-count="3">
+        <div style="display: flex; align-items: center; gap: 18px; font-size: 28px; font-weight: 600">
+          <div style="width: 48px; height: 48px; border-radius: 12px; background: #212C47; display: flex; align-items: center; justify-content: center"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#FAD35A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13.5l5 5 11-12"/></svg></div>
+          {{p}}
+        </div>
+      </sc-for>
+    </div>
+    <p style="margin: 0; font-size: 26px; line-height: 1.6; color: #B4BCCB">Recording every channel around the clock costs real storage, so DVR is a small subscription. Subscribe at mysdatv.com, then log in here with the same email and password.</p>
+    <p style="margin: 0; font-size: 24px; line-height: 1.6; color: #B4BCCB"><span style="color: #FAD35A; font-weight: 600">Prefer to give? </span>A tax-deductible donation to mySDAtv unlocks DVR for a whole year. Temporary promotion.</p>
+  </div>
+
+  <div style="position: absolute; left: 1416px; top: 258px; width: 384px; height: 444px; border-radius: 24px; background: #151E33; display: flex; flex-direction: column; align-items: center; gap: 18px; padding-top: 30px; box-sizing: border-box">
+    <div style="width: 324px; height: 324px; border-radius: 12px; background: #FFFFFF; display: flex; align-items: center; justify-content: center"><img src="/_blob/ade3e22c8d4e928c90c54e00fb911009" alt="Donation QR code" style="width: 296px; height: 296px; object-fit: contain"></div>
+    <div style="font-weight: 600; font-size: 27px">Donate · scan with your phone</div>
+  </div>
+
+  <div style="position: absolute; left: 480px; top: 900px; display: flex; gap: 18px">
+    <div style="height: 72px; padding: 0 36px; border-radius: 18px; background: #F0262B; display: flex; align-items: center; font-weight: 700; font-size: 27px; box-shadow: 0 0 0 6px #FFFFFF">Log in</div>
+    <div style="height: 72px; padding: 0 36px; border-radius: 18px; background: #212C47; display: flex; align-items: center; font-weight: 700; font-size: 27px">How to subscribe</div>
+  </div>
+  <div style="position: absolute; right: 60px; top: 48px; width: 420px; height: 60px; border-radius: 12px; background: #151E33; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; box-sizing: border-box">
+    <span style="font-family: Manrope, sans-serif; font-weight: 700; font-size: 30px">3:20 PM</span>
+    <span style="font-size: 21px; color: #B4BCCB">Sunday, Oct 5</span>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1920,"height":1080}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const icons = {
+      tv: 'M8.5 12h23a3.5 3.5 0 0 1 3.5 3.5v13a3.5 3.5 0 0 1-3.5 3.5h-23A3.5 3.5 0 0 1 5 28.5v-13A3.5 3.5 0 0 1 8.5 12zM14 36h12M15 5l5 6 5-6',
+      globe: 'M35 20a15 15 0 1 1-30 0 15 15 0 0 1 30 0zM27 20c0 8.3-3.1 15-7 15s-7-6.7-7-15 3.1-15 7-15 7 6.7 7 15zM5 20h30M8 12.5h24M8 27.5h24',
+      dvr: 'M8 13a14 14 0 1 1-2 9M4.5 8l2.1 7.3 7-2.3M20 12v8l6 3.5',
+      radio: 'M7.5 14h25a3.5 3.5 0 0 1 3.5 3.5v14a3.5 3.5 0 0 1-3.5 3.5h-25A3.5 3.5 0 0 1 4 31.5v-14A3.5 3.5 0 0 1 7.5 14zM20 24.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0zM25 21h6M25 27.5h6M9 14l21-9',
+      user: 'M26.5 12.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0zM7 34c0-7.5 5.5-11.5 13-11.5S33 26.5 33 34'
+    };
+    const row = (label, icon, focused, gap) => ({ label, icon: icons[icon], gap: gap || '0px', bg: focused ? '#F0262B' : 'transparent', weight: focused ? 700 : 600 });
+    return {
+      rail: [row('Television', 'tv'), row('TV Languages', 'globe'), row('DVR', 'dvr'), row('Radios', 'radio'), row('Login', 'user', true, '56px')],
+      perks: ['21 days of every channel, recorded', 'Watch any programme you missed', 'Start a live programme over from the top']
+    };
+  }
+}
+</script>
+</body>
+</html>

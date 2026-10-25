@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  SdTile - the content tile, ported from wpa_live_roku's WpTile (2026-10-06).
+  One component for every grid in the channel, so the focus language is
+  identical everywhere by construction.
+
+  It reads mySDAtv's existing content nodes unchanged: title, hdPosterUrl.
+  Optional per-item fields (added by a screen when it wants them): sdArt,
+  sdMeta, sdTileW / sdTileH (the cell), sdPadTop / sdPadLeft (room for the
+  glow inside a clipping list).
+
+  FOCUS: the card the list is on is drawn at full size, picture at full
+  brightness, title in the accent, with a soft accent glow; every other card
+  rests at 0.92 with its picture dimmed. The scale is anchored at the card's
+  BOTTOM-LEFT, where the caption hangs. There is NO BORDER: a thin curve does
+  not survive the 720p panel's 2/3 downscale
+  (knowledge/dev-roku/focus-border-abandoned-for-size-and-brightness).
+-->
+<component name="SdTile" extends="Group">
+  <interface>
+    <field id="itemContent" type="node" onChange="onContentSet" />
+    <field id="focusPercent" type="float" onChange="onFocusPercentChanged" />
+    <!-- Set BY THE LIST that owns this tile, and the only reliable word on
+         whether the list itself holds focus: focusPercent stays at 1.0 after
+         the list has lost it
+         (knowledge/dev-roku/list-owned-focus-fields-not-parent-walk). -->
+    <field id="gridHasFocus" type="boolean" onChange="onFocusPercentChanged" />
+    <field id="listHasFocus" type="boolean" onChange="onFocusPercentChanged" />
+    <!-- Set by a wrapper item (DVREpisodeItem) that hosts this tile. -->
+    <field id="hostLit" type="boolean" onChange="onFocusPercentChanged" />
+  </interface>
+  <script type="text/brightscript" uri="pkg:/source/SdGlobals.brs" />
+  <script type="text/brightscript" uri="pkg:/source/SdTheme.brs" />
+  <script type="text/brightscript" uri="pkg:/source/SdMetrics.brs" />
+  <script type="text/brightscript" uri="pkg:/components/widgets/SdTile.brs" />
+  <children>
+    <Group id="tileRoot">
+      <Group id="cardGroup">
+        <!-- The picture sits on a rounded PLATE in the surface colour, 3
+             device px larger all round; the corner caps take the plate's
+             colour, so they round cleanly over the gradient ground
+             (knowledge/dev-roku/rounded-corners-on-images). -->
+        <Poster id="artPlate" uri="pkg:/images/png/shapes/pill_r12.9.png"
+                width="318" height="183" translation="[6, 6]" />
+        <Group id="artClip" translation="[9, 9]">
+          <!-- NO ARTWORK: a two-hue diagonal gradient hashed from the title,
+               and the monogram. -->
+          <Group id="fallback" visible="false">
+            <Poster id="fallbackFill" uri="pkg:/images/png/shapes/flat_white.png"
+                    width="312" height="177" loadDisplayMode="scaleToFill" />
+            <Poster id="fallbackOverlay" uri="pkg:/images/png/shapes/ramp_diag.png"
+                    width="312" height="177" loadDisplayMode="scaleToFill" />
+            <Label id="fallbackText" text="" width="312" height="177"
+                   horizAlign="center" vertAlign="center" color="0xFFFFFF59" />
+          </Group>
+          <Poster id="poster" uri=""
+                  width="312" height="177"
+                  loadDisplayMode="zoomToFill" />
+        </Group>
+
+        <!-- Rounds the artwork; tinted the plate's colour, drawn last in
+             cardGroup. -->
+        <Poster id="cardFrame" uri="pkg:/images/png/shapes/corners_r9.9.png"
+                width="312" height="177" translation="[9, 9]" />
+
+        <!-- FOCUS GLOW: the accent halo, 30 px past the cell, faded in as the
+             card grows. Accent baked in by tools/build-assets.ps1. -->
+        <Poster id="glowFrame" uri="pkg:/images/png/shapes/glow_frame_g30.9.png"
+                width="390" height="255" translation="[-30, -30]" opacity="0" />
+      </Group>
+
+      <!-- Caption OUTSIDE cardGroup: it neither scales nor dims. -->
+      <Label id="titleLabel" text="" width="306" height="36"
+             translation="[12, 207]" color="0xFFFFFFFF"
+             wrap="false" ellipsisText="...">
+        <Font role="font" uri="pkg:/images/fonts/Inter-SemiBold.ttf" size="27" />
+      </Label>
+      <Label id="metaLabel" text="" width="306" height="30"
+             translation="[12, 246]" color="0xB4BCCBFF"
+             wrap="false" ellipsisText="...">
+        <Font role="font" uri="pkg:/images/fonts/Inter-Medium.ttf" size="24" />
+      </Label>
+
+      <Animation id="growAnim" duration="0.16" repeat="false" easeFunction="outQuad">
+        <Vector2DFieldInterpolator key="[0.0, 1.0]"
+          keyValue="[ [0.92, 0.92], [1.0, 1.0] ]" fieldToInterp="cardGroup.scale" />
+        <FloatFieldInterpolator id="glowInInterp" key="[0.0, 1.0]" keyValue="[0.0, 1.0]" fieldToInterp="glowFrame.opacity" />
+      </Animation>
+      <Animation id="shrinkAnim" duration="0.16" repeat="false" easeFunction="outQuad">
+        <Vector2DFieldInterpolator key="[0.0, 1.0]"
+          keyValue="[ [1.0, 1.0], [0.92, 0.92] ]" fieldToInterp="cardGroup.scale" />
+        <FloatFieldInterpolator id="glowOutInterp" key="[0.0, 1.0]" keyValue="[1.0, 0.0]" fieldToInterp="glowFrame.opacity" />
+      </Animation>
+    </Group>
+  </children>
+</component>

@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>B1 TV Guide</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&amp;family=Barlow:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 1920px; height: 1080px; position: relative; overflow: hidden; background: #050B1E; color: #FFFFFF; font-family: Barlow, sans-serif">
+
+  <div style="position: absolute; left: 0; top: 0; width: 1920px; height: 104px; display: flex; align-items: center; padding: 0 64px; box-sizing: border-box; gap: 56px; border-bottom: 1px solid #1C2E55">
+    <img src="/_blob/ec7c10bad0117787e03b001592d65bba" alt="mySDAtv" style="width: 150px; height: 78px">
+    <div style="display: flex; gap: 44px; flex-grow: 1">
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="5">
+        <div style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 34px; letter-spacing: 1px; color: {{t.fg}}; padding: 8px 0; border-bottom: 4px solid {{t.line}}">{{t.label}}</div>
+      </sc-for>
+    </div>
+    <div style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 34px">3:20 PM <span style="color: #A9B6CF; font-weight: 600">SUN OCT 5</span></div>
+  </div>
+
+  <div style="position: absolute; left: 64px; top: 136px; width: 640px; height: 360px; border-radius: 12px; overflow: hidden; background: #000000">
+    <img src="/_blob/c4daed39c492a92a3a5a2eeb01619e11" alt="" style="width: 100%; height: 100%; object-fit: cover">
+    <div style="position: absolute; left: 14px; top: 14px; height: 34px; padding: 0 12px; border-radius: 7px; background: #F0262B; display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 19px"><span style="width: 8px; height: 8px; border-radius: 4px; background: #FFFFFF"></span>LIVE PREVIEW</div>
+  </div>
+
+  <div style="position: absolute; left: 744px; top: 140px; width: 1112px; display: flex; flex-direction: column; gap: 14px">
+    <div style="display: flex; align-items: center; gap: 16px">
+      <div style="width: 98px; height: 70px; border-radius: 8px; background: #FFFFFF; display: flex; align-items: center; justify-content: center"><img src="/_blob/242bd1a56c08d0855ef8ca15fcbcd4ef" alt="" style="width: 88px; height: 62px; object-fit: contain"></div>
+      <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 30px; color: #FAD35A">3ABN · CH 1</span>
+    </div>
+    <h1 style="margin: 0; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 66px; line-height: 1">3ABN TODAY BIBLE Q&amp;A</h1>
+    <div style="display: flex; align-items: center; gap: 18px; font-size: 26px; color: #A9B6CF">
+      <span>3:00 – 3:55 PM</span>
+      <div style="width: 360px; height: 6px; border-radius: 3px; background: #1C2E55"><div style="width: 36%; height: 6px; border-radius: 3px; background: #FAD35A"></div></div>
+      <span>35 min left</span>
+    </div>
+    <div style="font-size: 25px; color: #A9B6CF"><span style="color: #FFFFFF; font-weight: 600">Next 4:00 PM</span> · 3ABN KIDS CAMP KITCHEN FUN</div>
+    <div style="display: flex; gap: 16px; margin-top: 10px">
+      <div style="height: 64px; padding: 0 30px; border-radius: 8px; background: #FAD35A; color: #050B1E; display: flex; align-items: center; font-weight: 700; font-size: 26px">Watch live</div>
+      <div style="height: 64px; padding: 0 30px; border-radius: 8px; background: #10203F; display: flex; align-items: center; font-weight: 700; font-size: 26px">Start over</div>
+    </div>
+  </div>
+
+  <div style="position: absolute; left: 64px; top: 536px; width: 1792px; height: 44px">
+    <div style="position: absolute; left: 0; top: 6px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 26px; color: #A9B6CF">TODAY</div>
+    <sc-for list="{{ticks}}" as="k" hint-placeholder-count="4">
+      <div style="position: absolute; left: {{k.x}}; top: 6px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 26px; color: #A9B6CF">{{k.label}}</div>
+    </sc-for>
+  </div>
+
+  <div style="position: absolute; left: 64px; top: 590px; width: 1792px; display: flex; flex-direction: column; gap: 6px">
+    <sc-for list="{{rows}}" as="r" hint-placeholder-count="5">
+      <div style="position: relative; height: 84px">
+        <div style="position: absolute; left: 0; top: 0; width: 300px; height: 84px; border-radius: 8px; background: #0B1733; display: flex; align-items: center; gap: 14px; padding: 0 10px; box-sizing: border-box">
+          <div style="width: 100px; height: 66px; border-radius: 6px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><img src="{{r.logo}}" alt="" style="width: 92px; height: 60px; object-fit: contain"></div>
+          <span style="font-weight: 600; font-size: 22px; line-height: 1.15">{{r.name}}</span>
+        </div>
+        <sc-for list="{{r.cells}}" as="c" hint-placeholder-count="3">
+          <div style="position: absolute; top: 0; left: {{c.x}}; width: {{c.w}}; height: 84px; border-radius: 8px; overflow: hidden; background: {{c.bg}}; color: {{c.fg}}; box-sizing: border-box; padding: 10px 14px; display: flex; flex-direction: column; justify-content: center; gap: 2px">
+            <div style="font-weight: 700; font-size: 23px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{c.title}}</div>
+            <div style="font-weight: 500; font-size: 19px; opacity: 0.8; white-space: nowrap; overflow: hidden">{{c.time}}</div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-for>
+  </div>
+  <div style="position: absolute; left: {{nowX}}; top: 572px; width: 4px; height: 470px; background: #FAD35A; border-radius: 2px"></div>
+  <div style="position: absolute; left: {{nowTagX}}; top: 540px; height: 30px; padding: 0 8px; border-radius: 6px; background: #FAD35A; color: #050B1E; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 22px; display: flex; align-items: center">3:20</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1920,"height":1080}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const X0 = 316, PPM = 12.3, NOW = 20;
+    const m = (hm) => { const [h, mm] = hm.split(':').map(Number); return (h - 15) * 60 + mm; };
+    const cell = (s, e, title, focus, generic) => {
+      const a = m(s), b = Math.min(m(e), 120);
+      const live = a <= NOW && b > NOW;
+      return {
+        x: (X0 + a * PPM) + 'px', w: Math.max(0, (b - a) * PPM - 6) + 'px', title,
+        time: generic ? s.replace(/^15/, '3').replace(/^16/, '4') + ' · live programming' : '',
+        bg: focus ? '#FAD35A' : (live ? '#16294F' : '#10203F'), fg: focus ? '#050B1E' : '#FFFFFF'
+      };
+    };
+    const row = (logo, name, cells) => ({ logo: '/_blob/' + logo, name, cells });
+    return {
+      tabs: [
+        { label: 'GUIDE', fg: '#FFFFFF', line: '#FAD35A' }, { label: 'LANGUAGES', fg: '#A9B6CF', line: 'transparent' },
+        { label: 'RADIO', fg: '#A9B6CF', line: 'transparent' }, { label: 'CATCH-UP', fg: '#A9B6CF', line: 'transparent' },
+        { label: 'ACCOUNT', fg: '#A9B6CF', line: 'transparent' }
+      ],
+      ticks: [{ x: X0 + 'px', label: '3:00 PM' }, { x: (X0 + 30 * PPM) + 'px', label: '3:30' }, { x: (X0 + 60 * PPM) + 'px', label: '4:00 PM' }, { x: (X0 + 90 * PPM) + 'px', label: '4:30' }],
+      nowX: (64 + X0 + NOW * PPM - 2) + 'px', nowTagX: (64 + X0 + NOW * PPM - 26) + 'px',
+      rows: [
+        row('242bd1a56c08d0855ef8ca15fcbcd4ef', '3ABN', [cell('15:00', '16:00', '3ABN TODAY BIBLE Q&A', true), cell('16:00', '16:30', 'KIDS CAMP KITCHEN FUN'), cell('16:30', '16:45', 'TINY TOTS KITCHEN'), cell('16:45', '17:00', 'TINY TOTS WORSHIP')]),
+        row('e40d84f762578caed15688344a03391c', '3ABN Proclaim', [cell('15:00', '16:00', 'REVELATION OF JESUS CHRIST'), cell('16:00', '16:30', 'WHITE HORSE MEDIA'), cell('16:30', '17:00', 'WHITE HORSE MEDIA')]),
+        row('3cd27ca3e7d58e9a1aa8273e9c19caa4', '3ABN Kids', [cell('15:00', '15:15', 'HERE I AM SEND ME'), cell('15:15', '15:30', 'TINY TOTS WORSHIP'), cell('15:30', '16:00', 'TINY TOTS FOR JESUS'), cell('16:00', '16:15', 'BIBLE TREASURES'), cell('16:15', '16:30', 'TINY TOTS WORSHIP'), cell('16:30', '16:45', 'BIBLE GEMS'), cell('16:45', '17:00', 'FIT CLUB')]),
+        row('8a4ae2c264a612734dc50b5aabb7da57', 'HopeChannel', [cell('15:00', '16:00', 'HopeChannel', false, true), cell('16:00', '17:00', 'HopeChannel', false, true)]),
+        row('e2f268b5a36bee5d8c269ca003c3de9e', 'It is Written TV', [cell('15:00', '16:00', 'It is Written TV', false, true), cell('16:00', '17:00', 'It is Written TV', false, true)])
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

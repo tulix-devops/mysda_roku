@@ -1,0 +1,9 @@
+# Local device credentials (ROKU_DEV_TARGET / ROKU_DEV_PASSWORD) - never commit.
+.env
+# Build output: tools/deploy.ps1 and the VS Code extension write here.
+out/
+# VS Code launch config carries the device password.
+.vscode/launch.json
+# Design export bundles and raw review renders (JPEG copies live in docs/design/).
+docs/design/*.zip
+docs/team/tasks/*/screenshots/*.png

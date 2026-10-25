@@ -1,5 +1,9 @@
 function init()
     ? "[home_scene] init"
+    SdEnsureGlobals()
+    ' The page ground from the theme (redesign 2026-10-06).
+    SdPaint(m.top, [["pageGroundFill", "color", "cGround"], ["gradient", "uri", "gGround"]])
+    m.top.backgroundColor = SdTheme().cGround
     ' m.global.addField("liveChannelsEntity", "array", false)
     ' m.navBar = m.top.findNode("navigation_bar")
     ' m.navBar.setFocus(true)

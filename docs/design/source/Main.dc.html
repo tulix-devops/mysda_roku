@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>mySDAtv design directions</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;800&amp;family=Inter:wght@400;500;600&amp;family=Barlow+Condensed:wght@600;700&amp;family=Plus+Jakarta+Sans:wght@500;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 1920px; height: 1080px; box-sizing: border-box; padding: 72px 96px; background: #0B1222; color: #FFFFFF; font-family: Inter, sans-serif; display: flex; flex-direction: column; gap: 40px">
+  <div style="display: flex; align-items: center; gap: 32px">
+    <img src="/_blob/ec7c10bad0117787e03b001592d65bba" alt="mySDAtv" style="width: 207px; height: 108px">
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <h1 style="margin: 0; font-family: Manrope, sans-serif; font-weight: 800; font-size: 56px; letter-spacing: -0.5px">Three design directions for the Roku channel</h1>
+      <p style="margin: 0; font-size: 24px; color: #B4BCCB">Every screen uses real mySDAtv logos, programme titles and frame grabs, as they were on 5 October 2026 at 3:20 PM.</p>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; flex-grow: 1">
+    <sc-for list="{{directions}}" as="d" hint-placeholder-count="3">
+      <div style="background: #151E33; border-radius: 24px; padding: 36px; display: flex; flex-direction: column; gap: 18px">
+        <div style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 26px; letter-spacing: 3px; color: #FAD35A">{{d.tag}}</div>
+        <h2 style="margin: 0; font-family: Manrope, sans-serif; font-weight: 800; font-size: 44px">{{d.name}}</h2>
+        <p style="margin: 0; font-size: 22px; line-height: 1.45; color: #DDE2EA">{{d.idea}}</p>
+        <div style="display: flex; gap: 10px">
+          <sc-for list="{{d.swatches}}" as="s" hint-placeholder-count="4">
+            <div style="display: flex; flex-direction: column; gap: 6px; align-items: flex-start">
+              <div style="width: 72px; height: 44px; border-radius: 10px; background: {{s.hex}}; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18)"></div>
+              <span style="font-size: 15px; color: #B4BCCB">{{s.hex}}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 19px; line-height: 1.4; color: #B4BCCB">
+          <div><span style="color: #FFFFFF; font-weight: 600">Navigation </span>{{d.nav}}</div>
+          <div><span style="color: #FFFFFF; font-weight: 600">Opens on </span>{{d.launch}}</div>
+          <div><span style="color: #FFFFFF; font-weight: 600">Focus </span>{{d.focus}}</div>
+          <div><span style="color: #FFFFFF; font-weight: 600">Type </span>{{d.type}}</div>
+          <div><span style="color: #FFFFFF; font-weight: 600">Schedule data </span>{{d.data}}</div>
+          <div><span style="color: #FFFFFF; font-weight: 600">Build effort </span>{{d.effort}}</div>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="background: #10182B; border-radius: 20px; padding: 26px 32px; display: flex; flex-direction: column; gap: 10px">
+    <div style="font-family: Manrope, sans-serif; font-weight: 800; font-size: 26px">What the data allows (all three directions follow these)</div>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px 40px; font-size: 18px; line-height: 1.4; color: #B4BCCB">
+      <sc-for list="{{rules}}" as="r" hint-placeholder-count="6">
+        <div>{{r}}</div>
+      </sc-for>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1920,"height":1080}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      directions: [
+        { tag: 'A · LINEUP', name: 'Rail and channel grids',
+          idea: 'The build on the TV today, refined. Channels are logo cards shown whole; a line under each says what is on. Fastest to ship, closest to WPALive.',
+          swatches: [{ hex: '#0B1222' }, { hex: '#151E33' }, { hex: '#F0262B' }, { hex: '#FAD35A' }],
+          nav: 'collapsing left rail (120 / 440), as built',
+          launch: 'the Television grid',
+          focus: 'card grows from 0.92 with a soft red glow',
+          type: 'Manrope + Inter',
+          data: 'now/next loaded for the visible row only (5 channels)',
+          effort: 'S: about 2-3 days on top of the current build' },
+        { tag: 'B · GUIDE', name: 'A TV guide first',
+          idea: 'What a cable viewer expects: channels down, time across, a live preview on top. Catch-up is the same guide scrolled into the past 21 days, with no separate DVR world.',
+          swatches: [{ hex: '#050B1E' }, { hex: '#10203F' }, { hex: '#FAD35A' }, { hex: '#F0262B' }],
+          nav: 'top tabs: Guide, Languages, Radio, Catch-up, Account',
+          launch: 'the guide, focused on now, with a preview',
+          focus: 'a gold cell with dark ink, and a gold now-line',
+          type: 'Barlow Condensed + Barlow',
+          data: 'schedules for 6 visible channels, cached; needs the lazy loader',
+          effort: 'L: about 2 weeks (guide grid, time maths, paging)' },
+        { tag: 'C · SHOWCASE', name: 'A streaming home of rows',
+          idea: 'Lean-back and image-led. Home opens on what is on now, with frame grabs, then channels, languages, radio and catch-up by series. Each channel gets its own page.',
+          swatches: [{ hex: '#07080C' }, { hex: '#12141B' }, { hex: '#FFFFFF' }, { hex: '#1E8BFF' }],
+          nav: 'a quiet top menu over full-bleed art',
+          launch: 'Home: a hero of what is on now, then rows',
+          focus: 'card lifts 1.08 with a white title, no border',
+          type: 'Plus Jakarta Sans',
+          data: 'now/next for the 3ABN family first, then the rest lazily',
+          effort: 'M-L: about 1-1.5 weeks (rows, channel page, series grouping)' }
+      ],
+      rules: [
+        'Logos are 225x160 on white: show them WHOLE at 1.41 on a light plate, never cropped to 16:9.',
+        'Only the 3ABN family has programme titles; other channels say "Live now" and the hour.',
+        'Frame grabs are 320x180: sharp at most about 480 px wide, otherwise blurred behind content.',
+        'Not yet aired = a placeholder image: future slots show logo and time, never a thumbnail.',
+        'No descriptions anywhere: no layout leans on a synopsis.',
+        'Schedule is 377 KB per channel: load only what is on screen (or ask the API for now/next).'
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

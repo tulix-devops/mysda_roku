@@ -1,29 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  DVRSidebarItem - one day in the DVR overlay's list, drawn as a rail row
+  (redesign 2026-10-06, WPALive section 14):
+    focused    accent pill, dark-navy ink      (the list holds focus)
+    selected   accent label and dot            (the recordings hold focus)
+    idle       white label
+-->
 <component name="DVRSidebarItem" extends="Group">
   <interface>
     <field id="itemContent" type="node" onChange="updateContent" />
+    <field id="focusPercent" type="float" onChange="onFocusChanged" />
+    <!-- Set by the MarkupList: the only reliable word on whether the LIST
+         holds focus (focusPercent stays 1.0 after it has lost it). -->
+    <field id="listHasFocus" type="boolean" onChange="onFocusChanged" />
   </interface>
 
   <children>
-    <Rectangle
-      id="background"
-      width="330"
-      height="70"
-      color="0x00000000"
-    />
-
+    <Poster id="pill" uri="pkg:/images/png/shapes/pill_r9.9.png"
+            width="420" height="66" blendColor="0x00000000" />
     <Label
       id="label"
-      translation="[20, 15]"
-      width="310"
-      height="40"
-      color="0xCCCCCC"
-      font="font:MediumSystemFont"
+      translation="[24, 0]"
+      width="348"
+      height="66"
+      color="0xFFFFFFFF"
       horizAlign="left"
       vertAlign="center"
-      text="test"
-    />
+      ellipsisText="..."
+      text="" />
+    <Poster id="dot" uri="pkg:/images/png/shapes/pill_r6.9.png"
+            width="12" height="12" translation="[384, 27]" blendColor="0x00000000" />
   </children>
 
+  <script type="text/brightscript" uri="pkg:/source/SdGlobals.brs" />
+  <script type="text/brightscript" uri="pkg:/source/SdTheme.brs" />
+  <script type="text/brightscript" uri="pkg:/source/SdMetrics.brs" />
   <script type="text/brightscript" uri="pkg:/components/widgets/DVRSidebarItem.brs" />
 </component>

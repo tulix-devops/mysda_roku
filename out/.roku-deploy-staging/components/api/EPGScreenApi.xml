@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<component name="EpgScreenData" extends="Task" >
-	<interface>
-		<field id="responseData" type="string"/>
-		<field id="epgId" type="integer" />
-	</interface>
-	<script type="text/brightscript" uri="pkg:/components/api/EPGScreenApi.brs"/>
-</component>

@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<player state="open" error="false">
+	<plugin id="dev" name="mySDAtv" bandwidth="11076605 bps" />
+	<format audio="aac_adts" video="mpeg4_10b" captions="none" drm="none" />
+	<status_message />
+</player>

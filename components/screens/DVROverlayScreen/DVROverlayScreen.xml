@@ -1,3 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  DVROverlayScreen - one channel's DVR: the days down the left, that day's
+  recordings in a grid on the right. Created by dvr_vod and appended over the
+  scene (the rail is hidden while it is up).
+
+  Redesign 2026-10-06 (WPALive layout): the ground, the logo and the channel
+  as the heading, the clock; the days as rail-style pill rows
+  (DVRSidebarItem), the recordings as the channel's one tile (DVREpisodeItem
+  hosts SdTile). Three 390x219 tiles across 660..1860 (3 x 390 + 2 x 12 =
+  1194); the grid sits 30 left / 20 up of them with a last column spacing of
+  60 for the focus glow (knowledge/dev-roku/markupgrid-clips-at-content-box).
+
+  Node ids the .brs reads are kept: dvrSidebar, dvrEpisodes, parentTitle,
+  episodeTitle, timeTitle.
+-->
 <component name="DVROverlayScreen" extends="Group">
     <interface>
       <field id="content" type="array" onChange="onContentLoaded"  />
@@ -5,84 +21,70 @@
       <field id="requestOverlayClose" type="bool"  />
       <field id="selectedDvrItem" type="node" />
     </interface>
-  
+
     <children>
-  
-      <!-- Semi-transparent background -->
-      <Poster
-      id="gradient"
-      uri="pkg:/images/png/gradient.png"
-      width="1920"
-      height="1080"
-      translation="[0, 0]"
-      ></Poster>
-      <!-- Horizontal Layout: Sidebar + List -->
-      <Group translation="[90, 90]">
-      
-          <Label
-          id="parentTitle"
-          translation="[0, 0]"
-          width="1000"
-          height="40"
-          color="0xFFFFFFFF"
-          ><Font role="font" uri="pkg:/images/UrbanistBold.ttf" size="36" />  
+      <!-- The page ground, painted from the theme in init. -->
+      <Rectangle id="groundFill" width="1920" height="1080" color="0x04142BFF" />
+      <Poster id="gradient" uri="" width="1920" height="1080"
+              loadWidth="960" loadHeight="540" loadDisplayMode="scaleToFill" />
+
+      <SdTopBar id="topBar" translation="[160, 48]" heading="" />
+      <Label
+        id="parentTitle"
+        translation="[160, 150]"
+        width="1700"
+        height="66"
+        vertAlign="center"
+        wrap="false"
+        ellipsisText="..."
+        color="0xFFFFFFFF">
+        <Font role="font" uri="pkg:/images/fonts/Manrope-ExtraBold.ttf" size="48" />
       </Label>
+
+      <SdClock id="sdClock" translation="[1440, 48]" />
+      <!-- The legacy clock: still written by the .brs, no longer shown. -->
+      <Group visible="false">
+        <Label id="timeTitle" text="" />
       </Group>
 
-      <Group translation="[1730, 90]">
-        <Label
-        id="timeTitle"
-        translation="[0, 0]"
-        width="150"
-        height="40"
-        color="0xFFFFFFFF"
-        ><Font role="font" uri="pkg:/images/UrbanistRegular.ttf" size="36" />  
-        </Label>
-      </Group>
-      
-      <Group translation="[640, 160]">
-        <Label
+      <!-- The day in hand, over the recordings. -->
+      <Label
         id="episodeTitle"
-        translation="[0, 0]"
-        width="500"
+        translation="[660, 246]"
+        width="1200"
         text=""
-        height="40"
-        color="0xFFFFFFFF"
-        ><Font role="font" uri="pkg:/images/UrbanistRegular.ttf" size="24" />  
-        </Label>
-      </Group>
+        height="36"
+        vertAlign="center"
+        color="0xB4BCCBFF">
+        <Font role="font" uri="pkg:/images/fonts/Inter-Bold.ttf" size="24" />
+      </Label>
 
-      <Group translation="[90, 200]" >
-      
-        <!-- Left: DVR Day/Section List -->
-        <MarkupList
-          id="dvrSidebar"
-          itemComponentName="DVRSidebarItem"
-          itemSize="[450, 70]"
-          focusBitmapBlendColor="0x442255AA"
-          vertFocusAnimationStyle="floatingFocus"
-        />
-        <!-- Right: DVR Episode List (Grid: 3 columns x 3 rows) -->
-     
+      <MarkupList
+        id="dvrSidebar"
+        translation="[160, 300]"
+        itemComponentName="DVRSidebarItem"
+        itemSize="[444, 66]"
+        itemSpacing="[0, 4]"
+        numRows="10"
+        drawFocusFeedback="false"
+        vertFocusAnimationStyle="floatingFocus"
+      />
+
       <MarkupGrid
         id="dvrEpisodes"
         itemComponentName="DVREpisodeItem"
-        itemSize="[380, 310]"
-        translation="[550, 0]"
+        translation="[630, 280]"
+        itemSize="[390, 300]"
+        itemSpacing="[12, 18]"
+        columnSpacings="[12, 12, 60]"
         numColumns="3"
         numRows="3"
-        itemSpacing="[15, 20]"
-        drawFocusFeedback="true"
-        focusBitmapBlendColor="0x66CCFF"
+        drawFocusFeedback="false"
         vertFocusAnimationStyle="fixedFocus"
       />
-      </Group>
     </children>
+    <script type="text/brightscript" uri="pkg:/source/SdGlobals.brs" />
+    <script type="text/brightscript" uri="pkg:/source/SdTheme.brs" />
+    <script type="text/brightscript" uri="pkg:/source/SdMetrics.brs" />
     <script type="text/brightscript" uri="DVROverlayScreen.brs" />
   </component>
-
-
-
-
-
-  

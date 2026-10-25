@@ -1,11 +1,44 @@
+' ============================================================================
+' navigation_bar.brs - the left rail (redesign 2026-10-06, on wpa_live_roku's
+' WpNavRail). Five destinations, the account row after a gap:
+'
+'   0 Television     vod_screen      3 Radios         third_vod
+'   1 TV Languages   second_vod      4 Login/Logout   loginInfoScreen preview
+'   2 DVR            dvr_vod
+'
+' Moving Up/Down SHOWS the destination at once (mySDAtv's own behaviour,
+' kept); Right or OK goes into it; on the account row they start the
+' login / logout flow. Back from the rail asks to exit the channel - before
+' the redesign Back could never leave it (certification).
+'
+' Visual states (WPALive section 14):
+'   focused    accent pill, cOnNavFocus ink       (open rail, the row in hand)
+'   selected   cSelected label, glyph and dot     (the "SDA" gold in "myred")
+'   idle       white label, glyph dimmed
+' Collapsed: glyphs only, the selected one in cSelected.
+'
+' The login/logout flow below the rail code is unchanged; its calls to the
+' old per-row builders (updateLiveRow ... updateLogout) now just repaint.
+' ============================================================================
+
 sub init()
-    ' Make navigation bar focusable so it can receive key events
+    ' First line: a child's init runs BEFORE the scene's.
+    SdEnsureGlobals()
     m.top.focusable = true
-    
-    m.navGroup = m.top.findNode("navGroup")
-    m.selector = m.top.findNode("selector")
-    m.expandAnimation = m.top.findNode("expandAnimation")
-    m.collapseAnimation = m.top.findNode("collapseAnimation")
+    m.t = SdTheme()
+    SdPaint(m.top, [["railPanel", "color", "cRail"], ["railEdge", "color", "cHairline"], ["railTitleMy", "color", "cBrandRed"], ["railTitleSda", "color", "cBrandGold"], ["railTitleTv", "color", "cBrandBlue"], ["railMark", "uri", "gMark60"], ["leftEdgeFade", "uri", "gGroundFade"], ["leftEdgeFade", "blendColor", "gFadeTint"]])
+
+    m.itemsContainer = m.top.findNode("itemsContainer")
+    m.iconsContainer = m.top.findNode("iconsContainer")
+    m.railPanel  = m.top.findNode("railPanel")
+    m.railRight  = m.top.findNode("railRight")
+    m.fadeLayer  = m.top.findNode("fadeLayer")
+    m.railAnim   = m.top.findNode("railAnim")
+    m.panelWInterp   = m.top.findNode("panelWInterp")
+    m.panelOpInterp  = m.top.findNode("panelOpInterp")
+    m.rightPosInterp = m.top.findNode("rightPosInterp")
+    m.rightOpInterp  = m.top.findNode("rightOpInterp")
+    m.fadeOpInterp   = m.top.findNode("fadeOpInterp")
 
     ' Initialize login variables
     m.authEmail = ""
@@ -13,64 +46,203 @@ sub init()
 
     m.menuItems = ["live", "archive", "dvr", "radios", "logout"]
     m.selectedIndex = 0
-    
+
     ' Check if user is actually logged in
     authData = RetrieveAuthData()
     if authData <> invalid and authData.isauth = 1 then
         m.isLoggedIn = true
-        print "User is logged in - showing Logout"
     else
         m.isLoggedIn = false
-        print "User is not logged in - showing Login"
     end if
-    
-    m.top.observeField("userLoggedIn", "onUserLoggedIn")
-    ' m.top.findNode("liveActive").visible = true
-    ' m.top.findNode("liveInactive").visible = false
-    ' m.top.findNode("live").color = "0x007199"
-    
-    ' m.top.findNode("televisionIconActive").opacity  = 1
-    ' m.top.findNode("televisionIconActive").scale = 1
-    ' m.top.findNode("televisionIconInactive").opacity = 0
-    ' m.top.findNode("televisionIconInactive").scale = 0
-    ' m.top.findNode("live").opacity = 0
-    ' m.top.findNode("live").scale = 0
+
+    ' Geometry, the engine's: 66 px rows 4 apart, glyph at x 40 in both
+    ' states (24 margin + 16 pad), a 30 px gap before the account row.
+    m.railWidth      = m.t.railW
+    m.railCollapsedW = m.t.railCollapsedW
+    m.rowHeight  = 66
+    m.rowGap     = 4
+    m.rowMarginH = 24
+    m.rowPadH    = 16
+    m.rowPadR    = 24
+    m.iconSize   = 40
+    m.iconGap    = 18
+    m.dotSize    = 12
+    m.groupGap   = 30
+    m.items = [
+        { label: "Television",   icon: "tv" },
+        { label: "TV Languages", icon: "languages" },
+        { label: "DVR",          icon: "dvr" },
+        { label: "Radios",       icon: "radio" },
+        { label: "Login",        icon: "account", gapBefore: true }
+    ]
+    buildRows()
+
+    ' The XML is authored collapsed; nothing to animate on boot.
+    m.collapsed = true
+
     m.top.observeField("isVisible", "toggleNavVisibility")
     m.top.observeField("selectedIndex", "updateSelection")
-    updateLiveRow(false)
-    updateTelevisionLanguages(false)
-    updateRadios(false)
-    updateDvr(false)
-    updateLogout(false)
+    ' Focus entering or leaving the rail: repaint, and tell the tiles to
+    ' re-check whether their grid still holds focus.
+    m.top.observeField("focusedChild", "onNavFocusChanged")
+    repaint()
+end sub
 
+sub buildRows()
+    m.rows = []
+    y = 0
+    for each item in m.items
+        if item.gapBefore = true then y = y + m.groupGap * 2
+        m.rows.push(buildRow(item, y))
+        y = y + m.rowHeight + m.rowGap
+    end for
+end sub
+
+function buildRow(item as object, y as integer) as object
+    pillW = m.railWidth - m.rowMarginH * 2
+
+    row = m.itemsContainer.createChild("Group")
+    row.translation = [m.rowMarginH, y]
+
+    ' Rectangle has no corner radius: the pill is a 9-patch tinted per state.
+    pill = row.createChild("Poster")
+    pill.uri = "pkg:/images/png/shapes/pill_r9.9.png"
+    pill.width = pillW
+    pill.height = m.rowHeight
+    pill.blendColor = m.t.cClear
+
+    ' White glyph, tinted per state; in its own layer because it stays when
+    ' the rest of the row fades.
+    icon = m.iconsContainer.createChild("Poster")
+    icon.uri = "pkg:/images/png/nav/" + item.icon + ".png"
+    icon.width = m.iconSize
+    icon.height = m.iconSize
+    icon.loadWidth = m.iconSize
+    icon.loadHeight = m.iconSize
+    icon.translation = [m.rowMarginH + m.rowPadH, y + Int((m.rowHeight - m.iconSize) / 2)]
+
+    dot = row.createChild("Poster")
+    dot.uri = "pkg:/images/png/shapes/pill_r6.9.png"
+    dot.width = m.dotSize
+    dot.height = m.dotSize
+    dot.blendColor = m.t.cClear
+    dot.translation = [pillW - m.rowPadR - m.dotSize, Int((m.rowHeight - m.dotSize) / 2)]
+
+    labelX = m.rowPadH + m.iconSize + m.iconGap
+    label = row.createChild("Label")
+    label.translation = [labelX, 0]
+    label.width = pillW - labelX - m.rowPadR - m.dotSize - m.iconGap
+    label.height = m.rowHeight
+    label.vertAlign = "center"
+    label.horizAlign = "left"
+    label.ellipsisText = "..."
+    label.text = item.label
+    label.color = m.t.cText
+
+    return { pill: pill, icon: icon, dot: dot, label: label }
+end function
+
+sub repaint()
+    if m.rows = invalid or m.rows.count() = 0 then return
+    hasFocus = m.top.isInFocusChain()
+
+    ' The account row says what OK will do.
+    if m.isLoggedIn = true
+        m.rows[4].label.text = "Logout"
+    else
+        m.rows[4].label.text = "Login"
+    end if
+
+    for i = 0 to m.rows.count() - 1
+        row = m.rows[i]
+        isSelected = (i = m.selectedIndex)
+        isFocused = hasFocus and isSelected
+
+        if isSelected
+            row.label.font = SdFont(m.t.fDisplay, 30)
+        else
+            row.label.font = SdFont(m.t.fSemi, 29)
+        end if
+
+        if isFocused
+            row.pill.blendColor = m.t.cNavFocus
+            row.label.color = m.t.cOnNavFocus
+            row.icon.blendColor = m.t.cOnNavFocus
+            row.dot.blendColor = m.t.cClear
+        else if isSelected
+            row.pill.blendColor = m.t.cClear
+            row.label.color = m.t.cSelected
+            row.icon.blendColor = m.t.cSelected
+            row.dot.blendColor = m.t.cSelected
+        else
+            row.pill.blendColor = m.t.cClear
+            row.label.color = m.t.cText
+            row.icon.blendColor = m.t.cIconIdle
+            row.dot.blendColor = m.t.cClear
+        end if
+    end for
+end sub
+
+sub onNavFocusChanged()
+    repaint()
+    SdFocusChanged()
 end sub
 
 sub toggleNavVisibility(event as object)
-    if event.getData() = true then
+    expanded = (event.getData() = true)
+    if expanded then
         disableFullContentMode()
-        m.expandAnimation.control = "start"
     else
         enableFullContentMode()
-        m.collapseAnimation.control = "start"
     end if
-  
-    updateLiveRow(event.getData())
-    updateTelevisionLanguages(event.getData())
-    updateRadios(event.getData())
-    updateDvr(event.getData())
-    updateLogout(event.getData())
+    setCollapsed(not expanded)
+    repaint()
+end sub
+
+' Opening: the panel widens first and the words arrive once there is room;
+' closing: the words go first and the panel follows.
+sub setCollapsed(collapsed as boolean)
+    if m.collapsed = collapsed then return
+    m.collapsed = collapsed
+
+    panelW = m.railPanel.width
+    panelOp = m.railPanel.opacity
+    rightX = m.railRight.translation[0]
+    rightOp = m.railRight.opacity
+    fadeOp = m.fadeLayer.opacity
+
+    m.railAnim.control = "stop"
+    if collapsed
+        w = m.railCollapsedW + 0.0
+        m.railAnim.duration = 0.18
+        m.panelOpInterp.key = [0.0, 0.6, 1.0]
+        m.panelOpInterp.keyValue = [panelOp, panelOp, 0.0]
+        m.rightOpInterp.keyValue = [rightOp, 0.0]
+        m.fadeOpInterp.key = [0.0, 0.35, 1.0]
+        m.fadeOpInterp.keyValue = [fadeOp, 0.0, 0.0]
+    else
+        w = m.railWidth + 0.0
+        m.railAnim.duration = 0.22
+        m.panelOpInterp.key = [0.0, 0.3, 1.0]
+        m.panelOpInterp.keyValue = [panelOp, 1.0, 1.0]
+        m.rightOpInterp.keyValue = [rightOp, 1.0]
+        m.fadeOpInterp.key = [0.0, 0.4, 1.0]
+        m.fadeOpInterp.keyValue = [fadeOp, fadeOp, 1.0]
+    end if
+    m.panelWInterp.keyValue = [panelW, w]
+    m.rightPosInterp.keyValue = [[rightX, 0.0], [w, 0.0]]
+    m.railAnim.control = "start"
 end sub
 
 sub updateSelection()
-
-
     m.global.findNode("vod_screen").visible = false
     m.global.findNode("second_vod").visible = false
     m.global.findNode("third_vod").visible = false
     m.global.findNode("dvr_vod").visible = false
-    
+
     ' Hide LoginInfoScreen by default
     homeScene = m.top.getScene()
+    loginInfoScreen = invalid
     if homeScene <> invalid then
         loginInfoScreen = homeScene.findNode("loginInfoScreen")
         if loginInfoScreen <> invalid then
@@ -80,445 +252,120 @@ sub updateSelection()
 
     if m.selectedIndex = 0
         m.global.findNode("vod_screen").visible = true
-        updateLiveRow(true)
-        updateTelevisionLanguages(true)
-        updateRadios(true)
-        updateDvr(true)
-        updateLogout(true)
     else if m.selectedIndex = 1
         m.global.findNode("second_vod").visible = true
-        updateLiveRow(true)
-        updateTelevisionLanguages(true)
-        updateRadios(true)
-        updateDvr(true)
-        updateLogout(true)
     else if m.selectedIndex = 2
         m.global.findNode("dvr_vod").visible = true
-        updateLiveRow(true)
-        updateTelevisionLanguages(true)
-        updateRadios(true)
-        updateDvr(true)
-        updateLogout(true)
     else if m.selectedIndex = 3
         m.global.findNode("third_vod").visible = true
-        updateLiveRow(true)
-        updateTelevisionLanguages(true)
-        updateRadios(true)
-        updateDvr(true)
-        updateLogout(true)
     else if m.selectedIndex = 4
-        ' Login/Logout selected
-        ' Show LoginInfoScreen when hovering over Login/Logout button
-        if homeScene <> invalid and loginInfoScreen <> invalid then
+        ' Login/Logout: the LoginInfoScreen previews while the row is in hand.
+        if loginInfoScreen <> invalid then
             loginInfoScreen.visible = true
         end if
-        
-        updateLiveRow(true)
-        updateTelevisionLanguages(true)
-        updateRadios(true)
-        updateDvr(true)
-        updateLogout(true)
     end if
+    repaint()
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
-    print "NavigationScreen.brs - [onKeyEvent] key = "; key; ", isPressed = "; press
-    print "   hasFocus = "; m.top.hasFocus(); ", focusable = "; m.top.focusable
+    if not press then return false
 
-    if press
-        if key = "up"
-            m.selectedIndex = (m.selectedIndex - 1 + m.menuItems.count()) mod m.menuItems.count()
+    if key = "up"
+        if m.selectedIndex > 0
+            m.selectedIndex = m.selectedIndex - 1
             updateSelection()
-        else if key = "down"
-            m.selectedIndex = (m.selectedIndex + 1) mod m.menuItems.count()
-            updateSelection()
-        else if key = "OK"
-            ' Handle OK button press
-            if m.selectedIndex = 4 then
-                ' Check if user is logged in or out
-                if m.isLoggedIn = true then
-                    ' Show logout confirmation dialog
-                    showLogoutConfirmation()
-                else
-                    ' Show login screen
-                    performLogin()
-                end if
-                return true
-            end if
-        else if key = "right" or key = "back" then
-
-            if m.selectedIndex = 0 then
-                m.global.findNode("vod_screen").setFocus(true)
-                m.top.isVisible = false
-            else if m.selectedIndex = 1 then
-                m.top.isVisible = false
-                m.global.findNode("second_vod").setFocus(true)
-            else if m.selectedIndex = 2 then
-                m.top.isVisible = false
-                m.global.findNode("dvr_vod").setFocus(true)
-            else if m.selectedIndex = 3 then
-                m.top.isVisible = false
-                m.global.findNode("third_vod").setFocus(true)
-            else if m.selectedIndex = 4 then
-                ' Check if user is logged in or out
-                if m.isLoggedIn = true then
-                    ' Show logout confirmation dialog
-                    showLogoutConfirmation()
-                else
-                    ' Show login screen
-                    performLogin()
-                end if
-                return true
-            end if
-
-            ' liveVideoPlayer = m.global.findNode("LiveVideoPlayer")
-            ' liveVideoPlayer.setFocus(true)
-            return true
-
         end if
         return true
+    else if key = "down"
+        if m.selectedIndex < m.menuItems.count() - 1
+            m.selectedIndex = m.selectedIndex + 1
+            updateSelection()
+        end if
+        return true
+    else if key = "OK" or key = "right"
+        enterSelected()
+        return true
+    else if key = "back"
+        showExitConfirmation()
+        return true
     end if
-    return false
+    ' The rail is one column: Left, and every other key, stays here.
+    return true
 end function
 
+' Into the destination in hand: its grid, or the login / logout flow.
+sub enterSelected()
+    if m.selectedIndex = 4 then
+        if m.isLoggedIn = true then
+            showLogoutConfirmation()
+        else
+            performLogin()
+        end if
+        return
+    end if
+    screens = ["vod_screen", "second_vod", "dvr_vod", "third_vod"]
+    m.global.findNode(screens[m.selectedIndex]).setFocus(true)
+    m.top.isVisible = false
+end sub
 
 sub enableFullContentMode()
-    VodScreen = m.global.findNode("vod_screen") ' Find VodScreen node
-    SecondVodScreen = m.global.findNode("second_vod")
-    ThirdVodScreen = m.global.findNode("third_vod")
-    DvrVodScreen = m.global.findNode("dvr_vod")
-    if VodScreen <> invalid then
-        print "Setting showFullContent to TRUE in VodScreen"
-        VodScreen.showFullContent = true ' Directly set it to TRUE
-        SecondVodScreen.showFullContent = true
-        ThirdVodScreen.showFullContent = true
-        DvrVodScreen.showFullContent = true
-    else
-        print "Error: VodScreen not found!"
-    end if
+    for each id in ["vod_screen", "second_vod", "third_vod", "dvr_vod"]
+        node = m.global.findNode(id)
+        if node <> invalid then node.showFullContent = true
+    end for
 end sub
 
 sub disableFullContentMode()
-    
-    VodScreen = m.global.findNode("vod_screen") ' Find VodScreen node
-    SecondVodScreen = m.global.findNode("second_vod")
-    ThirdVodScreen = m.global.findNode("third_vod")
-    DvrVodScreen = m.global.findNode("dvr_vod")
-    if VodScreen <> invalid then
-        print "Setting showFullContent to TRUE in VodScreen"
-        VodScreen.showFullContent = false 
-        SecondVodScreen.showFullContent = false
-        ThirdVodScreen.showFullContent = false
-        DvrVodScreen.showFullContent = false
-    else
-        print "Error: VodScreen not found!"
-    end if
-end sub
-
-' sub exitApplication()
-'     mainScene = m.top.getScene() ' Get reference to MainScene
-
-'     if mainScene <> invalid
-'         print "Exiting Application via NavigationScreen"
-'         print "Setting exitApp to TRUE"
-
-'         mainScene.exitApp = true ' Trigger exit
-
-'         print "exitApp is now: "; mainScene.exitApp ' Debug: Print the value
-'     else
-'         print "Error: MainScene reference not found!"
-'     end if
-' end sub
-
-
-sub openOptionsDialog()
-    heroScene = m.top.getScene() ' Get the parent HeroScene
-
-    if heroScene = invalid then
-        print "❌ ERROR: HeroScene is INVALID!"
-        return
-    end if
-
-    print "✅ HeroScene FOUND! Attempting to call showOptionsDialog()..."
-
-    ' Call function using callFunc()
-    result = heroScene.callFunc("showOptionsDialog")
-
-    if result = invalid then
-        print "❌ ERROR: showOptionsDialog() function call failed!"
-    else
-        print "✅ showOptionsDialog() executed successfully!"
-    end if
-end sub
-
-
-
-sub updateLiveRow(isNavExpanded as Boolean)
-    liveRow = m.top.findNode("liveRow")
-    childCount = liveRow.getChildCount()
-    for i = childCount - 1 to 0 step -1
-        liveRow.removeChildIndex(i)
+    for each id in ["vod_screen", "second_vod", "third_vod", "dvr_vod"]
+        node = m.global.findNode(id)
+        if node <> invalid then node.showFullContent = false
     end for
-    
-    labelColor = "0x888888"
-    if m.selectedIndex = 0
-        labelColor = "0xFFFFFF"
+end sub
+
+' Back from the rail: leave the channel, after a yes. m.global.sdExitApp
+' is observed by main.brs, which returns from main and closes the channel.
+sub showExitConfirmation()
+    exitDialog = CreateObject("roSGNode", "BackDialog")
+    exitDialog.title = "Exit mySDAtv"
+    exitDialog.message = "Do you want to exit mySDAtv?"
+    exitDialog.buttons = ["Exit", "Cancel"]
+    exitDialog.ObserveField("buttonSelected", "onExitDialogButton")
+    m.top.GetScene().dialog = exitDialog
+    m.exitDialog = exitDialog
+end sub
+
+sub onExitDialogButton()
+    buttonIndex = m.exitDialog.buttonSelected
+    if m.top.GetScene().dialog <> invalid
+        m.top.GetScene().dialog.close = true
     end if
-
-    if isNavExpanded
-        if m.selectedIndex = 0 then 
-            activeIcon = createObject("roSGNode", "Poster")
-            activeIcon.uri = "pkg:/images/png/television_active_optimized.png"
-            activeIcon.width = 100
-            activeIcon.height = 100
-            activeIcon.loadDisplayMode = "scaleToZoom"
-            liveRow.appendChild(activeIcon)
-        else
-            inactiveIcon = createObject("roSGNode", "Poster")
-            inactiveIcon.uri = "pkg:/images/png/television_inactive_optimized.png"
-            inactiveIcon.width = 100
-            inactiveIcon.height = 100
-            inactiveIcon.loadDisplayMode = "scaleToZoom"
-            liveRow.appendChild(inactiveIcon)
-        end if
-
-        labelWrapper = createObject("roSGNode", "Group")
-        labelWrapper.translation = [0, 40]
-        label = createObject("roSGNode", "Label")
-        label.text = "Television"
-        label.height = 48
-        label.font = "font:SmallBoldSystemFont"
-        label.color = labelColor
-        
-        labelWrapper.appendChild(label)
-        liveRow.appendChild(labelWrapper)
-
-        ' m.top.findNode("shiftLiveRow").control = "start"
+    if buttonIndex = 0 then
+        m.global.sdExitApp = true
     else
-        if m.selectedIndex = 0 then 
-            activeIcon = createObject("roSGNode", "Poster")
-            activeIcon.uri = "pkg:/images/png/television_active_optimized.png"
-            activeIcon.width = 100
-            activeIcon.height = 100
-            activeIcon.loadDisplayMode = "scaleToZoom"
-            liveRow.appendChild(activeIcon)
-        else
-            inactiveIcon = createObject("roSGNode", "Poster")
-            inactiveIcon.uri = "pkg:/images/png/television_inactive_optimized.png"
-            inactiveIcon.width = 100
-            inactiveIcon.height = 100
-            inactiveIcon.loadDisplayMode = "scaleToZoom"
-            liveRow.appendChild(inactiveIcon)
-        end if
-        ' m.top.findNode("shiftLiveRow").reverse = true
-        ' m.top.findNode("shiftLiveRow").control = "start"
-  
-        
+        m.top.setFocus(true)
     end if
 end sub
 
-
+' The old per-row builders, still called by the login / logout flow below:
+' the rail draws every row in one pass now.
+sub updateLiveRow(isNavExpanded as Boolean)
+    repaint()
+end sub
 
 sub updateTelevisionLanguages(isNavExpanded as Boolean)
-    televisionLanguageRow = m.top.findNode("archiveRow")
-    childCount = televisionLanguageRow.getChildCount()
-    for i = childCount - 1 to 0 step -1
-        televisionLanguageRow.removeChildIndex(i)
-    end for
-
-    labelColor = "0x888888"
-    if m.selectedIndex = 1
-        labelColor = "0xFFFFFF"
-    end if
-
-    if isNavExpanded
-        if m.selectedIndex = 1 then 
-            activeIcon = createObject("roSGNode", "Poster")
-            activeIcon.uri = "pkg:/images/png/television_language_optimized.png"
-            activeIcon.width = 100
-            activeIcon.height = 100
-            activeIcon.loadDisplayMode = "scaleToZoom"
-            televisionLanguageRow.appendChild(activeIcon)
-        else
-            inactiveIcon = createObject("roSGNode", "Poster")
-            inactiveIcon.uri = "pkg:/images/png/television_languages_inactive.png"
-            inactiveIcon.width = 100
-            inactiveIcon.height = 100
-            inactiveIcon.loadDisplayMode = "scaleToZoom"
-            televisionLanguageRow.appendChild(inactiveIcon)
-        end if
-        labelWrapper = createObject("roSGNode", "Group")
-        labelWrapper.translation = [0, 40]
-        label = createObject("roSGNode", "Label")
-        label.text = "Television Languages"
-        label.height = 48
-        label.font = "font:SmallBoldSystemFont"
-        label.color = labelColor
-        labelWrapper.appendChild(label)
-        televisionLanguageRow.appendChild(labelWrapper)
-    else
-        if m.selectedIndex = 1 then 
-            activeIcon = createObject("roSGNode", "Poster")
-            activeIcon.uri = "pkg:/images/png/television_language_optimized.png"
-            activeIcon.width = 100
-            activeIcon.height = 100
-            activeIcon.loadDisplayMode = "scaleToZoom"
-            televisionLanguageRow.appendChild(activeIcon)
-        else
-            inactiveIcon = createObject("roSGNode", "Poster")
-            inactiveIcon.uri = "pkg:/images/png/television_languages_inactive.png"
-            inactiveIcon.width = 100
-            inactiveIcon.height = 100
-            inactiveIcon.loadDisplayMode = "scaleToZoom"
-            televisionLanguageRow.appendChild(inactiveIcon)
-        end if
-  
-        
-    end if
+    repaint()
 end sub
 
-
 sub updateRadios(isNavExpanded as Boolean)
-    radiosRow = m.top.findNode("exitRow")
-    childCount = radiosRow.getChildCount()
-    for i = childCount - 1 to 0 step -1
-        radiosRow.removeChildIndex(i)
-    end for
-
-    labelColor = "0x888888"
-    if m.selectedIndex = 3
-        labelColor = "0xFFFFFF"
-    end if
-
-    if isNavExpanded
-        if m.selectedIndex = 3 then 
-            activeIcon = createObject("roSGNode", "Poster")
-            activeIcon.uri = "pkg:/images/png/radio_active_optimized.png"
-            activeIcon.width = 100
-            activeIcon.height = 100
-            activeIcon.loadDisplayMode = "scaleToZoom"
-            radiosRow.appendChild(activeIcon)
-        else
-            inactiveIcon = createObject("roSGNode", "Poster")
-            inactiveIcon.uri = "pkg:/images/png/radio_inactive_optimized.png"
-            inactiveIcon.width = 100
-            inactiveIcon.height = 100
-            inactiveIcon.loadDisplayMode = "scaleToZoom"
-            radiosRow.appendChild(inactiveIcon)
-        end if
-        labelWrapper = createObject("roSGNode", "Group")
-        labelWrapper.translation = [0, 40]
-        label = createObject("roSGNode", "Label")
-        label.text = "Radios"
-        label.height = 48
-        label.font = "font:SmallBoldSystemFont"
-        label.color = labelColor
-        labelWrapper.appendChild(label)
-        radiosRow.appendChild(labelWrapper)
-    else
-        if m.selectedIndex = 3 then 
-            activeIcon = createObject("roSGNode", "Poster")
-            activeIcon.uri = "pkg:/images/png/radio_active_optimized.png"
-            activeIcon.width = 100
-            activeIcon.height = 100
-            activeIcon.loadDisplayMode = "scaleToZoom"
-            radiosRow.appendChild(activeIcon)
-        else
-            inactiveIcon = createObject("roSGNode", "Poster")
-            inactiveIcon.uri = "pkg:/images/png/radio_inactive_optimized.png"
-            inactiveIcon.width = 100
-            inactiveIcon.height = 100
-            inactiveIcon.loadDisplayMode = "scaleToZoom"
-            radiosRow.appendChild(inactiveIcon)
-        end if
-  
-        
-    end if
+    repaint()
 end sub
 
 sub updateDvr(isNavExpanded as Boolean)
-    dvrRow = m.top.findNode("dvrRow")
-    childCount = dvrRow.getChildCount()
-    for i = childCount - 1 to 0 step -1
-        dvrRow.removeChildIndex(i)
-    end for
-
-    labelColor = "0x888888"
-    if m.selectedIndex = 2
-        labelColor = "0xFFFFFF"
-    end if
-
-    if isNavExpanded
-        if m.selectedIndex = 2 then 
-            activeIcon = createObject("roSGNode", "Poster")
-            activeIcon.uri = "pkg:/images/png/television_active_optimized.png"
-            activeIcon.width = 100
-            activeIcon.height = 100
-            activeIcon.loadDisplayMode = "scaleToZoom"
-            dvrRow.appendChild(activeIcon)
-        else
-            inactiveIcon = createObject("roSGNode", "Poster")
-            inactiveIcon.uri = "pkg:/images/png/television_inactive_optimized.png"
-            inactiveIcon.width = 100
-            inactiveIcon.height = 100
-            inactiveIcon.loadDisplayMode = "scaleToZoom"
-            dvrRow.appendChild(inactiveIcon)
-        end if
-        labelWrapper = createObject("roSGNode", "Group")
-        labelWrapper.translation = [0, 40]
-        label = createObject("roSGNode", "Label")
-        label.text = "DVR"
-        label.height = 48
-        label.font = "font:SmallBoldSystemFont"
-        label.color = labelColor
-        labelWrapper.appendChild(label)
-        dvrRow.appendChild(labelWrapper)
-    else
-        if m.selectedIndex = 2 then 
-            activeIcon = createObject("roSGNode", "Poster")
-            activeIcon.uri = "pkg:/images/png/television_active_optimized.png"
-            activeIcon.width = 100
-            activeIcon.height = 100
-            activeIcon.loadDisplayMode = "scaleToZoom"
-            dvrRow.appendChild(activeIcon)
-        else
-            inactiveIcon = createObject("roSGNode", "Poster")
-            inactiveIcon.uri = "pkg:/images/png/television_inactive_optimized.png"
-            inactiveIcon.width = 100
-            inactiveIcon.height = 100
-            inactiveIcon.loadDisplayMode = "scaleToZoom"
-            dvrRow.appendChild(inactiveIcon)
-        end if
-    end if
+    repaint()
 end sub
 
 sub updateLogout(isNavExpanded as Boolean)
-    logoutRow = m.top.findNode("logoutRow")
-    childCount = logoutRow.getChildCount()
-    for i = childCount - 1 to 0 step -1
-        logoutRow.removeChildIndex(i)
-    end for
-
-    ' Set color based on selection - white when focused, gray when not
-    labelColor = "0x888888"
-    if m.selectedIndex = 4
-        labelColor = "0xFFFFFF"
-    end if
-
-    ' Show text label only (no icon)
-    ' Change text based on login state
-    labelText = "Logout"
-    if m.isLoggedIn = false then
-        labelText = "Login"
-    end if
-    
-    label = createObject("roSGNode", "Label")
-    label.text = labelText
-    label.height = 48
-    label.font = "font:SmallBoldSystemFont"
-    label.color = labelColor
-    label.translation = [20, 0]
-    logoutRow.appendChild(label)
+    repaint()
 end sub
 
 sub performLogout()

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>B2 Languages guide</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&amp;family=Barlow:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 1920px; height: 1080px; position: relative; overflow: hidden; background: #050B1E; color: #FFFFFF; font-family: Barlow, sans-serif">
+
+  <div style="position: absolute; left: 0; top: 0; width: 1920px; height: 104px; display: flex; align-items: center; padding: 0 64px; box-sizing: border-box; gap: 56px; border-bottom: 1px solid #1C2E55">
+    <img src="/_blob/ec7c10bad0117787e03b001592d65bba" alt="mySDAtv" style="width: 150px; height: 78px">
+    <div style="display: flex; gap: 44px; flex-grow: 1">
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="5">
+        <div style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 34px; letter-spacing: 1px; color: {{t.fg}}; padding: 8px 0; border-bottom: 4px solid {{t.line}}">{{t.label}}</div>
+      </sc-for>
+    </div>
+    <div style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 34px">3:20 PM <span style="color: #A9B6CF; font-weight: 600">SUN OCT 5</span></div>
+  </div>
+
+  <div style="position: absolute; left: 64px; top: 136px; display: flex; gap: 12px">
+    <sc-for list="{{chips}}" as="c" hint-placeholder-count="9">
+      <div style="height: 54px; padding: 0 22px; border-radius: 8px; display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 24px; background: {{c.bg}}; color: {{c.fg}}">{{c.label}}<span style="font-weight: 500; opacity: 0.7">{{c.n}}</span></div>
+    </sc-for>
+  </div>
+  <div style="position: absolute; left: 64px; top: 214px; font-size: 22px; color: #A9B6CF">Only 3ABN Latino publishes programme titles; the other channels show their hour of live programming.</div>
+
+  <div style="position: absolute; left: 64px; top: 268px; width: 1792px; height: 44px">
+    <div style="position: absolute; left: 0; top: 6px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 26px; color: #A9B6CF">TODAY</div>
+    <sc-for list="{{ticks}}" as="k" hint-placeholder-count="4">
+      <div style="position: absolute; left: {{k.x}}; top: 6px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 26px; color: #A9B6CF">{{k.label}}</div>
+    </sc-for>
+  </div>
+
+  <div style="position: absolute; left: 64px; top: 322px; width: 1792px; display: flex; flex-direction: column; gap: 6px">
+    <sc-for list="{{rows}}" as="r" hint-placeholder-count="7">
+      <div style="position: relative; height: 98px">
+        <div style="position: absolute; left: 0; top: 0; width: 300px; height: 98px; border-radius: 8px; background: #0B1733; display: flex; align-items: center; gap: 14px; padding: 0 10px; box-sizing: border-box">
+          <div style="width: 110px; height: 78px; border-radius: 6px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><img src="{{r.logo}}" alt="" style="width: 100px; height: 71px; object-fit: contain"></div>
+          <div style="display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 600; font-size: 22px; line-height: 1.15">{{r.name}}</span><span style="font-weight: 700; font-size: 18px; color: #FAD35A">{{r.lang}}</span></div>
+        </div>
+        <sc-for list="{{r.cells}}" as="c" hint-placeholder-count="3">
+          <div style="position: absolute; top: 0; left: {{c.x}}; width: {{c.w}}; height: 98px; border-radius: 8px; overflow: hidden; background: {{c.bg}}; color: {{c.fg}}; box-sizing: border-box; padding: 10px 14px; display: flex; flex-direction: column; justify-content: center; gap: 2px">
+            <div style="font-weight: 700; font-size: 23px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{c.title}}</div>
+            <div style="font-weight: 500; font-size: 19px; opacity: 0.8; white-space: nowrap; overflow: hidden">{{c.time}}</div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-for>
+  </div>
+  <div style="position: absolute; left: {{nowX}}; top: 304px; width: 4px; height: 740px; background: #FAD35A; border-radius: 2px"></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1920,"height":1080}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const X0 = 316, PPM = 12.3, NOW = 20;
+    const m = (hm) => { const [h, mm] = hm.split(':').map(Number); return (h - 15) * 60 + mm; };
+    const fmt = (hm) => { const [h, mm] = hm.split(':').map(Number); return (h > 12 ? h - 12 : h) + ':' + String(mm).padStart(2, '0'); };
+    const cell = (s, e, title, focus, generic) => {
+      const a = m(s), b = Math.min(m(e), 120), live = a <= NOW && b > NOW;
+      return { x: (X0 + a * PPM) + 'px', w: Math.max(0, (b - a) * PPM - 6) + 'px', title,
+        time: generic ? fmt(s) + ' – ' + fmt(e) + ' · live' : fmt(s) + ' – ' + fmt(e),
+        bg: focus ? '#FAD35A' : (live ? '#16294F' : '#10203F'), fg: focus ? '#050B1E' : '#FFFFFF' };
+    };
+    const hour = (name) => [cell('15:00', '16:00', name, false, true), cell('16:00', '17:00', name, false, true)];
+    const row = (logo, name, lang, cells) => ({ logo: '/_blob/' + logo, name, lang, cells });
+    const chip = (label, n, on) => ({ label, n, bg: on ? '#FAD35A' : '#10203F', fg: on ? '#050B1E' : '#FFFFFF' });
+    return {
+      tabs: [
+        { label: 'GUIDE', fg: '#A9B6CF', line: 'transparent' }, { label: 'LANGUAGES', fg: '#FFFFFF', line: '#FAD35A' },
+        { label: 'RADIO', fg: '#A9B6CF', line: 'transparent' }, { label: 'CATCH-UP', fg: '#A9B6CF', line: 'transparent' },
+        { label: 'ACCOUNT', fg: '#A9B6CF', line: 'transparent' }
+      ],
+      chips: [chip('All', '16', true), chip('Português', '3'), chip('Español', '6'), chip('Français', '1'), chip('Русский', '1'), chip('العربية', '1'), chip('한국어', '1'), chip('中文', '1'), chip('More', '2')],
+      ticks: [{ x: X0 + 'px', label: '3:00 PM' }, { x: (X0 + 30 * PPM) + 'px', label: '3:30' }, { x: (X0 + 60 * PPM) + 'px', label: '4:00 PM' }, { x: (X0 + 90 * PPM) + 'px', label: '4:30' }],
+      nowX: (64 + X0 + NOW * PPM - 2) + 'px',
+      rows: [
+        row('f6c61295f0443e7ad9bb2b7f1a99ddee', '3ABN Latino', 'ESPAÑOL', [cell('15:00', '15:30', 'MARAVILLOSA CREACIÓN', true), cell('15:30', '16:00', 'REMEDIOS CASEROS'), cell('16:00', '16:30', 'ESTRELLITAS DE JESÚS'), cell('16:30', '17:00', 'JESUS 4 ASIA NOW')]),
+        row('65b299a9290c54c570d3ed32566fc0d7', 'Novo Tempo', 'PORTUGUÊS', hour('Novo Tempo')),
+        row('b01b57a70c67310359e8c88197b9f4a7', 'Nuevo Tiempo', 'ESPAÑOL', hour('Nuevo Tiempo')),
+        row('1665be3f90d7999cb068ba7946955070', 'LLBN Latino', 'ESPAÑOL', hour('LLBN Latino')),
+        row('136b9acb47d16154b7835bc9a7d5e19a', '3ABN Français', 'FRANÇAIS', hour('3ABN Français')),
+        row('42ed1061a9ed38d6e124007cc3c12fa8', '3ABN Russia', 'РУССКИЙ', hour('3ABN Russia Network')),
+        row('568800af03c6d40aac53d5a56abf64df', 'LLBN Arabic', 'العربية', hour('LLBN Arabic'))
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

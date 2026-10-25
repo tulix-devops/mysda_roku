@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>B4 Catch-up</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&amp;family=Barlow:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 1920px; height: 1080px; position: relative; overflow: hidden; background: #050B1E; color: #FFFFFF; font-family: Barlow, sans-serif">
+
+  <div style="position: absolute; left: 0; top: 0; width: 1920px; height: 104px; display: flex; align-items: center; padding: 0 64px; box-sizing: border-box; gap: 56px; border-bottom: 1px solid #1C2E55">
+    <img src="/_blob/ec7c10bad0117787e03b001592d65bba" alt="mySDAtv" style="width: 150px; height: 78px">
+    <div style="display: flex; gap: 44px; flex-grow: 1">
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="5">
+        <div style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 34px; letter-spacing: 1px; color: {{t.fg}}; padding: 8px 0; border-bottom: 4px solid {{t.line}}">{{t.label}}</div>
+      </sc-for>
+    </div>
+    <div style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 34px">3:20 PM <span style="color: #A9B6CF; font-weight: 600">SUN OCT 5</span></div>
+  </div>
+
+  <div style="position: absolute; left: 64px; top: 136px; display: flex; gap: 10px; align-items: center">
+    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="#A9B6CF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M24 10l-10 10 10 10"/></svg>
+    <sc-for list="{{days}}" as="d" hint-placeholder-count="8">
+      <div style="height: 64px; padding: 0 20px; border-radius: 8px; display: flex; flex-direction: column; justify-content: center; background: {{d.bg}}; color: {{d.fg}}">
+        <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 26px; line-height: 1">{{d.top}}</span>
+        <span style="font-weight: 600; font-size: 17px; opacity: 0.8">{{d.sub}}</span>
+      </div>
+    </sc-for>
+    <span style="margin-left: 18px; font-size: 22px; color: #A9B6CF">back to Mon, Sep 15 · 21 days</span>
+  </div>
+
+  <div style="position: absolute; left: 64px; top: 236px; width: 1792px; height: 44px">
+    <sc-for list="{{ticks}}" as="k" hint-placeholder-count="3">
+      <div style="position: absolute; left: {{k.x}}; top: 6px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 26px; color: #A9B6CF">{{k.label}}</div>
+    </sc-for>
+  </div>
+
+  <div style="position: absolute; left: 64px; top: 288px; width: 1792px; display: flex; flex-direction: column; gap: 8px">
+    <sc-for list="{{rows}}" as="r" hint-placeholder-count="5">
+      <div style="position: relative; height: 140px">
+        <div style="position: absolute; left: 0; top: 0; width: 300px; height: 140px; border-radius: 8px; background: #0B1733; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 8px">
+          <div style="width: 140px; height: 99px; border-radius: 6px; background: #FFFFFF; display: flex; align-items: center; justify-content: center"><img src="{{r.logo}}" alt="" style="width: 130px; height: 92px; object-fit: contain"></div>
+        </div>
+        <sc-for list="{{r.cells}}" as="c" hint-placeholder-count="3">
+          <div style="position: absolute; top: 0; left: {{c.x}}; width: {{c.w}}; height: 140px; border-radius: 8px; overflow: hidden; background: {{c.bg}}; color: {{c.fg}}; box-sizing: border-box; padding: 12px; display: flex; gap: 14px; align-items: center">
+            <sc-if value="{{c.hasThumb}}" hint-placeholder-val="{{true}}">
+              <div style="position: relative; width: 192px; height: 108px; border-radius: 6px; overflow: hidden; flex-shrink: 0; background: #000000">
+                <img src="{{c.thumb}}" alt="" style="width: 100%; height: 100%; object-fit: cover">
+                <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center"><svg width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="rgba(5,11,30,0.7)"/><path d="M16 12l12 8-12 8z" fill="#FFFFFF"/></svg></div>
+              </div>
+            </sc-if>
+            <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0">
+              <div style="font-weight: 700; font-size: 23px; line-height: 1.15; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical">{{c.title}}</div>
+              <div style="font-weight: 500; font-size: 19px; opacity: 0.8; white-space: nowrap">{{c.time}}</div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-for>
+  </div>
+  <div style="position: absolute; left: {{nowX}}; top: 272px; width: 4px; height: 760px; background: #F0262B; border-radius: 2px"></div>
+  <div style="position: absolute; left: {{nowTagX}}; top: 236px; height: 32px; padding: 0 10px; border-radius: 6px; background: #F0262B; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 22px; display: flex; align-items: center">NOW</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1920,"height":1080}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const X0 = 316, PPM = 16.4, NOW = 80;
+    const m = (hm) => { const [h, mm] = hm.split(':').map(Number); return (h - 14) * 60 + mm; };
+    const fmt = (hm) => { const [h, mm] = hm.split(':').map(Number); return (h > 12 ? h - 12 : h) + ':' + String(mm).padStart(2, '0'); };
+    const cell = (s, e, title, thumb, focus) => {
+      const a = Math.max(m(s), 0), b = Math.min(m(e), 90);
+      return { x: (X0 + a * PPM) + 'px', w: Math.max(0, (b - a) * PPM - 6) + 'px', title, time: fmt(s) + ' – ' + fmt(e),
+        thumb: thumb ? '/_blob/' + thumb : '', hasThumb: !!thumb,
+        bg: focus ? '#FAD35A' : '#10203F', fg: focus ? '#050B1E' : '#FFFFFF' };
+    };
+    const row = (logo, cells) => ({ logo: '/_blob/' + logo, cells });
+    const day = (top, sub, on) => ({ top, sub, bg: on ? '#FAD35A' : '#10203F', fg: on ? '#050B1E' : '#FFFFFF' });
+    return {
+      tabs: [
+        { label: 'GUIDE', fg: '#A9B6CF', line: 'transparent' }, { label: 'LANGUAGES', fg: '#A9B6CF', line: 'transparent' },
+        { label: 'RADIO', fg: '#A9B6CF', line: 'transparent' }, { label: 'CATCH-UP', fg: '#FFFFFF', line: '#FAD35A' },
+        { label: 'ACCOUNT', fg: '#A9B6CF', line: 'transparent' }
+      ],
+      days: [day('TODAY', 'Sun Oct 5', true), day('SAT', 'Oct 4'), day('FRI', 'Oct 3'), day('THU', 'Oct 2'), day('WED', 'Oct 1'), day('TUE', 'Sep 30'), day('MON', 'Sep 29'), day('SUN', 'Sep 28')],
+      ticks: [{ x: X0 + 'px', label: '2:00 PM' }, { x: (X0 + 30 * PPM) + 'px', label: '2:30' }, { x: (X0 + 60 * PPM) + 'px', label: '3:00 PM' }],
+      nowX: (64 + X0 + NOW * PPM - 2) + 'px', nowTagX: (64 + X0 + NOW * PPM - 30) + 'px',
+      rows: [
+        row('242bd1a56c08d0855ef8ca15fcbcd4ef', [cell('14:00', '14:30', 'ACTION 4 LIFE', '917133d468c5f2657305a93b11198669'), cell('14:30', '15:00', 'A WOLF IN SHEEP’S CLOTHING', '677cf0801d486ffa412e4bf103d043d0', true), cell('15:00', '15:55', '3ABN TODAY BIBLE Q&A', 'c4daed39c492a92a3a5a2eeb01619e11')]),
+        row('e40d84f762578caed15688344a03391c', [cell('14:00', '14:30', 'IN THE FOOTSTEPS OF PAUL', '17e0616bb1dfe499be2559ba86cf7ea7'), cell('14:30', '15:00', 'IT IS WRITTEN', '653491aec2d0952a7094d2935614b6b7'), cell('15:00', '15:57', 'REVELATION OF JESUS CHRIST', '0ac5dbae153d93324008faeb65c388ea')]),
+        row('3cd27ca3e7d58e9a1aa8273e9c19caa4', [cell('14:00', '14:30', 'STARTING WITH JESUS'), cell('14:30', '14:45', 'GRANDMA’S HOUSE'), cell('14:45', '15:00', 'BIBLE BUZZ'), cell('15:00', '15:15', 'HERE I AM SEND ME'), cell('15:15', '15:30', 'TINY TOTS WORSHIP')]),
+        row('8a4ae2c264a612734dc50b5aabb7da57', [cell('14:00', '15:00', 'HopeChannel · 2 PM hour', 'a6d6fc68979c3232e0db6cac7afd6b3e'), cell('15:00', '16:00', 'HopeChannel · 3 PM hour', '47e13eaa7d6c8fe02b87cd4c4db3c6f7')]),
+        row('e2f268b5a36bee5d8c269ca003c3de9e', [cell('14:00', '15:00', 'It is Written TV · 2 PM hour', '9deb069f8233c879a067b185cdf3873b'), cell('15:00', '16:00', 'It is Written TV · 3 PM hour', 'fd3818e84422d8b0a384d0b8e35d2f3a')])
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

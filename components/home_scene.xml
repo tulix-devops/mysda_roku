@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <component name="home_scene" extends="Scene">
+  <script type="text/brightscript" uri="pkg:/source/SdGlobals.brs" />
+  <script type="text/brightscript" uri="pkg:/source/SdTheme.brs" />
+  <script type="text/brightscript" uri="pkg:/source/SdMetrics.brs" />
   <script type="text/brightscript" uri="pkg:/components/home_scene.brs" />
   <script type="text/brightscript" uri="pkg:/source/StaticContent.brs" />
   <script type="text/brightscript" uri="pkg:/components/helpers/ChannelEntityHelper.brs" />
@@ -10,18 +13,12 @@
   </interface>
   <children>
 
-    <!-- <Rectangle
-            id="backgroundRectangle"
-            width="1920" 
-            height="1080"
-            color="#000000" translation="[0, 0]"/> -->
-            <Poster
-            id="gradient"
-            uri="pkg:/images/png/gradient.png"
-            width="1920"
-            height="1080"
-            translation="[0, 0]"
-            ></Poster>
+    <!-- The page ground, painted from the theme in init (SdPaint): a flat
+         cGround under the ground picture, so the plane is covered while the
+         picture decodes. -->
+    <Rectangle id="pageGroundFill" width="1920" height="1080" color="0x04142BFF" />
+    <Poster id="gradient" uri="" width="1920" height="1080"
+            loadWidth="960" loadHeight="540" loadDisplayMode="scaleToFill" />
     <home_screen id ="home_screen" translation="[0, 0]" visible="false" liveChannelData=""/>
     <live_screen id ="live_screen" translation="[140, 0]" visible="false" />
     <search_screen id ="search_screen" translation="[140, 0]" visible="false" />

@@ -4,6 +4,8 @@ sub init()
     m.episodes = m.top.findNode("dvrEpisodes")
     m.top.observeField("visible", "onVisibilityChanged")
     setTimeTitle()
+    SdEnsureGlobals()
+    SdPaint(m.top, [["groundFill", "color", "cGround"], ["gradient", "uri", "gGround"], ["parentTitle", "color", "cText"], ["episodeTitle", "color", "cText2"]])
 end sub
 
 

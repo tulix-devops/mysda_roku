@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>C6 Live player channel strip</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 1920px; height: 1080px; position: relative; overflow: hidden; background: #000000; color: #FFFFFF; font-family: 'Plus Jakarta Sans', sans-serif">
+  <img src="/_blob/fd3818e84422d8b0a384d0b8e35d2f3a" alt="" style="position: absolute; inset: 0; width: 1920px; height: 1080px; object-fit: cover; filter: blur(6px); transform: scale(1.03)">
+  <div style="position: absolute; left: 0; top: 0; width: 1920px; height: 240px; background: linear-gradient(180deg, rgba(0,0,0,0.7), rgba(0,0,0,0))"></div>
+  <div style="position: absolute; left: 0; bottom: 0; width: 1920px; height: 460px; background: linear-gradient(0deg, rgba(7,8,12,0.95) 0%, rgba(7,8,12,0.7) 60%, rgba(7,8,12,0) 100%)"></div>
+
+  <div style="position: absolute; left: 96px; top: 60px; display: flex; flex-direction: column; gap: 8px">
+    <div style="display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 20px; letter-spacing: 2px; color: #F0262B"><span style="width: 10px; height: 10px; border-radius: 5px; background: #F0262B"></span>LIVE</div>
+    <div style="font-weight: 800; font-size: 46px; letter-spacing: -0.5px">It is Written TV</div>
+    <div style="font-weight: 600; font-size: 22px; color: #DADDE5">Live now · 3 PM hour</div>
+  </div>
+  <div style="position: absolute; right: 96px; top: 66px; font-weight: 700; font-size: 30px">3:20 PM</div>
+
+  <div style="position: absolute; left: 96px; bottom: 300px; font-weight: 700; font-size: 22px; color: #A6ABB8">Left / Right to switch · OK for the channel page</div>
+  <div style="position: absolute; left: 96px; bottom: 80px; display: flex; gap: 22px; align-items: flex-end">
+    <sc-for list="{{strip}}" as="s" hint-placeholder-count="7">
+      <div style="display: flex; flex-direction: column; gap: 10px; width: {{s.w}}">
+        <div style="height: {{s.h}}; border-radius: 14px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; box-shadow: {{s.shadow}}; opacity: {{s.o}}">
+          <img src="{{s.logo}}" alt="" style="width: 90%; height: 90%; object-fit: contain">
+        </div>
+        <div style="font-weight: 700; font-size: {{s.fs}}; color: {{s.fg}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{s.now}}</div>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1920,"height":1080}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = (logo, now, f) => ({ logo: '/_blob/' + logo, now, w: f ? '288px' : '200px', h: f ? '204px' : '142px', o: f ? 1 : 0.75,
+      shadow: f ? '0 26px 60px rgba(0,0,0,0.8)' : 'none', fs: f ? '22px' : '18px', fg: f ? '#FFFFFF' : '#A6ABB8' });
+    return {
+      strip: [
+        s('242bd1a56c08d0855ef8ca15fcbcd4ef', '3ABN Today Bible Q&A'),
+        s('e40d84f762578caed15688344a03391c', 'Revelation of Jesus Christ'),
+        s('3cd27ca3e7d58e9a1aa8273e9c19caa4', 'Tiny Tots Worship'),
+        s('8a4ae2c264a612734dc50b5aabb7da57', 'Live now'),
+        s('e2f268b5a36bee5d8c269ca003c3de9e', 'Watching · live', true),
+        s('6ec2f978278a61060737b8b22d12c18e', 'Live now'),
+        s('163b3b93da32b56730990408244fbfaa', 'Live now'),
+        s('53ee2f0dc851bf2f516b0ec5f1913e5a', 'Live now')
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
