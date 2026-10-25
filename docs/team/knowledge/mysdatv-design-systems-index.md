@@ -1,11 +1,11 @@
 ---
 topic: mysdatv-design-systems-index
-summary: Start here for any mySDAtv Roku UI work - three drawn design systems (C Showcase final, A Lineup alpha final, B Guide G1/G2 pick pending), where the specs and 1920x1080 screens live, and the rules all share
+summary: Start here for mySDAtv Roku UI work - three drawn systems (C Showcase BUILT on design/showcase, A Lineup alpha final, B Guide pick pending), where specs and 1920x1080 screens live, shared rules
 platform: roku
 applies-to: [mysdatv]
 observed-in: [mysdatv]
-date: 2026-10-06
-source-task: mysdatv/docs/team/tasks/2026-10-06-three-design-directions/
+date: 2026-10-25
+source-task: mysdatv/docs/team/tasks/2026-10-06-three-design-directions/; status updated 2026-10-25 from mysdatv/docs/team/tasks/2026-10-25-showcase-build/
 ---
 
 # mySDAtv design systems: index
@@ -18,7 +18,7 @@ Three complete design systems for the mySDAtv Roku channel were drawn on all 8 s
 
 | System | Idea | Status (owner, 2026-10-06) | Entry |
 |---|---|---|---|
-| C Showcase | Streaming home of rows, channel pages, catch-up by series | FINAL. "I like everything about Showcase." Chosen first to build. | [[mysdatv-design-showcase-c]] |
+| C Showcase | Streaming home of rows, channel pages, catch-up by series | FINAL. "I like everything about Showcase." BUILT 2026-10-25 on branch `design/showcase` (078820a, e03912d, 0ab8b78, 2a19b20); device round 1 done for signed-out flows, signed-in flows pending credentials. | [[mysdatv-design-showcase-c]] |
 | A Lineup | Rail plus channel grids; today's build, refined | FINAL as alpha "Ink and ember". | [[mysdatv-design-lineup-alpha-a]] |
 | B Guide | TV guide first; catch-up is the guide scrolled backwards | Shapes final (B-1). Navigation: G1 and G2 both drawn; PICK PENDING. | [[mysdatv-design-guide-b]] |
 
@@ -38,7 +38,7 @@ The three share a colour source (the logo: "my" red `#F0262B`, "SDA" gold `#FAD3
 ## How to apply
 
 1. Read the system's own entry first, then its `docs/design/<system>.md`, then look at the final folder screens.
-2. Building: C is first. A reuses Phase 1 (the WPALive port, see [[mysdatv-wpalive-port-pattern]]) as its code base. B waits on the G1/G2 pick; do not start B navigation until the owner chooses.
+2. Building: C is first and is built (branch `design/showcase`; its component map and board deviations are in the C entry). A reuses Phase 1 (the WPALive port, see [[mysdatv-wpalive-port-pattern]]) as its code base. B waits on the G1/G2 pick; do not start B navigation until the owner chooses.
 3. Rules every system follows: logos whole at 1.41 on a light plate; no "Program" titles; no descriptions; frame grabs at most 480 px wide and always with the channel logo; schedule loaded lazily. Details in [[mysdatv-feed-derived-design-rules]].
 4. Update the status column here and in the system entry when the owner decides (B pick, build order).
 
