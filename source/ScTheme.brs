@@ -26,6 +26,7 @@ function ScTheme() as object
         cTag:        "0x07080CCC"   ' a tag over a picture (80 %)
         cScrim:      "0x07080CFF"   ' fades and scrims, alpha from the asset
         cShadow:     "0x000000FF"
+        cVideo:      "0x000000FF"   ' behind the video plane
         cPlate:      "0xFFFFFFFF"   ' logo plates
 
         ' -- text --------------------------------------------------------------

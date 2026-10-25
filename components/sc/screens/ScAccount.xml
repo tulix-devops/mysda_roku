@@ -25,10 +25,10 @@
     <Label id="title" text="" />
     <Label id="subtitle" text="" />
 
-    <Label id="heading" text="" translation="[184, 190]" width="900" height="160" wrap="true" maxLines="2" />
-    <Label id="body" text="" translation="[184, 372]" width="860" height="124" wrap="true" maxLines="3" />
-    <Group id="perks" translation="[184, 520]" />
-    <Group id="buttons" translation="[184, 700]" />
+    <Label id="heading" text="" translation="[184, 170]" width="900" height="196" wrap="true" maxLines="2" />
+    <Label id="body" text="" translation="[184, 384]" width="860" height="124" wrap="true" maxLines="3" />
+    <Group id="perks" translation="[184, 530]" />
+    <Group id="buttons" translation="[184, 716]" />
 
     <Group id="give" translation="[1240, 640]">
       <Poster id="givePlate" uri="" width="560" height="244" />

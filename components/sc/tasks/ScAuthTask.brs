@@ -32,13 +32,15 @@ function signIn() as object
         out.reason = "credentials"
         return out
     end if
-    if json.statusCode = 200 and json.data <> invalid and json.data.accessToken <> invalid
+    code = json.statusCode
+    if code = invalid then code = 0
+    if code = 200 and json.data <> invalid and json.data.accessToken <> invalid
         ScWriteAuth(json.data)
         out.ok = true
         out.reason = ""
         return out
     end if
-    if res.code = 401 or res.code = 403 or res.code = 422 or res.code = 400 or json.statusCode = 401
+    if res.code = 401 or res.code = 403 or res.code = 422 or res.code = 400 or code = 401
         out.reason = "credentials"
     end if
     return out
@@ -62,7 +64,7 @@ function checkAccess() as object
         json = ParseJson(res.body)
         if json = invalid
             out.access = "error"
-        else if (json.data <> invalid and type(json.data) = "roBoolean" and json.data = true) or json.statusCode = 200
+        else if (json.data <> invalid and type(json.data) = "roBoolean" and json.data = true) or (json.statusCode <> invalid and json.statusCode = 200)
             out.access = "yes"
         else
             out.access = "no"

@@ -215,6 +215,7 @@ end sub
 sub onOpenScreen()
     name = m.global.openScreen
     if name = invalid or name = "" then return
+    m.pendingPlay = invalid
     destroyPlayer()
     closeDialog()
     showChrome(true)
@@ -302,7 +303,10 @@ sub onDialogResult()
         end if
     else if id = "accessError"
         if idx = 0 and m.pendingPlay <> invalid
+            ' The check runs in the background; focus goes back to the page
+            ' rather than staying on the hidden dialog (review C2).
             startAccessCheck()
+            restoreFocus()
             return
         end if
         m.pendingPlay = invalid
@@ -461,6 +465,9 @@ sub onPlayItem()
 end sub
 
 sub startPlayer(item as object)
+    ' Whatever was waiting on the catch-up check is overtaken: a late "yes"
+    ' must not replace what is playing now (review C3).
+    m.pendingPlay = invalid
     destroyPlayer()
     closeDialog()
     m.playerReturnNav = m.nav.navHasFocus
@@ -510,6 +517,7 @@ sub applyPendingDeepLink()
     ch = ScChannelById(id)
     if ch = invalid and m.feedsPending > 0 then return
     m.pendingDeepLink = invalid
+    m.pendingPlay = invalid
     destroyPlayer()
     closeDialog()
     if m.signin.visible

@@ -45,7 +45,7 @@ sub init()
     m.zone = "buttons"
     m.placed = false
 
-    ScInitRowList(m.rows, 526)
+    ScInitRowList(m.rows, 470)
     m.rows.observeField("rowItemSelected", "onCardSelected")
     m.top.observeField("focusedChild", "onFocusChild")
     m.global.observeField("schedVersion", "onSched")
@@ -98,7 +98,7 @@ sub drawTop()
         m.liveLine.text = p.title + " · until " + ScClock(p.scEnd)
     end if
     thumb = ""
-    if p <> invalid then thumb = p.scThumb
+    if p <> invalid then thumb = ScGrab(p)
     m.backdrop.visible = (thumb <> "")
     if thumb <> "" and m.backdrop.uri <> thumb then m.backdrop.uri = thumb
 
@@ -149,6 +149,7 @@ sub drawRows()
         else if p.scStart <= now
             n = ScRecordingCard(p, ch, 340, 191, "● LIVE", ScRange(p.scStart, p.scEnd))
             n.scTagLive = true
+            n.scThumb = ScGrab(p)
             n.scAction = "live"
             n.scRef = ch
             liveAt = today.count()

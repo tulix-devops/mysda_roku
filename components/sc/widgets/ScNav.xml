@@ -15,7 +15,7 @@
 <component name="ScNav" extends="Group">
   <interface>
     <!-- The destination on display: home | channels | radio | catchup | account -->
-    <field id="selected" type="string" value="home" onChange="paint" />
+    <field id="selected" type="string" value="home" onChange="onSelected" />
     <field id="navHasFocus" type="boolean" onChange="onNavFocus" />
     <!-- Set when the viewer opens a destination (alwaysNotify: the same one
          again still means "go into it"). -->

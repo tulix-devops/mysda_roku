@@ -66,6 +66,6 @@ function toChannel(item as object, kind as string, index as integer) as dynamic
     c.title = title
     c.url = url
     c.streamFormat = "hls"
-    c.addFields({ scLogo: logo, scDvr: dvr, scStream: stream, scKind: kind, scLang: ScLangFor(title, kind), scIndex: index })
+    c.addFields({ scLogo: logo, scDvr: dvr, scStream: stream, scKind: kind, scLang: ScLangFor(title), scIndex: index })
     return c
 end function

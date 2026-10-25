@@ -25,7 +25,7 @@
   <script type="text/brightscript" uri="pkg:/components/sc/ScScene.brs" />
   <interface>
     <!-- A deep link, from launch args or a roInputEvent: { id, mediaType } -->
-    <field id="deepLink" type="assocarray" onChange="onDeepLink" />
+    <field id="deepLink" type="assocarray" alwaysNotify="true" onChange="onDeepLink" />
   </interface>
   <children>
     <Rectangle id="groundFill" width="1920" height="1080" />
@@ -53,8 +53,9 @@
     <Timer id="bootWatchdog" repeat="false" duration="12" />
 
     <ScNav id="nav" />
+    <!-- Before the modals: a dialog raised during playback paints over it. -->
+    <Group id="playerHost" />
     <ScDialog id="dialog" visible="false" />
     <ScSignIn id="signin" visible="false" />
-    <Group id="playerHost" />
   </children>
 </component>

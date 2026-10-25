@@ -13,7 +13,7 @@ sub init()
     m.tick = m.top.findNode("tick")
     m.tick.observeField("fire", "onTick")
 
-    ScPaint(m.top, [["bottomFade", "blendColor", "cScrim"], ["radioGround", "color", "cGround"]])
+    ScPaint(m.top, [["black", "color", "cVideo"], ["bottomFade", "blendColor", "cScrim"], ["radioGround", "color", "cGround"]])
     m.top.findNode("topFade").blendColor = "0x000000FF"
     lab(m.top.findNode("liveKicker"), m.t.fXB, 20, m.t.cLive)
     lab(m.top.findNode("liveTitle"), m.t.fXB, 46, m.t.cText)
@@ -129,6 +129,9 @@ sub playUrl(url as string, title as string, isLive as boolean)
     c.live = isLive
     m.errored = false
     m.ended = false
+    ' Position events from the stream being replaced are ignored until this
+    ' one plays (review C10).
+    m.armed = false
     m.status.text = "Loading" + Chr(8230)
     m.status.visible = true
     m.video.content = c
@@ -155,6 +158,7 @@ sub onState()
     ' error on screen (knowledge/dev-roku/video-node-moves-error-to-finished-on-its-own).
     if m.errored then return
     if st = "playing"
+        m.armed = true
         m.status.visible = false
         if m.resumeAt > 0
             m.video.seek = m.resumeAt
@@ -176,7 +180,7 @@ sub onState()
 end sub
 
 sub onPosition()
-    if m.mode <> "catchup" then return
+    if m.mode <> "catchup" or m.armed <> true then return
     d = duration()
     if d > 0 and m.video.position >= d - 1 then onEnded()
     drawBar()
@@ -438,7 +442,7 @@ end sub
 
 ' The episode that comes after this one, from the list it was opened from
 ' (any order; programme nodes or cards carrying one in scRef): the earliest
-' that starts after this one ends and has aired.
+' on the same channel that starts after this one ends and has aired.
 function findNext() as dynamic
     if m.list = invalid or m.prog = invalid then return invalid
     best = invalid
@@ -447,7 +451,7 @@ function findNext() as dynamic
         p = c
         if c.hasField("scCard") then p = c.scRef
         if p <> invalid and p.hasField("scStart")
-            if p.scStart >= m.prog.scEnd - 60 and p.scEnd <= now and p.url <> ""
+            if p.scStream = m.prog.scStream and p.scStart >= m.prog.scEnd - 60 and p.scEnd <= now and p.url <> ""
                 if best = invalid or p.scStart < best.scStart then best = p
             end if
         end if

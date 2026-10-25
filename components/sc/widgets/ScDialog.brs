@@ -38,9 +38,12 @@ sub onSpec()
     m.bodyLabel.translation = [pad, pad + titleH + 14]
     m.bodyLabel.text = body
     bodyLines = 0
-    if body <> "" then bodyLines = Int(ScTextW(body, 24, "semi") / inner) + 1
+    ' Word wrap breaks earlier than the summed width: allow a quarter more.
+    if body <> "" then bodyLines = Int(ScTextW(body, 24, "semi") * 1.25 / inner) + 1
     if bodyLines > 4 then bodyLines = 4
-    bodyH = bodyLines * 34
+    ' A wrapping Label too short for its lines drops them silently
+    ' (knowledge/dev-roku/text-measurement-and-label-height): 40 px a line.
+    bodyH = bodyLines * 40
     m.bodyLabel.height = bodyH
     m.bodyLabel.visible = (body <> "")
 

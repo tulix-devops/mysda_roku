@@ -33,7 +33,7 @@
   <script type="text/brightscript" uri="pkg:/source/ScUi.brs" />
   <script type="text/brightscript" uri="pkg:/components/sc/ScPlayer.brs" />
   <children>
-    <Rectangle id="black" width="1920" height="1080" color="0x000000FF" />
+    <Rectangle id="black" width="1920" height="1080" />
     <Video id="video" width="1920" height="1080" enableUI="false" enableTrickPlay="false" />
 
     <!-- Radio: the station, whole, on its plate. -->
@@ -58,7 +58,7 @@
       </Group>
       <Label id="clock" text="" translation="[1424, 60]" width="400" height="44" horizAlign="right" vertAlign="center" />
 
-      <Label id="stripHint" text="Left / Right to switch · OK for the channel page" translation="[96, 744]" width="1400" height="34" vertAlign="center" />
+      <Label id="stripHint" text="Left / Right to switch · OK for the channel page" translation="[96, 700]" width="1400" height="34" vertAlign="center" />
       <Group id="strip" translation="[96, 0]" />
 
       <Group id="vod" visible="false">

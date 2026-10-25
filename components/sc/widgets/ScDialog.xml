@@ -9,7 +9,7 @@
 <component name="ScDialog" extends="Group">
   <interface>
     <!-- { id, title, body, buttons: [..] } -->
-    <field id="spec" type="assocarray" onChange="onSpec" />
+    <field id="spec" type="assocarray" alwaysNotify="true" onChange="onSpec" />
   </interface>
   <script type="text/brightscript" uri="pkg:/source/ScGlobals.brs" />
   <script type="text/brightscript" uri="pkg:/source/ScTheme.brs" />

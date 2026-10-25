@@ -32,7 +32,7 @@ sub build(out as object, arr as object, stream as string)
     dayEnd = dayStart + 86400
     weekStart = dayStart - 6 * 86400
 
-    ' The feed is newest first; walk it once, keeping plain AAs until the end.
+    ' Walk the feed once, keeping plain AAs until the end.
     progs = []
     titled = false
     for each it in arr
@@ -49,9 +49,12 @@ sub build(out as object, arr as object, stream as string)
         end if
     end for
     out.scTitled = titled
+    ' Newest first, explicitly: the context brief said the feed was newest
+    ' first, but on 2026-10-25 it came oldest first and the day ran backwards.
+    progs.SortBy("st", "r")
     if progs.count() = 0 then return
 
-    ' Today, oldest first (the feed is newest first).
+    ' Today, oldest first (progs is newest first).
     for i = progs.count() - 1 to 0 step -1
         p = progs[i]
         if p.en > dayStart and p.st < dayEnd then out.scToday.appendChild(toNode(p, now, stream))

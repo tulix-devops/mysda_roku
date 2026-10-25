@@ -71,7 +71,7 @@ sub init()
     m.seriesShown = false
     m.btnKey = ""
 
-    ScInitRowList(m.rows, 650)
+    ScInitRowList(m.rows, 598)
     m.rows.observeField("rowItemSelected", "onCardSelected")
     m.rows.observeField("rowItemFocused", "onCardFocused")
     m.top.observeField("focusedChild", "onFocusChild")
@@ -169,7 +169,7 @@ sub rebuild()
 
     hasRows = (tv.count() + lang.count() + radio.count() > 0)
     m.empty.visible = (not hasRows and m.global.catVersion >= 3)
-    m.empty.text = "mySDAtv isn't reachable right now. Check the connection; the channel will try again when you come back."
+    m.empty.text = "mySDAtv isn't reachable right now. Check the connection, then open the channel again."
 
     if m.heroCh = invalid then m.heroCh = featured()
     ' Schedules for what is in view: the featured channel and the first
@@ -248,7 +248,7 @@ sub showHero()
     end if
 
     thumb = ""
-    if p <> invalid then thumb = p.scThumb
+    if p <> invalid then thumb = ScGrab(p)
     m.backdrop.visible = (thumb <> "")
     if thumb <> "" and m.backdrop.uri <> thumb then m.backdrop.uri = thumb
     if thumb <> ""

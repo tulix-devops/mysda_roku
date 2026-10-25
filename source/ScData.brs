@@ -76,8 +76,8 @@ function ScCleanTitle(raw as dynamic) as string
 end function
 
 ' The language a channel is in, from its title (the feed has no language
-' field). Television (list 8) is English.
-function ScLangFor(title as string, kind as string) as string
+' field). What matches nothing is English (all of Television, list 8).
+function ScLangFor(title as string) as string
     t = LCase(title)
     if Instr(1, t, "minha") > 0 or Instr(1, t, "terceiro anjo") > 0 or Instr(1, t, "novo tempo") > 0 then return "Português"
     if Instr(1, t, "latino") > 0 or Instr(1, t, "mas tv") > 0 or Instr(1, t, "nuevo tiempo") > 0 or Instr(1, t, "vida mejor") > 0 then return "Español"
@@ -164,6 +164,16 @@ function ScNextAfter(sched as dynamic, prog as dynamic) as dynamic
         if p.scStart >= prog.scEnd then return p
     end for
     return invalid
+end function
+
+' A programme's frame grab, or "" while it is too new to have one. For its
+' first minutes the feed serves one shared grey "play" placeholder at the
+' grab's own URL (same file for every channel: 6542 bytes, measured
+' 2026-10-25), so a grab is used only once the programme has run 10 minutes.
+function ScGrab(p as dynamic) as string
+    if p = invalid then return ""
+    if ScNowSecs() - p.scStart < 600 then return ""
+    return p.scThumb
 end function
 
 ' What a programme is called on screen: its title, else "3 PM hour".

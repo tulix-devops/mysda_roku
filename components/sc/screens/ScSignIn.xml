@@ -19,7 +19,7 @@
     <!-- "signedIn" | "closed" -->
     <field id="outcome" type="string" alwaysNotify="true" />
     <field id="active" type="boolean" onChange="onActiveChanged" />
-    <field id="result" type="assocarray" onChange="onAuthResult" />
+    <field id="result" type="assocarray" alwaysNotify="true" onChange="onAuthResult" />
     <!-- { email, password } for the scene to run; it empties it at once. -->
     <field id="submitRequest" type="assocarray" alwaysNotify="true" />
   </interface>

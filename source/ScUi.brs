@@ -24,7 +24,7 @@ sub ScSetTitle(titleLabel as object, subLabel as object, title as string, subtit
     subLabel.text = subtitle
 end sub
 
-' A RowList the Showcase way: rows of ScCards, the focused card pinned at
+' A RowList the Showcase way (y = the first row LABEL's top): rows of ScCards, the focused card pinned at
 ' the content edge (x 184) and the ones scrolled past sliding left under the
 ' fade and the capsule rather than vanishing
 ' (knowledge/dev-roku/rowlist-fixedfocus-hides-items-before-focus).
@@ -36,10 +36,16 @@ sub ScInitRowList(list as object, y as integer)
     list.itemComponentName = "ScCard"
     list.translation = [t.contentX - off, y]
     list.rowFocusAnimationStyle = "fixedFocus"
+    ' Explicit: Up off row 0 must not be consumed (Home and the channel page
+    ' hand it to their buttons).
+    list.vertFocusAnimationStyle = "fixedFocus"
     list.focusXOffset = [off]
     list.showRowLabel = [true]
     list.showRowCounter = [false]
-    list.rowLabelOffset = [[off, -58]]
+    ' The label sits in a band the RowList reserves ABOVE each row's items
+    ' (about 43 px for a 32-px face, measured on device 2026-10-25): the list's
+    ' y is the first label's top, and rowHeights include the band.
+    list.rowLabelOffset = [[off, 0]]
     list.rowLabelFont = ScFont(t.fXB, 32)
     list.rowLabelColor = t.cText
     list.drawFocusFeedback = false
@@ -136,7 +142,7 @@ sub ScFillOnNow(n as object, ch as object)
             n.title = ch.title
             n.scMeta = "Live now · " + ScHourText(p.scStart)
         end if
-        n.scThumb = p.scThumb
+        n.scThumb = ScGrab(p)
         n.scPct = ScProgress(p.scStart, p.scEnd)
     end if
     n.scTick = n.scTick + 1

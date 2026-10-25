@@ -215,31 +215,45 @@ sub draw()
     onFocus()
 end sub
 
+' FOCUS, from the list's own focusPercent (gated on the list-set booleans,
+' knowledge/dev-roku/list-owned-focus-fields-not-parent-walk). Within the row
+' (or grid) that holds focus, the cards at rest step back - 94 %, dimmed,
+' grey caption - and the focused one lifts to 104 % with a shadow and a white
+' caption. Size and brightness carry focus on this plane; a thin ring alone
+' does not survive the 720p downscale
+' (knowledge/dev-roku/focus-border-abandoned-for-size-and-brightness).
+' Measured on device 2026-10-25: a 1.0 -> 1.07 lift alone read as no focus.
 sub onFocus()
-    fp = m.top.focusPercent
-    has = m.top.gridHasFocus or (m.top.rowListHasFocus and m.top.rowHasFocus)
-    if not has then fp = 0
+    fpRaw = m.top.focusPercent
+    inFocus = m.top.gridHasFocus or (m.top.rowListHasFocus and m.top.rowHasFocus)
     if m.kind = "station"
         ' The Radio carousel: the station in the middle is the big one.
-        s = 0.62 + 0.38 * m.top.focusPercent
+        s = 0.62 + 0.38 * fpRaw
         m.art.scale = [s, s]
-        m.art.opacity = 0.55 + 0.45 * m.top.focusPercent
-        m.shadow.visible = (fp > 0.05)
-        m.shadow.opacity = fp
+        m.art.opacity = 0.55 + 0.45 * fpRaw
+        m.shadow.visible = (fpRaw > 0.05)
+        m.shadow.opacity = fpRaw
         m.title.visible = false
         m.meta.visible = false
         return
     end if
-    s = 1.0 + 0.07 * fp
-    m.art.scale = [s, s]
-    m.shadow.visible = (fp > 0.05)
-    m.shadow.opacity = fp
-    lit = (fp > 0.5)
-    if m.kind = "logo"
-        m.ring.visible = lit
-        m.art.opacity = 0.9 + 0.1 * fp
-    end if
-    if m.title.visible
-        if lit then m.title.color = m.t.cText else m.title.color = m.t.cText1
+    if inFocus
+        fp = fpRaw
+        s = 0.94 + 0.10 * fp
+        m.art.scale = [s, s]
+        m.art.opacity = 0.7 + 0.3 * fp
+        m.shadow.visible = (fp > 0.05)
+        m.shadow.opacity = fp
+        lit = (fp > 0.5)
+        if lit then m.title.color = m.t.cText else m.title.color = m.t.cText2
+        m.title.opacity = 0.75 + 0.25 * fp
+        m.ring.visible = (m.kind = "logo" and lit)
+    else
+        m.art.scale = [1.0, 1.0]
+        m.art.opacity = 1.0
+        m.shadow.visible = false
+        m.title.color = m.t.cText1
+        m.title.opacity = 1.0
+        m.ring.visible = false
     end if
 end sub

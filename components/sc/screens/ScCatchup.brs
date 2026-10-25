@@ -10,7 +10,7 @@ sub init()
     m.note.font = ScFont(m.t.fSemi, 24)
     m.note.color = m.t.cText2
     ScSetTitle(m.top.findNode("title"), m.top.findNode("subtitle"), "Catch-up", "21 days of every channel")
-    ScInitRowList(m.rows, 214)
+    ScInitRowList(m.rows, 150)
     m.rows.observeField("rowItemSelected", "onCardSelected")
     m.top.observeField("focusedChild", "onFocusChild")
     m.global.observeField("schedVersion", "onSched")
@@ -102,6 +102,8 @@ sub rebuild()
     ScApplyRows(m.rows, rows)
 
     has = (m.rows.content <> invalid and m.rows.content.getChildCount() > 0 and m.rows.visible)
+    ' Rows that land while the Group itself holds focus take it (review C1).
+    if has and m.top.hasFocus() then m.rows.setFocus(true)
     m.note.visible = not has
     if not has then m.note.text = "Loading recordings" + Chr(8230)
 end sub

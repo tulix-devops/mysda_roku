@@ -51,6 +51,13 @@ function indexOf(name as string) as integer
     return 0
 end function
 
+' The destination changed under an open capsule (Back goes Home): its focus
+' follows (review C13).
+sub onSelected()
+    if m.top.navHasFocus then m.focusIndex = indexOf(m.top.selected)
+    paint()
+end sub
+
 sub onNavFocus()
     if m.top.navHasFocus
         ' Focus opens on the destination on display.
