@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  ScScheduleTask - one channel's getdvr.php (about 377 KB, 21 days back to the
+  end of today), parsed HERE and reduced to what the screens draw, so the
+  render thread never touches the big body (context-brief gotcha 5).
+
+  result: a ContentNode, id = the stream id, with
+    scStream  scAt (epoch s loaded)  scOk  scTitled (any real titles)
+    scToday   ContentNode: today's programmes, oldest first
+    scWeek    ContentNode: aired in the 6 days before today, newest first
+              (one per title for a titled channel), at most 14
+    scSeries  ContentNode: one child per series (title, scCount = recordings
+              in the window), most recorded first, at most 8; each child's
+              children are its episodes, newest first, at most 20
+  A programme node: title ("" when the feed says "Program"), scStart, scEnd,
+  scThumb ("" until it has started), url (the recording), scRec (id),
+  scStream.
+-->
+<component name="ScScheduleTask" extends="Task">
+  <interface>
+    <field id="stream" type="string" />
+    <field id="url" type="string" />
+    <field id="result" type="node" />
+    <field id="done" type="boolean" alwaysNotify="true" />
+  </interface>
+  <script type="text/brightscript" uri="pkg:/source/ScTime.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScData.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScNet.brs" />
+  <script type="text/brightscript" uri="pkg:/components/sc/tasks/ScScheduleTask.brs" />
+</component>

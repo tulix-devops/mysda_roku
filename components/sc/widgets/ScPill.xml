@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  ScPill - the Showcase button: a fully round pill (radius h/2).
+  At rest: white 14 % fill, white ink, Bold. Lit (it holds focus): a white
+  pill with dark ink, ExtraBold, lifted 1.06 from its left edge with a soft
+  shadow (showcase.md, "Shape and focus"). One focus indicator: only the lit
+  pill changes.
+  Width follows the text (ScTextW over the shipped TTF's advances); the
+  parent reads `w` to lay a row out.
+-->
+<component name="ScPill" extends="Group">
+  <interface>
+    <field id="text" type="string" onChange="layout" />
+    <field id="icon" type="string" onChange="layout" />
+    <field id="lit" type="boolean" onChange="paint" />
+    <!-- Chosen but not focused (a filter chip): white with dark ink, no lift. -->
+    <field id="selected" type="boolean" onChange="paint" />
+    <field id="h" type="integer" value="72" onChange="layout" />
+    <field id="fontSize" type="integer" value="26" onChange="layout" />
+    <field id="minW" type="integer" value="0" onChange="layout" />
+    <field id="w" type="integer" />
+  </interface>
+  <script type="text/brightscript" uri="pkg:/source/ScTheme.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScMetrics.brs" />
+  <script type="text/brightscript" uri="pkg:/components/sc/widgets/ScPill.brs" />
+  <children>
+    <Group id="body">
+      <Poster id="shadow" uri="" visible="false" />
+      <Poster id="plate" uri="" width="200" height="72" />
+      <Poster id="glyph" uri="" width="22" height="22" visible="false" />
+      <Label id="label" text="" height="72" vertAlign="center" horizAlign="center" />
+    </Group>
+  </children>
+</component>

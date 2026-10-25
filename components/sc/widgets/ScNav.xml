@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  ScNav - the floating capsule (showcase.md, option N2; owner 2026-10-06).
+
+  At rest: a glass pill at x 32, y 250, 104 wide (rgba 24,26,34,0.82, a 1 px
+  white ring at 8 %, a deep shadow) holding five 72-px icon circles. The
+  current destination sits on a white 18 % circle with a white glyph; the
+  others are #A6ABB8.
+  With focus: the capsule widens to 330 with labels; the focused item is a
+  white circle with dark ink; the page stays put and the scene dims it.
+
+  Up / Down move; OK or Right open the destination (the page does not change
+  while moving - it is dimmed behind). Back is the scene's.
+-->
+<component name="ScNav" extends="Group">
+  <interface>
+    <!-- The destination on display: home | channels | radio | catchup | account -->
+    <field id="selected" type="string" value="home" onChange="paint" />
+    <field id="navHasFocus" type="boolean" onChange="onNavFocus" />
+    <!-- Set when the viewer opens a destination (alwaysNotify: the same one
+         again still means "go into it"). -->
+    <field id="choose" type="string" alwaysNotify="true" />
+  </interface>
+  <script type="text/brightscript" uri="pkg:/source/ScGlobals.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScTheme.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScMetrics.brs" />
+  <script type="text/brightscript" uri="pkg:/components/sc/widgets/ScNav.brs" />
+  <children>
+    <Group id="capsule" translation="[32, 250]">
+      <Poster id="shadow" uri="" />
+      <Poster id="ring" uri="" translation="[-1, -1]" />
+      <Poster id="plate" uri="" />
+      <Group id="items" translation="[16, 16]" />
+    </Group>
+  </children>
+</component>

@@ -1,4 +1,5 @@
-// Ported 2026-10-06 from wpa_live_roku/tools/check-scope.js (prefix Sd).
+// Ported 2026-10-06 from wpa_live_roku/tools/check-scope.js (prefix Sd; the
+// C - Showcase build added Sc, 2026-10-25).
 // Static scope check for the SceneGraph components: every function a
 // component's scripts CALL must be DEFINED in a script that component
 // includes. source/ is not in component scope on its own
@@ -14,7 +15,7 @@
 // names and sub/function names.
 //
 // WHAT "CLEAN" DOES NOT COVER (review C10, 2026-09-29) - check these by hand:
-//   * only Sd*-prefixed calls are resolved; a missing screen-local helper
+//   * only Sd*/Sc*-prefixed calls are resolved; a missing screen-local helper
 //     (no Wp prefix) or another component's function is not reported
 //   * callFunc("x") targets are not matched to the target's <interface>
 //     (knowledge/dev-roku/callfunc-needs-interface-declaration)
@@ -36,7 +37,7 @@ const builtins = new Set(["Main"]);
 const defined = new Set(allXmls.map((f) => (fs.readFileSync(f, "utf8").match(/<component name="(\w+)"/) || [])[1]).filter(Boolean));
 const sgNodes = new Set(["Group", "Rectangle", "Poster", "Label", "Timer", "Animation", "RowList", "MarkupGrid", "MarkupList",
   "Video", "Font", "LayoutGroup", "MiniKeyboard", "Keyboard", "Vector2DFieldInterpolator", "FloatFieldInterpolator",
-  "ColorFieldInterpolator", "KeyboardDialog", "ProgressDialog", "Dialog", "interface", "field", "function", "children", "script", "component", "BusySpinner"]);
+  "ColorFieldInterpolator", "Scene", "Task", "KeyboardDialog", "ProgressDialog", "Dialog", "interface", "field", "function", "children", "script", "component", "BusySpinner"]);
 
 let problems = 0;
 const report = (f, msg) => { problems++; console.log(`${path.relative(root, f)}: ${msg}`); };
@@ -55,7 +56,7 @@ for (const x of xmls) {
     if (!fs.existsSync(p)) { report(x, `script missing: ${u}`); continue; }
     const src = strip(fs.readFileSync(p, "utf8"));
     for (const m of src.matchAll(/^\s*(?:function|sub)\s+(\w+)/gim)) defs.add(m[1].toLowerCase());
-    for (const m of src.matchAll(/\b(Sd\w+)\s*\(/g)) if (!calls.has(m[1].toLowerCase())) calls.set(m[1].toLowerCase(), `${u}: ${m[1]}`);
+    for (const m of src.matchAll(/\b((?:Sd|Sc)\w+)\s*\(/g)) if (!calls.has(m[1].toLowerCase())) calls.set(m[1].toLowerCase(), `${u}: ${m[1]}`);
     for (const m of src.matchAll(/^\s*(step|rem|box|run|tab|pos|sub)\s*=/gim)) report(x, `${u}: reserved word assigned: ${m[1]}`);
     for (const m of src.matchAll(/^\s*(?:function|sub)\s+(step|rem|box|run|tab|pos|sub)\s*\(/gim)) report(x, `${u}: reserved word as a function name: ${m[1]}`);
     for (const m of src.matchAll(/^\s*for\s+(?:each\s+)?(step|rem|box|run|tab|pos|sub|m)\b/gim)) report(x, `${u}: reserved word as a loop variable: ${m[1]}`);

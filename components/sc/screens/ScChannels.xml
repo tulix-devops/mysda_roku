@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  ScChannels - C3, every live channel: Television and Languages together,
+  chips to narrow it (All / Television / Languages / per language), a logo
+  grid six across. Logos whole on white plates; the focused one lifts with
+  a hairline ring. OK opens the channel's page.
+
+  MarkupGrid clips at its content box, so the last column's spacing is
+  widened for the lift (knowledge/dev-roku/markupgrid-clips-at-content-box);
+  fixedFocus plus a clippingRect keeps focus off a half-visible row
+  (knowledge/dev-roku/markupgrid-floatingfocus-does-not-scroll-past-visible-rows).
+-->
+<component name="ScChannels" extends="Group">
+  <interface>
+    <field id="active" type="boolean" onChange="onActive" />
+  </interface>
+  <script type="text/brightscript" uri="pkg:/source/ScGlobals.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScTheme.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScMetrics.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScTime.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScData.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScUi.brs" />
+  <script type="text/brightscript" uri="pkg:/components/sc/screens/ScChannels.brs" />
+  <children>
+    <Label id="title" text="" />
+    <Label id="subtitle" text="" />
+    <Group id="chips" translation="[184, 150]" />
+    <MarkupGrid id="grid" translation="[184, 262]"
+                itemComponentName="ScCard"
+                numColumns="6" numRows="3"
+                itemSize="[252, 232]"
+                itemSpacing="[24, 30]"
+                columnSpacings="[24, 24, 24, 24, 24, 60]"
+                vertFocusAnimationStyle="fixedFocus"
+                drawFocusFeedback="false" />
+  </children>
+</component>

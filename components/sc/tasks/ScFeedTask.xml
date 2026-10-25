@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  ScFeedTask - one catalogue list (8 Television, 9 Languages, 10 Radios),
+  fetched AND parsed here, off the render thread. The result is a ContentNode
+  whose children are channel nodes:
+    id title scLogo url scDvr scStream scKind scLang scIndex
+  `done` is set last, after `result`, `ok` and `status`.
+-->
+<component name="ScFeedTask" extends="Task">
+  <interface>
+    <field id="kind" type="string" />
+    <field id="result" type="node" />
+    <field id="ok" type="boolean" />
+    <field id="status" type="integer" />
+    <field id="done" type="boolean" alwaysNotify="true" />
+  </interface>
+  <script type="text/brightscript" uri="pkg:/source/ScTime.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScData.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScNet.brs" />
+  <script type="text/brightscript" uri="pkg:/components/sc/tasks/ScFeedTask.brs" />
+</component>

@@ -84,7 +84,7 @@ foreach ($spec in $Include) {
 }
 if ($files.Count -eq 0) { throw "Nothing matched the include list under $root." }
 
-foreach ($required in @('manifest', 'source/main.brs', 'components/home_scene.xml', 'source/SdTheme.brs')) {
+foreach ($required in @('manifest', 'source/main.brs', 'components/sc/ScScene.xml', 'source/ScTheme.brs')) {
     $abs = Join-Path $root ($required -replace '/', '\')
     if (-not (Test-Path $abs)) { Write-Warning "expected file missing: $required"; continue }
     if (-not ($files -contains (Get-Item $abs).FullName)) {

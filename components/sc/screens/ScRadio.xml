@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  ScRadio - C4, a carousel: the focused station big in the middle (600x426),
+  its neighbours smaller and dimmer (380x270 at 0.6, 254x180 at 0.35), its
+  name and line under it, and Listen. Left / Right move round the ten
+  stations (it wraps); OK listens.
+  Five fixed slots whose logos are re-pointed on a move. Every logo Poster
+  decodes at the same load size, so a station already seen in any slot is
+  in the texture cache and the swap never shows a blank plate
+  (knowledge/dev-roku/backdrop-poster-uri-swap-is-black-until-loaded); the
+  ten are prefetched at that size when the list lands.
+-->
+<component name="ScRadio" extends="Group">
+  <interface>
+    <field id="active" type="boolean" onChange="onActive" />
+  </interface>
+  <script type="text/brightscript" uri="pkg:/source/ScGlobals.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScTheme.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScMetrics.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScTime.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScData.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScUi.brs" />
+  <script type="text/brightscript" uri="pkg:/components/sc/screens/ScRadio.brs" />
+  <children>
+    <Label id="title" text="" />
+    <Label id="subtitle" text="" />
+    <Group id="prefetch" visible="false" />
+    <Group id="slots" />
+    <Label id="kicker" text="" translation="[0, 728]" width="1920" height="34" horizAlign="center" vertAlign="center" />
+    <Label id="name" text="" translation="[160, 768]" width="1600" height="84" horizAlign="center" vertAlign="center"
+           wrap="false" ellipsisText="..." />
+    <Group id="listenRow" translation="[0, 868]" />
+    <Label id="hint" text="" translation="[0, 960]" width="1920" height="32" horizAlign="center" vertAlign="center" />
+    <Label id="empty" text="" translation="[184, 460]" width="1500" height="60" visible="false" />
+  </children>
+</component>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  ScSignIn - email and password, typed with the remote, for the
+  mysdatv.com subscription that unlocks catch-up (POST /api/login,
+  ScAuthTask). Ported from wpa_live_roku's WpSignIn (itself AfricaMax's
+  AmSignIn, device-verified 2026-09-17):
+  * The FULL Keyboard node: MiniKeyboard has no "@" or "."
+    (knowledge/dev-roku/minikeyboard-cannot-type-credentials).
+  * Stacked: the form in one row, the keyboard under it; Roku's own QR
+    banner covers the top ~200 px of the keyboard's right two thirds while
+    it has focus (knowledge/dev-roku/keyboard-node-qr-banner-forces-stacked-layout).
+  * The keyboard's own edit box is hidden; the form shows what is typed,
+    the password masked.
+  Showcase styling: a field or button holding focus is a white plate with
+  dark ink (one focus indicator).
+-->
+<component name="ScSignIn" extends="Group">
+  <interface>
+    <!-- "signedIn" | "closed" -->
+    <field id="outcome" type="string" alwaysNotify="true" />
+    <field id="active" type="boolean" onChange="onActiveChanged" />
+    <field id="result" type="assocarray" onChange="onAuthResult" />
+    <!-- { email, password } for the scene to run; it empties it at once. -->
+    <field id="submitRequest" type="assocarray" alwaysNotify="true" />
+  </interface>
+  <script type="text/brightscript" uri="pkg:/source/ScGlobals.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScTheme.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScMetrics.brs" />
+  <script type="text/brightscript" uri="pkg:/components/sc/screens/ScSignIn.brs" />
+  <children>
+    <Rectangle id="groundFill" width="1920" height="1080" />
+    <Poster id="logo" uri="" translation="[12, 40]" width="144" height="75" />
+    <Label id="heading" text="Log in" translation="[184, 40]" height="64" vertAlign="center" />
+    <Label id="lede" text="Use the email and password of your mysdatv.com subscription."
+           translation="[184, 120]" width="1500" height="40" vertAlign="center" />
+
+    <Label id="emailCaption" text="EMAIL" translation="[184, 196]" width="600" height="30" vertAlign="center" />
+    <Poster id="emailPlate" uri="" translation="[184, 230]" width="620" height="72" />
+    <Label id="emailValue" text="" translation="[214, 230]" width="560" height="72"
+           vertAlign="center" wrap="false" ellipsisText="..." />
+
+    <Label id="passwordCaption" text="PASSWORD" translation="[836, 196]" width="540" height="30" vertAlign="center" />
+    <Poster id="passwordPlate" uri="" translation="[836, 230]" width="520" height="72" />
+    <Label id="passwordValue" text="" translation="[866, 230]" width="460" height="72"
+           vertAlign="center" wrap="false" ellipsisText="..." />
+
+    <ScPill id="submit" translation="[1388, 230]" text="Log in" minW="300" />
+
+    <Label id="message" text="" translation="[184, 318]" width="1600" height="42"
+           vertAlign="center" wrap="false" ellipsisText="..." />
+    <Keyboard id="keyboard" translation="[258, 392]" />
+    <Label id="keyboardHint" text="Press Back or Up when you have finished typing, then choose Log in."
+           translation="[184, 880]" width="1600" height="36" vertAlign="center" />
+    <Label id="note" text="No subscription yet? Subscribe at mysdatv.com, or scan the donation code on the Account screen."
+           translation="[184, 926]" width="1600" height="36" vertAlign="center" />
+  </children>
+</component>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  ScScene - the C · Showcase shell (docs/design/showcase.md), built the way
+  wpa_live_roku's WpScene is (device-proven): one scene, the screens in one
+  group, the scene owning the one Video node, the dialog, the sign-in page,
+  the clock, the boot watchdog and the m.global request fields.
+
+  * The capsule floats over the page; with focus it widens and the page
+    DIMS to 50 % behind a left fade - it never moves or re-lays out
+    (knowledge/dev-roku/collapsing-rail-breaks-full-bleed-children).
+  * The whole logo sits above the capsule; never a crop of it.
+  * leftFade is the ground fading out over 220 px: cards scrolled past slide
+    under it and under the capsule rather than being cut.
+  * playerHost is EMPTY: one Video node per channel, created on demand and
+    destroyed on the way out (declaring a second hangs the first render pass).
+  Draw order is declaration order.
+-->
+<component name="ScScene" extends="Scene">
+  <script type="text/brightscript" uri="pkg:/source/ScGlobals.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScTheme.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScMetrics.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScTime.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScData.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScNet.brs" />
+  <script type="text/brightscript" uri="pkg:/components/sc/ScScene.brs" />
+  <interface>
+    <!-- A deep link, from launch args or a roInputEvent: { id, mediaType } -->
+    <field id="deepLink" type="assocarray" onChange="onDeepLink" />
+  </interface>
+  <children>
+    <Rectangle id="groundFill" width="1920" height="1080" />
+
+    <Group id="screensGroup">
+      <ScHome     id="home"     visible="false" />
+      <ScChannels id="channels" visible="false" />
+      <ScRadio    id="radio"    visible="false" />
+      <ScCatchup  id="catchup"  visible="false" />
+      <ScAccount  id="account"  visible="false" />
+      <ScChannel  id="channelPage" visible="false" />
+    </Group>
+
+    <!-- rgba(7,8,12,0.7) -> 0 over 220 px: cards pass under it. -->
+    <Poster id="leftFade" uri="pkg:/images/png/shapes/fade_right.png"
+            width="220" height="1080" opacity="0.7" />
+    <!-- With the capsule open: a deeper fade, 900 wide, at 0.85. -->
+    <Poster id="navFade" uri="pkg:/images/png/shapes/fade_right.png"
+            width="900" height="1080" opacity="0.85" visible="false" />
+
+    <Poster id="logo" uri="" translation="[12, 40]" width="144" height="75" />
+    <Label id="clock" text="" translation="[1424, 50]" width="400" height="40"
+           horizAlign="right" vertAlign="center" />
+    <Timer id="clockTimer" repeat="true" duration="30" />
+    <Timer id="bootWatchdog" repeat="false" duration="12" />
+
+    <ScNav id="nav" />
+    <ScDialog id="dialog" visible="false" />
+    <ScSignIn id="signin" visible="false" />
+    <Group id="playerHost" />
+  </children>
+</component>

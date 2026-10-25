@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  ScHome - C1. A hero of what is on now (the featured channel, or the
+  channel whose card holds focus in On now / Channels), then the rows:
+  On now, Channels, In your language, Radio, Catch-up by series.
+
+  The hero's backdrop is the programme's own grab decoded TINY and drawn
+  1920 wide - a blur SceneGraph cannot do otherwise - dimmed, under a bottom
+  fade and a left fade; a sharp copy of at most 480x270 sits on the right
+  (showcase.md, Hero). Grabs are 320x180 at the source.
+-->
+<component name="ScHome" extends="Group">
+  <interface>
+    <field id="active" type="boolean" onChange="onActive" />
+  </interface>
+  <script type="text/brightscript" uri="pkg:/source/ScGlobals.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScTheme.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScMetrics.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScTime.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScData.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScUi.brs" />
+  <script type="text/brightscript" uri="pkg:/components/sc/screens/ScHome.brs" />
+  <children>
+    <Group id="hero">
+      <Poster id="backdrop" uri="" width="1920" height="640"
+              loadWidth="48" loadHeight="27" loadDisplayMode="scaleToZoom" opacity="0.55" />
+      <Rectangle id="veil" width="1920" height="660" opacity="0.2" />
+      <Poster id="fadeBottom" uri="pkg:/images/png/shapes/fade_bottom.png" width="1920" height="660" />
+      <Poster id="fadeLeft" uri="pkg:/images/png/shapes/fade_right.png" width="1200" height="660" opacity="0.85" />
+
+      <Group id="preview" translation="[1344, 170]">
+        <Poster id="previewShadow" uri="" />
+        <Poster id="previewPlate" uri="" width="480" height="270" />
+        <Poster id="previewImage" uri="" width="480" height="270"
+                loadWidth="320" loadHeight="180" loadDisplayMode="scaleToZoom" />
+        <Poster id="previewLogo" uri="" width="300" height="212" translation="[90, 29]"
+                loadDisplayMode="scaleToFit" visible="false" />
+        <Poster id="previewCaps" uri="" width="480" height="270" />
+        <Group id="previewBadge" translation="[14, 196]">
+          <Poster id="previewBadgePlate" uri="" width="84" height="60" />
+          <Poster id="previewBadgeLogo" uri="" translation="[4, 3]" width="76" height="54" loadDisplayMode="scaleToFit" />
+        </Group>
+      </Group>
+
+      <Group id="info" translation="[184, 184]">
+        <Group id="onNowPill">
+          <Poster id="onNowPlate" uri="" height="36" />
+          <Poster id="onNowDot" uri="" width="8" height="8" translation="[14, 14]" />
+          <Label id="onNowText" text="ON NOW" translation="[30, 0]" height="36" vertAlign="center" />
+        </Group>
+        <Label id="heroChannel" text="" height="36" vertAlign="center" />
+        <Label id="heroTitle" text="" translation="[0, 50]" width="1100" height="78" vertAlign="center"
+               ellipsisText="..." wrap="false" />
+        <Label id="heroTime" text="" translation="[0, 136]" height="36" vertAlign="center" />
+        <Rectangle id="heroTrack" translation="[0, 151]" width="260" height="6" />
+        <Rectangle id="heroFill" translation="[0, 151]" width="0" height="6" />
+        <Label id="heroLeft" text="" translation="[0, 136]" height="36" vertAlign="center" />
+        <Group id="buttons" translation="[0, 206]" />
+      </Group>
+    </Group>
+
+    <Label id="title" text="" />
+    <Label id="subtitle" text="" />
+
+    <RowList id="rows" />
+
+    <Label id="empty" text="" translation="[184, 700]" width="1500" height="60" visible="false" />
+  </children>
+</component>

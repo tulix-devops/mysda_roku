@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  ScAuthTask - the viewer's session, one request per run.
+    kind "signIn"       email + password -> POST /api/login, stores AUTH.authData
+    kind "checkAccess"  POST /api/payments/customer/check-purchase (productId 15)
+    kind "signOut"      deletes AUTH.authData
+  result: { kind, ok, reason, status, access }
+    reason (signIn): "" | "credentials" | "network" | "error"
+    access (checkAccess): "yes" | "no" | "unauthorized" | "error"
+  The password lives on this Task only; the caller empties its own copy.
+-->
+<component name="ScAuthTask" extends="Task">
+  <interface>
+    <field id="kind" type="string" />
+    <field id="email" type="string" />
+    <field id="password" type="string" />
+    <field id="result" type="assocarray" />
+  </interface>
+  <script type="text/brightscript" uri="pkg:/source/ScTime.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScData.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScNet.brs" />
+  <script type="text/brightscript" uri="pkg:/components/sc/tasks/ScAuthTask.brs" />
+</component>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  ScCard - every card in the Showcase rows and grids (RowList / MarkupGrid
+  item). The content node (ScCardNode in ScData.brs) picks the kind:
+
+    frame    a programme's frame grab, the channel's logo badge top-left,
+             an optional tag (REPLAY / LIVE / 28 MIN) and progress bar
+    later    a slot that has not aired: a dark plate, the logo dimmed, a tag
+    logo     a channel's logo, WHOLE, on a white plate (never cropped)
+    station  a radio station's logo on a white plate (the Radio carousel)
+
+  Captions sit under the art (title, meta), or over a bottom fade inside it
+  (scInside, "Earlier this week").
+
+  FOCUS (showcase.md): the card lifts - scale 1.07 from its bottom-left, a
+  deep shadow - and its caption turns white. No border. The lift follows the
+  list's own focusPercent, gated on the list-set focus booleans
+  (knowledge/dev-roku/list-owned-focus-fields-not-parent-walk); in a RowList
+  rowHasFocus too, or every row lights a card.
+  Declaration order is draw order (knowledge/dev-roku/xml-declaration-order-is-z-order).
+-->
+<component name="ScCard" extends="Group">
+  <interface>
+    <field id="itemContent" type="node" onChange="onContent" />
+    <field id="focusPercent" type="float" onChange="onFocus" />
+    <field id="rowListHasFocus" type="boolean" onChange="onFocus" />
+    <field id="rowHasFocus" type="boolean" onChange="onFocus" />
+    <field id="gridHasFocus" type="boolean" onChange="onFocus" />
+    <field id="width" type="float" />
+    <field id="height" type="float" />
+  </interface>
+  <script type="text/brightscript" uri="pkg:/source/ScGlobals.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScTheme.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScMetrics.brs" />
+  <script type="text/brightscript" uri="pkg:/components/sc/widgets/ScCard.brs" />
+  <children>
+    <Group id="art">
+      <Poster id="shadow" uri="" visible="false" />
+      <Poster id="ring" uri="" visible="false" />
+      <Poster id="plate" uri="" />
+      <Poster id="thumb" uri="" loadDisplayMode="scaleToZoom" visible="false" />
+      <Poster id="logo" uri="" loadDisplayMode="scaleToFit" visible="false" />
+      <Poster id="fade" uri="pkg:/images/png/shapes/fade_bottom.png" visible="false" />
+      <Poster id="caps" uri="" />
+      <Group id="badge" translation="[12, 12]" visible="false">
+        <Poster id="badgePlate" uri="" width="72" height="51" />
+        <Poster id="badgeLogo" uri="" translation="[3, 2]" width="66" height="47" loadDisplayMode="scaleToFit" />
+      </Group>
+      <Group id="tag" visible="false">
+        <Poster id="tagPlate" uri="" height="30" />
+        <Label id="tagText" text="" height="30" vertAlign="center" horizAlign="center" />
+      </Group>
+      <Rectangle id="track" height="5" visible="false" />
+      <Rectangle id="fill" height="5" visible="false" />
+      <Label id="inTitle" text="" height="28" ellipsisText="..." visible="false" />
+      <Label id="inMeta" text="" height="22" ellipsisText="..." visible="false" />
+    </Group>
+    <Label id="title" text="" height="32" ellipsisText="..." />
+    <Label id="meta" text="" height="26" ellipsisText="..." />
+  </children>
+</component>

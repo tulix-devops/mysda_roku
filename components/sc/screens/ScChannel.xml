@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  ScChannel - C2, a channel's own page: its logo whole on a white plate, the
+  LIVE line, Watch live / Start over, then "Today on <channel>" (replays with
+  their grabs, the live one, later ones as logo cards) and "Earlier this
+  week". Live and its 21 days of recordings side by side.
+  Opened over the current destination (m.global.openChannel); Back closes it.
+-->
+<component name="ScChannel" extends="Group">
+  <interface>
+    <field id="channel" type="node" onChange="onChannel" />
+    <field id="active" type="boolean" />
+  </interface>
+  <script type="text/brightscript" uri="pkg:/source/ScGlobals.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScTheme.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScMetrics.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScTime.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScData.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScUi.brs" />
+  <script type="text/brightscript" uri="pkg:/components/sc/screens/ScChannel.brs" />
+  <children>
+    <Poster id="backdrop" uri="" width="1920" height="520"
+            loadWidth="48" loadHeight="27" loadDisplayMode="scaleToZoom" opacity="0.45" />
+    <Poster id="fadeBottom" uri="pkg:/images/png/shapes/fade_bottom.png" width="1920" height="540" />
+
+    <Poster id="plateShadow" uri="" />
+    <Poster id="plate" uri="" translation="[184, 130]" width="360" height="256" />
+    <Poster id="logo" uri="" translation="[199, 141]" width="330" height="234" loadDisplayMode="scaleToFit"
+            loadWidth="450" loadHeight="320" />
+
+    <Label id="name" text="" translation="[588, 130]" width="1236" height="84" vertAlign="center"
+           wrap="false" ellipsisText="..." />
+    <Label id="liveTag" text="● LIVE" translation="[588, 222]" width="140" height="36" vertAlign="center" />
+    <Label id="liveLine" text="" translation="[700, 222]" width="1124" height="36" vertAlign="center"
+           wrap="false" ellipsisText="..." />
+    <Label id="meta" text="" translation="[588, 266]" width="1236" height="32" vertAlign="center" />
+    <Group id="buttons" translation="[588, 316]" />
+
+    <Label id="title" text="" />
+    <Label id="subtitle" text="" />
+
+    <RowList id="rows" />
+    <Label id="note" text="" translation="[184, 520]" width="1600" height="40" vertAlign="center" />
+  </children>
+</component>

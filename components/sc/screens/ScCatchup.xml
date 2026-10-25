@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  ScCatchup - C5, catch-up by series: "Earlier today" (every loaded channel,
+  newest first), then one row per series - exact title within one channel's
+  21 days (3ABN Homecoming 57, The Carter Report 30, ...). Each card is the
+  recording's grab with its logo badge and its length bottom-right; OK plays
+  it (the scene checks the viewer may).
+  Programme titles exist for the 3ABN family only, so the series rows come
+  from those channels; their schedules load when this screen first shows.
+-->
+<component name="ScCatchup" extends="Group">
+  <interface>
+    <field id="active" type="boolean" onChange="onActive" />
+  </interface>
+  <script type="text/brightscript" uri="pkg:/source/ScGlobals.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScTheme.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScMetrics.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScTime.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScData.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScUi.brs" />
+  <script type="text/brightscript" uri="pkg:/components/sc/screens/ScCatchup.brs" />
+  <children>
+    <Label id="title" text="" />
+    <Label id="subtitle" text="" />
+    <RowList id="rows" />
+    <Label id="note" text="" translation="[184, 220]" width="1600" height="40" vertAlign="center" />
+  </children>
+</component>

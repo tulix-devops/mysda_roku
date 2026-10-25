@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  ScPlayer - the one player, created by the scene on demand and destroyed on
+  the way out (one Video node per channel). Three modes from the play item:
+
+    live     C6: title top-left, the clock, and a strip of channel logo cards
+             at the bottom - Left / Right move along it, OK switches to the
+             highlighted channel, or opens the page of the one playing.
+    radio    a now-playing card (the video plane is black for audio); Left /
+             Right change station.
+    catchup  C7: logo + "3ABN · Sat, Oct 4 · 5:00 PM · recording", the title,
+             a seek bar, -10 / play-pause / +10 and the next episode. Left /
+             Right move between them, OK presses; rewind / fast-forward and
+             play work straight from the remote. No trick-play thumbnails:
+             they need a pre-generated BIF (knowledge/dev-roku/trickplay-needs-pregenerated-bif).
+
+  The chrome hides after 5 s; the first key while it is hidden only shows it
+  (Back still closes). The Video node never holds focus: this Group does, so
+  Roku's own transport UI never appears (enableUI false).
+  An HLS recording can sit on its last frame in "playing" forever: the end is
+  position >= duration - 1, not "finished" (knowledge/dev-roku/hls-vod-never-reports-finished).
+-->
+<component name="ScPlayer" extends="Group">
+  <interface>
+    <field id="item" type="node" onChange="onItem" />
+    <function name="teardown" />
+  </interface>
+  <script type="text/brightscript" uri="pkg:/source/ScGlobals.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScTheme.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScMetrics.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScTime.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScData.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScUi.brs" />
+  <script type="text/brightscript" uri="pkg:/components/sc/ScPlayer.brs" />
+  <children>
+    <Rectangle id="black" width="1920" height="1080" color="0x000000FF" />
+    <Video id="video" width="1920" height="1080" enableUI="false" enableTrickPlay="false" />
+
+    <!-- Radio: the station, whole, on its plate. -->
+    <Group id="radioCard" visible="false">
+      <Rectangle id="radioGround" width="1920" height="1080" />
+      <Poster id="radioPlate" uri="" translation="[660, 200]" width="600" height="426" />
+      <Poster id="radioLogo" uri="" translation="[696, 226]" width="528" height="374"
+              loadDisplayMode="scaleToFit" loadWidth="450" loadHeight="320" />
+      <Label id="radioKicker" text="● LIVE RADIO" translation="[0, 676]" width="1920" height="34" horizAlign="center" vertAlign="center" />
+      <Label id="radioName" text="" translation="[160, 716]" width="1600" height="84" horizAlign="center" vertAlign="center" />
+      <Label id="radioHint" text="Left / Right for another station · Back to stop" translation="[0, 812]" width="1920" height="34" horizAlign="center" vertAlign="center" />
+    </Group>
+
+    <Group id="chrome">
+      <Poster id="topFade" uri="pkg:/images/png/shapes/fade_top.png" width="1920" height="240" opacity="0.7" />
+      <Poster id="bottomFade" uri="pkg:/images/png/shapes/fade_bottom.png" translation="[0, 560]" width="1920" height="520" opacity="0.96" />
+
+      <Group id="liveTop" translation="[96, 56]">
+        <Label id="liveKicker" text="● LIVE" height="30" vertAlign="center" />
+        <Label id="liveTitle" text="" translation="[0, 34]" width="1300" height="62" vertAlign="center" wrap="false" ellipsisText="..." />
+        <Label id="liveNow" text="" translation="[0, 98]" width="1300" height="32" vertAlign="center" wrap="false" ellipsisText="..." />
+      </Group>
+      <Label id="clock" text="" translation="[1424, 60]" width="400" height="44" horizAlign="right" vertAlign="center" />
+
+      <Label id="stripHint" text="Left / Right to switch · OK for the channel page" translation="[96, 744]" width="1400" height="34" vertAlign="center" />
+      <Group id="strip" translation="[96, 0]" />
+
+      <Group id="vod" visible="false">
+        <Group id="vodHead" translation="[96, 0]">
+          <Poster id="vodBadgePlate" uri="" translation="[0, 678]" width="84" height="60" />
+          <Poster id="vodBadgeLogo" uri="" translation="[4, 681]" width="76" height="54" loadDisplayMode="scaleToFit" />
+          <Label id="vodLine" text="" translation="[98, 678]" width="1100" height="60" vertAlign="center" wrap="false" ellipsisText="..." />
+          <Label id="vodTitle" text="" translation="[0, 744]" width="1250" height="84" vertAlign="center" wrap="false" ellipsisText="..." />
+        </Group>
+        <Label id="posText" text="0:00" translation="[96, 880]" width="110" height="40" vertAlign="center" />
+        <Poster id="barTrack" uri="" translation="[230, 896]" width="1460" height="8" />
+        <Poster id="barFill" uri="" translation="[230, 896]" width="0" height="8" />
+        <Poster id="knob" uri="" translation="[217, 887]" width="26" height="26" />
+        <Label id="durText" text="0:00" translation="[1714, 880]" width="110" height="40" horizAlign="right" vertAlign="center" />
+        <Group id="controls" />
+        <Group id="nextCard" translation="[1404, 670]" visible="false">
+          <Poster id="nextPlate" uri="" width="420" height="118" />
+          <Poster id="nextThumb" uri="" translation="[14, 14]" width="160" height="90" loadWidth="320" loadHeight="180" loadDisplayMode="scaleToZoom" />
+          <Poster id="nextCaps" uri="" translation="[14, 14]" width="160" height="90" />
+          <Label id="nextKicker" text="NEXT EPISODE" translation="[190, 16]" width="216" height="24" vertAlign="center" />
+          <Label id="nextTitle" text="" translation="[190, 42]" width="216" height="30" vertAlign="center" wrap="false" ellipsisText="..." />
+          <Label id="nextWhen" text="" translation="[190, 74]" width="216" height="26" vertAlign="center" />
+        </Group>
+      </Group>
+    </Group>
+
+    <Label id="status" text="" translation="[160, 500]" width="1600" height="80" horizAlign="center" vertAlign="center" visible="false" />
+    <Timer id="hideTimer" repeat="false" duration="5" />
+    <Timer id="tick" repeat="true" duration="1" />
+  </children>
+</component>

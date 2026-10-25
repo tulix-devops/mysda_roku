@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  ScDialog - the Showcase modal: the page dims, a panel holds a title, a
+  line or two and up to three pill buttons in a row. Left / Right move,
+  OK answers, Back answers -1. The answer goes to m.global.dialogResult as
+  { id, index }; the scene closes the dialog and routes the answer.
+  Declared after the screens and the capsule: it paints over both.
+-->
+<component name="ScDialog" extends="Group">
+  <interface>
+    <!-- { id, title, body, buttons: [..] } -->
+    <field id="spec" type="assocarray" onChange="onSpec" />
+  </interface>
+  <script type="text/brightscript" uri="pkg:/source/ScGlobals.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScTheme.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScMetrics.brs" />
+  <script type="text/brightscript" uri="pkg:/components/sc/widgets/ScDialog.brs" />
+  <children>
+    <Rectangle id="dim" width="1920" height="1080" />
+    <Group id="panelGroup">
+      <Poster id="shadow" uri="" />
+      <Poster id="panel" uri="" />
+      <Label id="title" text="" wrap="true" maxLines="2" />
+      <Label id="body" text="" wrap="true" maxLines="4" />
+      <Group id="buttons" />
+    </Group>
+  </children>
+</component>
