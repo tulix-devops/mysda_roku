@@ -82,6 +82,12 @@ function ScPillFor(h as integer) as string
     return ScShape("r2")
 end function
 
+' The headroom every ScCard keeps above its art for the focus lift (a lift
+' of 5 % on a 216-px card is 11 px); row and grid item heights include it.
+function ScCardPad() as integer
+    return 12
+end function
+
 function ScGlyph(name as string) as string
     return "pkg:/images/png/sc/" + name + ".png"
 end function

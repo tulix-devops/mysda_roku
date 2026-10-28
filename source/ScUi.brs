@@ -54,7 +54,8 @@ sub ScInitRowList(list as object, y as integer)
     list.rowItemSpacing = [[24, 0]]
 end sub
 
-' rows: [{ title, items: [card nodes], w, h, gap }]. h includes the caption.
+' rows: [{ title, items: [card nodes], w, h, gap }]. h includes the caption;
+' the card's headroom (ScCardPad) is added here.
 ' Keeps the viewer's place when the shape is rebuilt.
 sub ScApplyRows(list as object, rows as object)
     root = CreateObject("roSGNode", "ContentNode")
@@ -68,9 +69,10 @@ sub ScApplyRows(list as object, rows as object)
             for each it in r.items
                 row.appendChild(it)
             end for
-            sizes.push([r.w, r.h])
-            heights.push(r.h + r.gap)
-            if r.h + r.gap > maxH then maxH = r.h + r.gap
+            h = r.h + ScCardPad()
+            sizes.push([r.w, h])
+            heights.push(h + r.gap)
+            if h + r.gap > maxH then maxH = h + r.gap
         end if
     end for
     if root.getChildCount() = 0

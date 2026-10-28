@@ -17,6 +17,9 @@ sub init()
     m.note = m.top.findNode("note")
 
     m.plate.uri = ScShape("r22")
+    caps = m.top.findNode("logoCaps")
+    caps.uri = ScShape("caps18")
+    caps.blendColor = m.t.cGround
     m.plate.blendColor = m.t.cPlate
     sh = m.top.findNode("plateShadow")
     sh.uri = ScShape("shadow14")

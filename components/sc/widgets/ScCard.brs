@@ -52,6 +52,7 @@ sub init()
     m.lit = false
     m.kind = ""
     m.c = invalid
+    m.pad = ScCardPad()
 end sub
 
 ' A screen refreshes a card in place (on now, progress) by bumping its
@@ -96,6 +97,11 @@ sub draw()
     m.shadow.width = w + 2 * b
     m.shadow.height = h + 2 * b
 
+    ' Headroom above the art for the focus lift: a RowList clips its items,
+    ' and a card lifted 5 % from its bottom edge lost its top corners
+    ' (owner, 2026-10-28). Every row's item height includes ScCardPad().
+    m.art.translation = [0, m.pad]
+
     isFrame = (kind = "frame")
     isLogo = (kind = "logo" or kind = "station")
     isLater = (kind = "later")
@@ -118,9 +124,9 @@ sub draw()
         m.thumb.loadHeight = 180
         if m.thumb.uri <> c.scThumb then m.thumb.uri = c.scThumb
     end if
-    ' Corner caps only where a picture meets the ground; a plate is round
-    ' by itself.
-    m.caps.visible = m.thumb.visible
+    ' Corner caps wherever a square picture meets the ground: a grab, or a
+    ' channel logo drawn edge to edge. A plate is round by itself.
+    m.caps.visible = m.thumb.visible or (kind = "logo" and c.scLogo <> "")
 
     ' The logo: whole, at its own 1.41 aspect, inside the plate (logo,
     ' station), or dimmed in the middle of a later slot, or as a frame's
@@ -140,7 +146,13 @@ sub draw()
         m.logoPlate.translation = [Int((w - lw) / 2), Int((h - lh) / 2)]
     end if
     if m.logo.visible
-        if isLogo
+        if kind = "logo"
+            ' Edge to edge: channel logos are 1.41 like the card, so the
+            ' whole logo fills it - no white rim round a dark logo (owner,
+            ' 2026-10-28: "white outline" on Minha TV, ANJO, SUM, GNTV).
+            pw = w
+            ph = h
+        else if isLogo
             pw = Int(w * 0.86)
             ph = Int(h * 0.86)
         else if fallback
@@ -215,14 +227,14 @@ sub draw()
             m.title.horizAlign = "center"
             m.meta.horizAlign = "center"
             m.title.font = ScFont(m.t.fSemi, 19)
-            m.title.translation = [0, h + 10]
-            m.meta.translation = [0, h + 38]
+            m.title.translation = [0, m.pad + h + 10]
+            m.meta.translation = [0, m.pad + h + 38]
         else
             m.title.horizAlign = "left"
             m.meta.horizAlign = "left"
             m.title.font = ScFont(m.t.fBold, 23)
-            m.title.translation = [0, h + 10]
-            m.meta.translation = [0, h + 44]
+            m.title.translation = [0, m.pad + h + 10]
+            m.meta.translation = [0, m.pad + h + 44]
         end if
         m.title.text = c.title
         m.meta.text = c.scMeta

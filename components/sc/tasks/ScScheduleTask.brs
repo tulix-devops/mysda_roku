@@ -72,6 +72,19 @@ sub build(out as object, arr as object, stream as string)
         for each p in progs
             p.thumb = ""
         end for
+    else
+        ' The real grab of what is on can take well over 10 minutes to
+        ' arrive (still the placeholder 22 min in, 2026-10-28): probe what is
+        ' on now and the programme before it, and drop a placeholder so the
+        ' screens fall back to the last real picture.
+        k = 0
+        for each p in progs
+            if p.st <= now and p.thumb <> ""
+                if isPlaceholderGrab(p.thumb, stream) then p.thumb = ""
+                k = k + 1
+                if k >= 2 then exit for
+            end if
+        end for
     end if
 
     ' Today, oldest first (progs is newest first).
@@ -147,13 +160,18 @@ function grabsArePlaceholders(progs as object, now as integer, stream as string)
         end if
     end for
     if probe = invalid then return false
+    return isPlaceholderGrab(probe.thumb, stream)
+end function
+
+' True when a grab URL serves the feed's placeholder (by its exact size).
+function isPlaceholderGrab(url as string, stream as string) as boolean
     path = "tmp:/sc_probe_" + stream + ".jpg"
     port = CreateObject("roMessagePort")
     req = CreateObject("roUrlTransfer")
     req.SetMessagePort(port)
     req.SetCertificatesFile("common:/certs/ca-bundle.crt")
     req.InitClientCertificates()
-    req.SetUrl(probe.thumb)
+    req.SetUrl(url)
     if not req.AsyncGetToFile(path) then return false
     msg = wait(8000, port)
     if type(msg) <> "roUrlEvent" or msg.GetResponseCode() <> 200

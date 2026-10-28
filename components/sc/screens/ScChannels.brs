@@ -75,7 +75,7 @@ end sub
 sub showFilter()
     root = CreateObject("roSGNode", "ContentNode")
     for each ch in m.filters[m.filter].items
-        root.appendChild(ScLogoCard(ch, "channel", 252, 190))
+        root.appendChild(ScLogoCard(ch, "channel", 252, 179))
     end for
     m.grid.content = root
 end sub
