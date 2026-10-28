@@ -39,6 +39,10 @@
       <ScChannel  id="channelPage" visible="false" />
     </Group>
 
+    <!-- The page dims under ONE ground-coloured layer while the capsule is
+         open. Fading the screens Group instead fades every plate and logo
+         separately and draws grey frames round logos (owner, 2026-10-28). -->
+    <Rectangle id="pageDim" width="1920" height="1080" opacity="0" visible="false" />
     <!-- rgba(7,8,12,0.7) -> 0 over 220 px: cards pass under it. -->
     <Poster id="leftFade" uri="pkg:/images/png/shapes/fade_right.png"
             width="220" height="1080" opacity="0.7" />
@@ -46,7 +50,7 @@
     <Poster id="navFade" uri="pkg:/images/png/shapes/fade_right.png"
             width="900" height="1080" opacity="0" visible="false" />
     <Animation id="dimAnim" duration="0.24" repeat="false" easeFunction="outCubic">
-      <FloatFieldInterpolator id="dimPage" key="[0.0, 1.0]" keyValue="[1.0, 0.5]" fieldToInterp="screensGroup.opacity" />
+      <FloatFieldInterpolator id="dimPage" key="[0.0, 1.0]" keyValue="[0.0, 0.5]" fieldToInterp="pageDim.opacity" />
       <FloatFieldInterpolator id="dimFade" key="[0.0, 1.0]" keyValue="[0.0, 0.85]" fieldToInterp="navFade.opacity" />
     </Animation>
 

@@ -8,7 +8,7 @@ sub init()
     ? "[ScScene] init"
     ScEnsureGlobals()
     m.t = ScTheme()
-    ScPaint(m.top, [["groundFill", "color", "cGround"], ["leftFade", "blendColor", "cScrim"], ["navFade", "blendColor", "cScrim"], ["logo", "uri", "logo"]])
+    ScPaint(m.top, [["groundFill", "color", "cGround"], ["pageDim", "color", "cGround"], ["leftFade", "blendColor", "cScrim"], ["navFade", "blendColor", "cScrim"], ["logo", "uri", "logo"]])
     m.top.backgroundColor = m.t.cGround
     m.top.backgroundUri = ""
 
@@ -21,6 +21,7 @@ sub init()
     m.logo = m.top.findNode("logo")
     m.clock = m.top.findNode("clock")
     m.navFade = m.top.findNode("navFade")
+    m.pageDim = m.top.findNode("pageDim")
     m.leftFade = m.top.findNode("leftFade")
     m.clock.font = ScFont(m.t.fSemi, 27)
     m.clock.color = m.t.cText2
@@ -203,7 +204,7 @@ sub onNavFocus()
     ' animation (same easing), from wherever they are now.
     anim = m.top.findNode("dimAnim")
     anim.control = "stop"
-    pageTo = 1.0
+    pageTo = 0.0
     fadeTo = 0.0
     anim.duration = 0.18
     if open
@@ -211,8 +212,9 @@ sub onNavFocus()
         fadeTo = 0.85
         anim.duration = 0.24
         m.navFade.visible = true
+        m.pageDim.visible = true
     end if
-    m.top.findNode("dimPage").keyValue = [m.screensGroup.opacity, pageTo]
+    m.top.findNode("dimPage").keyValue = [m.pageDim.opacity, pageTo]
     m.top.findNode("dimFade").keyValue = [m.navFade.opacity, fadeTo]
     anim.control = "start"
     ScFocusChanged()
@@ -265,7 +267,10 @@ sub showChrome(on as boolean)
     m.clock.visible = on
     m.leftFade.visible = on
     m.screensGroup.visible = on
-    if not on then m.navFade.visible = false
+    if not on
+        m.navFade.visible = false
+        m.pageDim.visible = false
+    end if
 end sub
 
 ' ---------------------------------------------------------------- dialog --

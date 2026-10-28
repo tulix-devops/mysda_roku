@@ -265,10 +265,15 @@ sub drawStrip()
         logo.loadDisplayMode = "scaleToFit"
         logo.loadWidth = 450
         logo.loadHeight = 320
+        ' Dim under one veil, never Group opacity (grey frames round logos).
+        veil = g.createChild("Poster")
+        veil.uri = ScShape("r14")
+        veil.blendColor = m.t.cGround
+        veil.opacity = 0.3
         cap = g.createChild("Label")
         cap.wrap = false
         cap.ellipsisText = "..."
-        m.stripPool.push({ group: g, shadow: sh, plate: plate, logo: logo, cap: cap })
+        m.stripPool.push({ group: g, shadow: sh, plate: plate, logo: logo, veil: veil, cap: cap })
     end while
     x = 0
     for i = 0 to m.stripPool.count() - 1
@@ -286,8 +291,9 @@ sub drawStrip()
             end if
             it.group.visible = true
             it.group.translation = [x, 1000 - h - 40]
-            it.group.opacity = 1.0
-            if not on then it.group.opacity = 0.75
+            it.veil.visible = not on
+            it.veil.width = w
+            it.veil.height = h
             it.plate.width = w
             it.plate.height = h
             it.shadow.visible = on
