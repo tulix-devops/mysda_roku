@@ -6,7 +6,7 @@ sub work()
     stream = m.top.stream
     out = CreateObject("roSGNode", "ContentNode")
     out.id = stream
-    out.addFields({ scStream: stream, scAt: ScNowSecs(), scOk: false, scTitled: false })
+    out.addFields({ scStream: stream, scAt: ScNowSecs(), scOk: false, scTitled: false, scNoGrabs: false })
     out.addField("scToday", "node", false)
     out.addField("scWeek", "node", false)
     out.addField("scSeries", "node", false)
@@ -49,10 +49,20 @@ sub build(out as object, arr as object, stream as string)
         end if
     end for
     out.scTitled = titled
-    ' Newest first, explicitly: the context brief said the feed was newest
-    ' first, but on 2026-10-25 it came oldest first and the day ran backwards.
+    ' Newest first, explicitly: the feed's order differs per channel (3ABN
+    ' came oldest first, Minha TV newest first, 2026-10-25/28).
     progs.SortBy("st", "r")
     if progs.count() = 0 then return
+
+    ' Some channels never get real grabs: every thumb is the feed's shared
+    ' grey "play" placeholder (Minha TV, 2026-10-28). One well-aired grab is
+    ' fetched; if it is the placeholder the channel's cards show its logo.
+    if grabsArePlaceholders(progs, now, stream)
+        out.scNoGrabs = true
+        for each p in progs
+            p.thumb = ""
+        end for
+    end if
 
     ' Today, oldest first (progs is newest first).
     for i = progs.count() - 1 to 0 step -1
@@ -113,6 +123,40 @@ sub build(out as object, arr as object, stream as string)
     end if
     out.scOk = true
 end sub
+
+' The feed's placeholder grab is one file served at every programme's own
+' grab URL until (or unless) a real one exists: 6542 bytes, the same md5
+' across channels (measured 2026-10-25 and 2026-10-28). Probe the newest
+' programme that ended over half an hour ago.
+function grabsArePlaceholders(progs as object, now as integer, stream as string) as boolean
+    probe = invalid
+    for each p in progs
+        if p.en <= now - 1800 and p.thumb <> ""
+            probe = p
+            exit for
+        end if
+    end for
+    if probe = invalid then return false
+    path = "tmp:/sc_probe_" + stream + ".jpg"
+    port = CreateObject("roMessagePort")
+    req = CreateObject("roUrlTransfer")
+    req.SetMessagePort(port)
+    req.SetCertificatesFile("common:/certs/ca-bundle.crt")
+    req.InitClientCertificates()
+    req.SetUrl(probe.thumb)
+    if not req.AsyncGetToFile(path) then return false
+    msg = wait(8000, port)
+    if type(msg) <> "roUrlEvent" or msg.GetResponseCode() <> 200
+        req.AsyncCancel()
+        return false
+    end if
+    fs = CreateObject("roFileSystem")
+    st = fs.Stat(path)
+    size = -1
+    if st <> invalid and st.size <> invalid then size = st.size
+    fs.Delete(path)
+    return (size = 6542)
+end function
 
 ' Stable descending sort on the item count (insertion sort: at most a few
 ' dozen series).

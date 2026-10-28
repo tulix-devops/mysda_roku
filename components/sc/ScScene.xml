@@ -44,7 +44,11 @@
             width="220" height="1080" opacity="0.7" />
     <!-- With the capsule open: a deeper fade, 900 wide, at 0.85. -->
     <Poster id="navFade" uri="pkg:/images/png/shapes/fade_right.png"
-            width="900" height="1080" opacity="0.85" visible="false" />
+            width="900" height="1080" opacity="0" visible="false" />
+    <Animation id="dimAnim" duration="0.24" repeat="false" easeFunction="outCubic">
+      <FloatFieldInterpolator id="dimPage" key="[0.0, 1.0]" keyValue="[1.0, 0.5]" fieldToInterp="screensGroup.opacity" />
+      <FloatFieldInterpolator id="dimFade" key="[0.0, 1.0]" keyValue="[0.0, 0.85]" fieldToInterp="navFade.opacity" />
+    </Animation>
 
     <Poster id="logo" uri="" translation="[12, 40]" width="144" height="75" />
     <Label id="clock" text="" translation="[1424, 50]" width="400" height="40"

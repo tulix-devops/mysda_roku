@@ -199,12 +199,22 @@ end sub
 sub onNavFocus()
     open = m.nav.navHasFocus
     m.global.navOpen = open
+    ' The page dims and the deep fade comes in WITH the capsule's own
+    ' animation (same easing), from wherever they are now.
+    anim = m.top.findNode("dimAnim")
+    anim.control = "stop"
+    pageTo = 1.0
+    fadeTo = 0.0
+    anim.duration = 0.18
     if open
-        m.screensGroup.opacity = 0.5
-    else
-        m.screensGroup.opacity = 1.0
+        pageTo = 0.5
+        fadeTo = 0.85
+        anim.duration = 0.24
+        m.navFade.visible = true
     end if
-    m.navFade.visible = open
+    m.top.findNode("dimPage").keyValue = [m.screensGroup.opacity, pageTo]
+    m.top.findNode("dimFade").keyValue = [m.navFade.opacity, fadeTo]
+    anim.control = "start"
     ScFocusChanged()
 end sub
 

@@ -216,13 +216,16 @@ sub draw()
 end sub
 
 ' FOCUS, from the list's own focusPercent (gated on the list-set booleans,
-' knowledge/dev-roku/list-owned-focus-fields-not-parent-walk). Within the row
-' (or grid) that holds focus, the cards at rest step back - 94 %, dimmed,
-' grey caption - and the focused one lifts to 104 % with a shadow and a white
-' caption. Size and brightness carry focus on this plane; a thin ring alone
-' does not survive the 720p downscale
+' knowledge/dev-roku/list-owned-focus-fields-not-parent-walk).
+' Every card keeps its size. In the row (or grid) that holds focus the cards
+' at rest dim to 60 % with a grey caption; the focused one is full brightness,
+' lifted 5 % from its bottom-left with a shadow and a white caption. The lift
+' follows focusPercent, so it glides with the list's own move. Brightness
+' carries focus on this plane
 ' (knowledge/dev-roku/focus-border-abandoned-for-size-and-brightness).
-' Measured on device 2026-10-25: a 1.0 -> 1.07 lift alone read as no focus.
+' History: 1.0 -> 1.07 alone read as no focus (device, 2026-10-25); then the
+' rest of the row shrinking to 0.94 read as shapes "changing drastically"
+' (owner, 2026-10-28) - so no card but the focused one changes size.
 sub onFocus()
     fpRaw = m.top.focusPercent
     inFocus = m.top.gridHasFocus or (m.top.rowListHasFocus and m.top.rowHasFocus)
@@ -239,9 +242,9 @@ sub onFocus()
     end if
     if inFocus
         fp = fpRaw
-        s = 0.94 + 0.10 * fp
+        s = 1.0 + 0.05 * fp
         m.art.scale = [s, s]
-        m.art.opacity = 0.7 + 0.3 * fp
+        m.art.opacity = 0.6 + 0.4 * fp
         m.shadow.visible = (fp > 0.05)
         m.shadow.opacity = fp
         lit = (fp > 0.5)

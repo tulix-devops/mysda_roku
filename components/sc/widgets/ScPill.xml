@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!--
   ScPill - the Showcase button: a fully round pill (radius h/2).
-  At rest: white 14 % fill, white ink, Bold. Lit (it holds focus): a white
-  pill with dark ink, ExtraBold, lifted 1.06 from its left edge with a soft
-  shadow (showcase.md, "Shape and focus"). One focus indicator: only the lit
-  pill changes.
-  Width follows the text (ScTextW over the shipped TTF's advances); the
-  parent reads `w` to lay a row out.
+  At rest: white 14 % fill, white ink. Lit (it holds focus): a white pill
+  with dark ink that grows 4 px round the text, with a soft shadow. Selected
+  (a chosen filter chip, not focused): white with dark ink, no growth.
+  The text is drawn 1:1 in one face in every state - never scaled, never a
+  heavier weight (owner, 2026-10-28). Width follows the text (ScTextW over
+  the shipped TTF's advances); the parent reads w to lay a row out.
 -->
 <component name="ScPill" extends="Group">
   <interface>

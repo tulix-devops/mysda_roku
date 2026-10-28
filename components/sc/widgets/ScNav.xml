@@ -6,7 +6,8 @@
   white ring at 8 %, a deep shadow) holding five 72-px icon circles. The
   current destination sits on a white 18 % circle with a white glyph; the
   others are #A6ABB8.
-  With focus: the capsule widens to 330 with labels; the focused item is a
+  With focus: the capsule widens to 330 (animated, 0.24 s out-cubic; owner
+  2026-10-28) and its labels fade in; the focused item is a
   white circle with dark ink; the page stays put and the scene dims it.
 
   Up / Down move; OK or Right open the destination (the page does not change
@@ -30,7 +31,16 @@
       <Poster id="shadow" uri="" />
       <Poster id="ring" uri="" translation="[-1, -1]" />
       <Poster id="plate" uri="" />
-      <Group id="items" translation="[16, 16]" />
+      <Group id="items" translation="[16, 16]">
+        <Group id="labels" />
+      </Group>
     </Group>
+    <!-- Open / close: width and label fade, re-keyed from where it is. -->
+    <Animation id="openAnim" duration="0.24" repeat="false" easeFunction="outCubic">
+      <FloatFieldInterpolator id="plateW" key="[0.0, 1.0]" keyValue="[104.0, 330.0]" fieldToInterp="plate.width" />
+      <FloatFieldInterpolator id="ringW" key="[0.0, 1.0]" keyValue="[106.0, 332.0]" fieldToInterp="ring.width" />
+      <FloatFieldInterpolator id="shadowW" key="[0.0, 1.0]" keyValue="[176.0, 402.0]" fieldToInterp="shadow.width" />
+      <FloatFieldInterpolator id="labelsFade" key="[0.0, 1.0]" keyValue="[0.0, 1.0]" fieldToInterp="labels.opacity" />
+    </Animation>
   </children>
 </component>
