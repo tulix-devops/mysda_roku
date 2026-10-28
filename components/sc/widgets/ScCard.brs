@@ -56,6 +56,9 @@ sub init()
     m.kind = ""
     m.c = invalid
     m.pad = ScCardPad()
+    ' A list can report focus before the card has content to draw.
+    m.dim = []
+    m.dimAt = -1.0
 end sub
 
 ' A screen refreshes a card in place (on now, progress) by bumping its
@@ -210,6 +213,11 @@ sub draw()
         m.logo.translation = [Int((w - pw) / 2), Int((h - ph) / 2)]
         m.logo.loadWidth = 450
         m.logo.loadHeight = 320
+        ' Edge to edge means FILL: scaleToFit left a 1-px gap beside a 1.406
+        ' logo in a 1.41 box, a hairline at its edge (owner, 2026-10-28). The
+        ' stretch is under 0.5 %, invisible; nothing is cropped.
+        edge = (isTone and not toneOnWhite) or (kind = "logo" and not isTone)
+        if edge then m.logo.loadDisplayMode = "scaleToFill" else m.logo.loadDisplayMode = "scaleToFit"
         if isLater then m.logo.opacity = 0.55 else m.logo.opacity = 1.0
         if m.logo.uri <> c.scLogo then m.logo.uri = c.scLogo
     end if
@@ -290,29 +298,69 @@ sub draw()
     else
         m.art.scaleRotateCenter = [0, h]
     end if
+
+    ' The layers that dim with focus, and the colour each is at full
+    ' brightness (ScScaleColor darkens them; see onFocus). Colours are the
+    ' STRINGS this card set: a blendColor read back off a node is an Integer
+    ' (device, 2026-10-29: a Type Mismatch in ScScaleColor).
+    plateColor = m.t.cSurface
+    if isTone
+        plateColor = c.scToneB
+    else if isLogo
+        plateColor = m.t.cPlate
+    else if isLater
+        plateColor = m.t.cSurface2
+    end if
+    m.dim = [[m.plate, plateColor]]
+    if m.ramp.visible then m.dim.push([m.ramp, c.scToneA])
+    if m.thumb.visible then m.dim.push([m.thumb, "0xFFFFFFFF"])
+    if m.logoPlate.visible then m.dim.push([m.logoPlate, m.t.cPlate])
+    if m.logo.visible then m.dim.push([m.logo, "0xFFFFFFFF"])
+    if m.logoCaps.visible then m.dim.push([m.logoCaps, c.scToneMid])
+    if m.badge.visible
+        m.dim.push([m.top.findNode("badgePlate"), m.t.cPlate])
+        m.dim.push([m.top.findNode("badgeLogo"), "0xFFFFFFFF"])
+    end if
+    if m.tag.visible
+        tagColor = m.t.cTag
+        if c.scTagLive then tagColor = m.t.cLive
+        m.dim.push([m.tagPlate, tagColor])
+    end if
+    m.dimAt = -1.0
     onFocus()
+end sub
+
+sub applyDim(f as float)
+    if Abs(f - m.dimAt) < 0.01 then return
+    m.dimAt = f
+    for each layer in m.dim
+        layer[0].blendColor = ScScaleColor(layer[1], f)
+    end for
 end sub
 
 ' FOCUS, from the list's own focusPercent (gated on the list-set booleans,
 ' knowledge/dev-roku/list-owned-focus-fields-not-parent-walk).
 ' Every card keeps its size. In the row (or grid) that holds focus the cards
-' at rest dim under a 42 % ground veil, with a grey caption; the focused one is full brightness,
-' lifted 5 % from its bottom-left with a shadow and a white caption. The lift
-' follows focusPercent, so it glides with the list's own move. Brightness
-' carries focus on this plane
-' (knowledge/dev-roku/focus-border-abandoned-for-size-and-brightness).
-' History: 1.0 -> 1.07 alone read as no focus (device, 2026-10-25); then the
-' rest of the row shrinking to 0.94 read as shapes "changing drastically"
-' (owner, 2026-10-28) - so no card but the focused one changes size.
+' at rest are darkened to 58 % - every layer's blendColor scaled (applyDim),
+' the one way that leaves no line at any edge - with a grey caption; the
+' focused one is full brightness, lifted 5 % from its bottom-left with a
+' shadow and a white caption. Both follow focusPercent, so they glide with
+' the list's own move. Brightness carries focus on this plane
+' (knowledge/dev-roku/focus-border-abandoned-for-size-and-brightness); the
+' hairline ring is gone (owner, 2026-10-28: "weird lines at the edges").
+' History: 1.0 -> 1.07 alone read as no focus (device, 2026-10-25); the rest
+' of the row shrinking to 0.94 read as shapes "changing drastically"; group
+' opacity drew grey frames; a veil drew light seams (owner, 2026-10-28).
 sub onFocus()
     fpRaw = m.top.focusPercent
     inFocus = m.top.gridHasFocus or (m.top.rowListHasFocus and m.top.rowHasFocus)
+    m.veil.visible = false
+    m.ring.visible = false
     if m.kind = "station"
         ' The Radio carousel: the station in the middle is the big one.
         s = 0.62 + 0.38 * fpRaw
         m.art.scale = [s, s]
-        m.veil.visible = (fpRaw < 0.99)
-        m.veil.opacity = 0.45 * (1.0 - fpRaw)
+        applyDim(0.45 + 0.55 * fpRaw)
         m.shadow.visible = (fpRaw > 0.05)
         m.shadow.opacity = fpRaw
         m.title.visible = false
@@ -323,20 +371,17 @@ sub onFocus()
         fp = fpRaw
         s = 1.0 + 0.05 * fp
         m.art.scale = [s, s]
-        m.veil.visible = (fp < 0.99)
-        m.veil.opacity = 0.42 * (1.0 - fp)
+        applyDim(0.58 + 0.42 * fp)
         m.shadow.visible = (fp > 0.05)
         m.shadow.opacity = fp
         lit = (fp > 0.5)
         if lit then m.title.color = m.t.cText else m.title.color = m.t.cText2
         m.title.opacity = 0.75 + 0.25 * fp
-        m.ring.visible = (m.kind = "logo" and lit)
     else
         m.art.scale = [1.0, 1.0]
-        m.veil.visible = false
+        applyDim(1.0)
         m.shadow.visible = false
         m.title.color = m.t.cText1
         m.title.opacity = 1.0
-        m.ring.visible = false
     end if
 end sub

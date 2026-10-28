@@ -4,7 +4,7 @@
 '
 ' SLIDING, NOT SWAPPING (owner, 2026-10-28: "horizontal scrolling can have a
 ' good smooth animation"). Seven slots sit at positions -3..+3 round the
-' middle; a move glides every slot one position over (place, size, veil)
+' middle; a move glides every slot one position over (place, size, shade)
 ' in 0.32 s. The slot leaving at one edge is already invisible there (+-3 has
 ' opacity 0) and re-enters at the other edge with the next station. Each slot
 ' is authored at the middle's full 600x426 and SCALED to its position, so a
@@ -56,37 +56,37 @@ sub init()
         sh.width = m.W + 72
         sh.height = m.H + 72
         plate = g.createChild("Poster")
+        plate.id = "plate" + i.toStr()
         plate.uri = ScShape("r22")
         plate.blendColor = m.t.cPlate
         plate.width = m.W
         plate.height = m.H
         logo = g.createChild("Poster")
+        logo.id = "logo" + i.toStr()
         logo.loadDisplayMode = "scaleToFit"
         logo.loadWidth = 450
         logo.loadHeight = 320
         logo.width = Int(m.W * 0.88)
         logo.height = Int(m.H * 0.88)
         logo.translation = [Int(m.W * 0.06), Int(m.H * 0.06)]
-        ' Dimming is ONE ground-coloured veil over the whole card: group
-        ' opacity fades the plate and the logo's own white background apart
-        ' and draws a grey frame round the logo (owner, 2026-10-28).
-        veil = g.createChild("Poster")
-        veil.id = "veil" + i.toStr()
-        veil.uri = ScShape("r22")
-        veil.blendColor = m.t.cGround
-        veil.width = m.W
-        veil.height = m.H
         tr = m.anim.createChild("Vector2DFieldInterpolator")
         tr.key = [0.0, 1.0]
         tr.fieldToInterp = g.id + ".translation"
         scl = m.anim.createChild("Vector2DFieldInterpolator")
         scl.key = [0.0, 1.0]
         scl.fieldToInterp = g.id + ".scale"
-        opa = m.anim.createChild("FloatFieldInterpolator")
-        opa.key = [0.0, 1.0]
-        opa.fieldToInterp = veil.id + ".opacity"
+        ' Dimming darkens the plate's and the logo's own colours together
+        ' (ScScaleColor): group opacity fades them apart (grey frames round
+        ' logos) and a veil on top leaves a light seam at the edge (owner,
+        ' 2026-10-28). Animated as colours.
+        plateC = m.anim.createChild("ColorFieldInterpolator")
+        plateC.key = [0.0, 1.0]
+        plateC.fieldToInterp = plate.id + ".blendColor"
+        logoC = m.anim.createChild("ColorFieldInterpolator")
+        logoC.key = [0.0, 1.0]
+        logoC.fieldToInterp = logo.id + ".blendColor"
         ' pos: where it is (or is going); k: the station it shows.
-        m.slots.push({ group: g, shadow: sh, logo: logo, veil: veil, tr: tr, scl: scl, opa: opa, pos: i - 3, k: 0 })
+        m.slots.push({ group: g, shadow: sh, plate: plate, logo: logo, tr: tr, scl: scl, plateC: plateC, logoC: logoC, pos: i - 3, k: 0, col: "0xFFFFFFFF" })
     end for
 
     m.listen = m.top.findNode("listenRow").createChild("ScPill")
@@ -105,6 +105,11 @@ end sub
 
 sub onActive()
 end sub
+
+' The white of a slot at position p, darkened to its brightness there.
+function shade(p as integer) as string
+    return ScScaleColor("0xFFFFFFFF", m.op[posKey(p)])
+end function
 
 function posKey(p as integer) as string
     return p.toStr()
@@ -125,7 +130,11 @@ sub place(slot as object, p as integer)
     s = m.sc[posKey(p)]
     g.translation = [m.cx[posKey(p)] - m.W / 2, 460 - m.H / 2]
     g.scale = [s, s]
-    slot.veil.opacity = 1.0 - m.op[posKey(p)]
+    c = shade(p)
+    ' Kept as a string: a blendColor read back off a node is an Integer.
+    slot.col = c
+    slot.plate.blendColor = c
+    slot.logo.blendColor = c
     slot.shadow.visible = (p = 0)
 end sub
 
@@ -199,12 +208,15 @@ sub move(dir as integer)
             bind(slot, wrapIndex(m.index + p))
             slot.tr.keyValue = [slot.group.translation, slot.group.translation]
             slot.scl.keyValue = [slot.group.scale, slot.group.scale]
-            slot.opa.keyValue = [slot.veil.opacity, slot.veil.opacity]
+            slot.plateC.keyValue = [slot.col, slot.col]
+            slot.logoC.keyValue = [slot.col, slot.col]
         else
             s = m.sc[posKey(p)]
             slot.tr.keyValue = [slot.group.translation, [m.cx[posKey(p)] - m.W / 2, 460 - m.H / 2]]
             slot.scl.keyValue = [slot.group.scale, [s, s]]
-            slot.opa.keyValue = [slot.veil.opacity, 1.0 - m.op[posKey(p)]]
+            slot.plateC.keyValue = [slot.col, shade(p)]
+            slot.logoC.keyValue = [slot.col, shade(p)]
+            slot.col = shade(p)
             slot.pos = p
             ' The shadow belongs to the middle only; it follows on arrival.
             slot.shadow.visible = false

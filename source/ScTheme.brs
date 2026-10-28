@@ -119,6 +119,18 @@ function ScHsl(h as integer, s as float, l as float) as string
     return "0x" + ScHex2(r + mm) + ScHex2(g + mm) + ScHex2(b + mm) + "FF"
 end function
 
+' A colour "0xRRGGBBAA" with its RGB multiplied by f (0..1), alpha kept.
+' Cards dim THIS way - every layer's blendColor darkened - never by opacity
+' (each child fades apart: grey frames round logos) nor by a veil on top
+' (its soft edge darkens the card's edge only half: a light seam). Owner,
+' 2026-10-28, both seen on the device.
+function ScScaleColor(hex as string, f as float) as string
+    r = Val(Mid(hex, 3, 2), 16) * f
+    g = Val(Mid(hex, 5, 2), 16) * f
+    b = Val(Mid(hex, 7, 2), 16) * f
+    return "0x" + ScHex2(r / 255) + ScHex2(g / 255) + ScHex2(b / 255) + Mid(hex, 9, 2)
+end function
+
 function ScHex2(v as float) as string
     n = Int(v * 255 + 0.5)
     if n < 0 then n = 0
