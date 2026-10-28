@@ -34,6 +34,10 @@ sub init()
     m.previewPlate.uri = ScShape("r14")
     m.previewCaps.uri = ScShape("caps18")
     m.previewCaps.blendColor = m.t.cGround
+    lp = m.top.findNode("previewLogoPlate")
+    lp.uri = ScShape("r14")
+    lp.blendColor = m.t.cPlate
+    m.top.findNode("previewLogoCaps").uri = ScShape("caps14")
     badgePlate = m.top.findNode("previewBadgePlate")
     badgePlate.uri = ScShape("r7")
     badgePlate.blendColor = m.t.cPlate
@@ -257,15 +261,38 @@ sub showHero()
         m.previewImage.visible = true
         m.previewLogo.visible = false
         m.previewCaps.visible = true
+        m.top.findNode("previewRamp").visible = false
+        m.top.findNode("previewLogoPlate").visible = false
+        m.top.findNode("previewLogoCaps").visible = false
         m.previewBadge.visible = true
         m.top.findNode("previewBadgeLogo").uri = ch.scLogo
     else
-        ' No grab yet: the channel's logo, whole, on its white plate.
-        m.previewPlate.blendColor = m.t.cPlate
+        ' No grab yet: the channel's tone with its logo whole in the middle -
+        ' on a white plate when the logo sits on white, edge to edge with
+        ' rounded corners when not (no white rim; owner, 2026-10-28).
+        t = ScToneFor(ch)
+        m.previewPlate.blendColor = t.b
+        ramp = m.top.findNode("previewRamp")
+        ramp.blendColor = t.a
+        ramp.visible = true
         m.previewImage.visible = false
+        lp = m.top.findNode("previewLogoPlate")
+        lc = m.top.findNode("previewLogoCaps")
+        lp.visible = t.white
+        lc.visible = not t.white
+        lc.blendColor = t.mid
+        if t.white
+            m.previewLogo.width = 268
+            m.previewLogo.height = 190
+            m.previewLogo.translation = [106, 40]
+        else
+            m.previewLogo.width = 298
+            m.previewLogo.height = 211
+            m.previewLogo.translation = [91, 30]
+        end if
         m.previewLogo.uri = ch.scLogo
         m.previewLogo.visible = true
-        m.previewCaps.visible = false
+        m.previewCaps.visible = true
         m.previewBadge.visible = false
     end if
     buildButtons(ch, p)

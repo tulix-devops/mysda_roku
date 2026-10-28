@@ -15,6 +15,7 @@
   <script type="text/brightscript" uri="pkg:/source/ScMetrics.brs" />
   <script type="text/brightscript" uri="pkg:/source/ScTime.brs" />
   <script type="text/brightscript" uri="pkg:/source/ScData.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScBrand.brs" />
   <script type="text/brightscript" uri="pkg:/source/ScUi.brs" />
   <script type="text/brightscript" uri="pkg:/components/sc/screens/ScAccount.brs" />
   <children>

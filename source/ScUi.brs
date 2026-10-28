@@ -151,9 +151,37 @@ sub ScFillOnNow(n as object, ch as object)
     n.scTick = n.scTick + 1
 end sub
 
-' A channel as its logo, whole, on a white plate.
+' A channel's tone: a diagonal gradient in its own brand colour (sampled
+' from its logo, source/ScBrand.brs), or - where the logo has too little
+' colour - in a hue hashed from its title, as the other Tulix Roku apps' tone
+' cards do (wpa_live_roku WpToneFor). { a: top-left, b: bottom-right,
+' mid: between them, white: the logo's own background is white }.
+function ScToneFor(ch as object) as object
+    hue = -1
+    white = true
+    row = ScBrandTable()[ch.id]
+    if type(row) = "roArray" and row.count() = 2
+        hue = row[0]
+        white = row[1]
+    end if
+    if hue < 0
+        key = ch.title
+        hue = 0
+        for i = 1 to Len(key)
+            hue = (31 * hue + Asc(Mid(key, i, 1))) mod 360
+        end for
+    end if
+    return { a: ScHsl(hue, 0.62, 0.36), b: ScHsl(hue + 12, 0.70, 0.13), mid: ScHsl(hue + 6, 0.66, 0.24), white: white }
+end function
+
+' A channel card: its logo, whole, on a gradient in the channel's own colour
+' (owner, 2026-10-28: "the colour on a background, as we have on other Roku
+' apps").
 function ScLogoCard(ch as object, action as string, w as integer, h as integer) as object
-    return ScCardNode("logo", { w: w, h: h, logo: ch.scLogo, title: ch.title, action: action, ref: ch })
+    n = ScCardNode("logo", { w: w, h: h, logo: ch.scLogo, title: ch.title, action: action, ref: ch })
+    t = ScToneFor(ch)
+    n.addFields({ scToneA: t.a, scToneB: t.b, scToneMid: t.mid, scLogoWhite: t.white })
+    return n
 end function
 
 ' A recording: frame grab, logo badge, a tag, title and when.

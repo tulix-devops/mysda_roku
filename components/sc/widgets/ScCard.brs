@@ -21,6 +21,9 @@ sub init()
     m.meta = m.top.findNode("meta")
     m.veil = m.top.findNode("veil")
     m.logoPlate = m.top.findNode("logoPlate")
+    m.ramp = m.top.findNode("ramp")
+    m.logoCaps = m.top.findNode("logoCaps")
+    m.logoCaps.uri = ScShape("caps14")
 
     m.shadow.uri = ScShape("shadow14")
     m.shadow.blendColor = "0x000000D0"
@@ -107,7 +110,17 @@ sub draw()
     isLater = (kind = "later")
 
     ' -- the art ----------------------------------------------------------
-    if isLogo
+    ' A channel card is a tone: the plate in the tone's deep end, the
+    ' diagonal ramp in its light end over it (wpa_live_roku WpPaintTone).
+    isTone = (kind = "logo" and c.hasField("scToneA"))
+    m.ramp.visible = isTone
+    m.logoCaps.visible = false
+    if isTone
+        m.plate.blendColor = c.scToneB
+        m.ramp.blendColor = c.scToneA
+        m.ramp.width = w
+        m.ramp.height = h
+    else if isLogo
         m.plate.blendColor = m.t.cPlate
     else if isLater
         m.plate.blendColor = m.t.cSurface2
@@ -124,9 +137,10 @@ sub draw()
         m.thumb.loadHeight = 180
         if m.thumb.uri <> c.scThumb then m.thumb.uri = c.scThumb
     end if
-    ' Corner caps wherever a square picture meets the ground: a grab, or a
-    ' channel logo drawn edge to edge. A plate is round by itself.
-    m.caps.visible = m.thumb.visible or (kind = "logo" and c.scLogo <> "")
+    ' Corner caps wherever a square picture meets the ground: a grab, the
+    ' tone's ramp, or a channel logo drawn edge to edge. A plate is round by
+    ' itself.
+    m.caps.visible = m.thumb.visible or isTone or (kind = "logo" and c.scLogo <> "")
 
     ' The logo: whole, at its own 1.41 aspect, inside the plate (logo,
     ' station), or dimmed in the middle of a later slot, or as a frame's
@@ -137,7 +151,12 @@ sub draw()
     ' the middle (owner, 2026-10-28: the first row read "really dry" with
     ' dim logos on dark boxes).
     fallback = isFrame and c.scThumb = "" and c.scLogo <> ""
-    m.logoPlate.visible = fallback
+    ' On a tone card the logo is a 62 %-wide panel in the middle: on a white
+    ' plate when it sits on white itself, otherwise edge to edge with its
+    ' corners rounded by caps in the tone's middle colour - never a white rim
+    ' round a dark logo.
+    toneOnWhite = isTone and c.scLogoWhite
+    m.logoPlate.visible = fallback or toneOnWhite
     if fallback
         lw = Int(w * 0.50)
         lh = Int(lw / 1.41)
@@ -145,8 +164,32 @@ sub draw()
         m.logoPlate.height = lh
         m.logoPlate.translation = [Int((w - lw) / 2), Int((h - lh) / 2)]
     end if
+    if isTone
+        iw = Int(w * 0.62)
+        ih = Int(iw / 1.41)
+        ix = Int((w - iw) / 2)
+        iy = Int((h - ih) / 2)
+        if toneOnWhite
+            m.logoPlate.width = iw
+            m.logoPlate.height = ih
+            m.logoPlate.translation = [ix, iy]
+        else if c.scLogo <> ""
+            m.logoCaps.visible = true
+            m.logoCaps.blendColor = c.scToneMid
+            m.logoCaps.width = iw
+            m.logoCaps.height = ih
+            m.logoCaps.translation = [ix, iy]
+        end if
+    end if
     if m.logo.visible
-        if kind = "logo"
+        if isTone
+            if toneOnWhite
+                pw = Int(w * 0.62 * 0.9)
+            else
+                pw = Int(w * 0.62)
+            end if
+            ph = Int(pw / 1.41)
+        else if kind = "logo"
             ' Edge to edge: channel logos are 1.41 like the card, so the
             ' whole logo fills it - no white rim round a dark logo (owner,
             ' 2026-10-28: "white outline" on Minha TV, ANJO, SUM, GNTV).

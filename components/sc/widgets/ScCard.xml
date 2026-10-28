@@ -6,7 +6,9 @@
     frame    a programme's frame grab, the channel's logo badge top-left,
              an optional tag (REPLAY / LIVE / 28 MIN) and progress bar
     later    a slot that has not aired: a dark plate, the logo dimmed, a tag
-    logo     a channel's logo, WHOLE, on a white plate (never cropped)
+    logo     a channel's logo, WHOLE (never cropped), on a gradient in the
+             channel's own colour (ScToneFor): on a white plate when the
+             logo sits on white, edge to edge with rounded corners when not
     station  a radio station's logo on a white plate (the Radio carousel)
 
   Captions sit under the art (title, meta), or over a bottom fade inside it
@@ -38,10 +40,14 @@
       <Poster id="shadow" uri="" visible="false" />
       <Poster id="ring" uri="" visible="false" />
       <Poster id="plate" uri="" />
+      <!-- A channel card's tone: the diagonal ramp over the plate. -->
+      <Poster id="ramp" uri="pkg:/images/png/sc/ramp_diag.png" visible="false" />
       <Poster id="thumb" uri="" loadDisplayMode="scaleToZoom" visible="false" />
       <!-- A frame card with no grab yet: its logo on a white plate. -->
       <Poster id="logoPlate" uri="" visible="false" />
       <Poster id="logo" uri="" loadDisplayMode="scaleToFit" visible="false" />
+      <!-- A logo not on white, drawn edge to edge on a tone card: its corners. -->
+      <Poster id="logoCaps" uri="" visible="false" />
       <Poster id="fade" uri="pkg:/images/png/shapes/fade_bottom.png" visible="false" />
       <Poster id="caps" uri="" />
       <Group id="badge" translation="[12, 12]" visible="false">

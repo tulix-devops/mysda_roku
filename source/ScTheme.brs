@@ -88,6 +88,44 @@ function ScCardPad() as integer
     return 12
 end function
 
+' CSS hsl() to "0xRRGGBBFF" (h in degrees, s and l in 0..1). Ported from
+' wpa_live_roku WpHsl, the tone cards' colour maths.
+function ScHsl(h as integer, s as float, l as float) as string
+    h = h mod 360
+    if h < 0 then h = h + 360
+    l2 = 2 * l - 1
+    if l2 < 0 then l2 = -l2
+    c = (1 - l2) * s
+    hp = h / 60.0
+    f = hp - 2 * Int(hp / 2) - 1
+    if f < 0 then f = -f
+    x = c * (1 - f)
+    sector = Int(hp)
+    r = 0.0 : g = 0.0 : b = 0.0
+    if sector = 0
+        r = c : g = x
+    else if sector = 1
+        r = x : g = c
+    else if sector = 2
+        g = c : b = x
+    else if sector = 3
+        g = x : b = c
+    else if sector = 4
+        r = x : b = c
+    else
+        r = c : b = x
+    end if
+    mm = l - c / 2
+    return "0x" + ScHex2(r + mm) + ScHex2(g + mm) + ScHex2(b + mm) + "FF"
+end function
+
+function ScHex2(v as float) as string
+    n = Int(v * 255 + 0.5)
+    if n < 0 then n = 0
+    if n > 255 then n = 255
+    return Right("0" + UCase(StrI(n, 16)), 2)
+end function
+
 function ScGlyph(name as string) as string
     return "pkg:/images/png/sc/" + name + ".png"
 end function

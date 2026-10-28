@@ -18,6 +18,7 @@
   <script type="text/brightscript" uri="pkg:/source/ScMetrics.brs" />
   <script type="text/brightscript" uri="pkg:/source/ScTime.brs" />
   <script type="text/brightscript" uri="pkg:/source/ScData.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScBrand.brs" />
   <script type="text/brightscript" uri="pkg:/source/ScUi.brs" />
   <script type="text/brightscript" uri="pkg:/components/sc/screens/ScHome.brs" />
   <children>
@@ -31,10 +32,14 @@
       <Group id="preview" translation="[1344, 170]">
         <Poster id="previewShadow" uri="" />
         <Poster id="previewPlate" uri="" width="480" height="270" />
+        <!-- No grab: the channel's tone, as its card has (ScToneFor). -->
+        <Poster id="previewRamp" uri="pkg:/images/png/sc/ramp_diag.png" width="480" height="270" visible="false" />
         <Poster id="previewImage" uri="" width="480" height="270"
                 loadWidth="320" loadHeight="180" loadDisplayMode="scaleToZoom" />
-        <Poster id="previewLogo" uri="" width="300" height="212" translation="[90, 29]"
-                loadDisplayMode="scaleToFit" visible="false" />
+        <Poster id="previewLogoPlate" uri="" width="298" height="211" translation="[91, 30]" visible="false" />
+        <Poster id="previewLogo" uri="" width="298" height="211" translation="[91, 30]"
+                loadDisplayMode="scaleToFit" loadWidth="450" loadHeight="320" visible="false" />
+        <Poster id="previewLogoCaps" uri="" width="298" height="211" translation="[91, 30]" visible="false" />
         <Poster id="previewCaps" uri="" width="480" height="270" />
         <Group id="previewBadge" translation="[14, 196]">
           <Poster id="previewBadgePlate" uri="" width="84" height="60" />
