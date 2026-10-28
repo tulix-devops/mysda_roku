@@ -176,6 +176,22 @@ function ScGrab(p as dynamic) as string
     return p.scThumb
 end function
 
+' The picture for what is on now: its own grab once it has one, else the
+' grab of the programme before it on the same channel - a real frame from
+' minutes ago rather than an empty box (owner, 2026-10-28: the first row was
+' "really dry" at the top of the hour, when every channel had just started).
+function ScNowGrab(sched as dynamic, p as dynamic) as string
+    g = ScGrab(p)
+    if g <> "" or p = invalid or sched = invalid or sched.scToday = invalid then return g
+    prev = invalid
+    for each q in ScChildren(sched.scToday)
+        if q.scStart >= p.scStart then exit for
+        if q.scThumb <> "" then prev = q
+    end for
+    if prev = invalid then return ""
+    return prev.scThumb
+end function
+
 ' What a programme is called on screen: its title, else "3 PM hour".
 function ScProgLabel(p as dynamic) as string
     if p = invalid then return ""

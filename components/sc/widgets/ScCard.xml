@@ -39,6 +39,8 @@
       <Poster id="ring" uri="" visible="false" />
       <Poster id="plate" uri="" />
       <Poster id="thumb" uri="" loadDisplayMode="scaleToZoom" visible="false" />
+      <!-- A frame card with no grab yet: its logo on a white plate. -->
+      <Poster id="logoPlate" uri="" visible="false" />
       <Poster id="logo" uri="" loadDisplayMode="scaleToFit" visible="false" />
       <Poster id="fade" uri="pkg:/images/png/shapes/fade_bottom.png" visible="false" />
       <Poster id="caps" uri="" />
@@ -54,6 +56,11 @@
       <Rectangle id="fill" height="5" visible="false" />
       <Label id="inTitle" text="" height="28" ellipsisText="..." visible="false" />
       <Label id="inMeta" text="" height="22" ellipsisText="..." visible="false" />
+      <!-- The dim of a card at rest: ONE ground-coloured veil over all of it.
+           Group opacity dims each child separately, so a white plate and the
+           logo's own white background faded apart and drew a grey frame
+           round every logo (owner, 2026-10-28). -->
+      <Poster id="veil" uri="" visible="false" />
     </Group>
     <Label id="title" text="" height="32" ellipsisText="..." />
     <Label id="meta" text="" height="26" ellipsisText="..." />

@@ -98,7 +98,7 @@ sub drawTop()
         m.liveLine.text = p.title + " · until " + ScClock(p.scEnd)
     end if
     thumb = ""
-    if p <> invalid then thumb = ScGrab(p)
+    if p <> invalid then thumb = ScNowGrab(sched, p)
     m.backdrop.visible = (thumb <> "")
     if thumb <> "" and m.backdrop.uri <> thumb then m.backdrop.uri = thumb
 
@@ -149,7 +149,7 @@ sub drawRows()
         else if p.scStart <= now
             n = ScRecordingCard(p, ch, 340, 191, "● LIVE", ScRange(p.scStart, p.scEnd))
             n.scTagLive = true
-            n.scThumb = ScGrab(p)
+            n.scThumb = ScNowGrab(sched, p)
             n.scAction = "live"
             n.scRef = ch
             liveAt = today.count()

@@ -54,6 +54,16 @@ sub build(out as object, arr as object, stream as string)
     progs.SortBy("st", "r")
     if progs.count() = 0 then return
 
+    ' Short gaps between programmes (3ABN: 11:00-11:28:30, then 11:30) belong
+    ' to the one before: otherwise nothing is "on now" for a minute or two
+    ' and Home's hero loses its programme (owner, 2026-10-28).
+    for i = 0 to progs.count() - 2
+        newer = progs[i]
+        older = progs[i + 1]
+        gap = newer.st - older.en
+        if gap > 0 and gap <= 600 then older.en = newer.st
+    end for
+
     ' Some channels never get real grabs: every thumb is the feed's shared
     ' grey "play" placeholder (Minha TV, 2026-10-28). One well-aired grab is
     ' fetched; if it is the placeholder the channel's cards show its logo.

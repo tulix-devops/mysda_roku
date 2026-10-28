@@ -128,7 +128,8 @@ function ScOnNowCard(ch as object) as object
 end function
 
 sub ScFillOnNow(n as object, ch as object)
-    p = ScOnNow(ScSched(ch.scStream))
+    sched = ScSched(ch.scStream)
+    p = ScOnNow(sched)
     if p = invalid
         n.title = ch.title
         n.scMeta = "Live now"
@@ -142,7 +143,7 @@ sub ScFillOnNow(n as object, ch as object)
             n.title = ch.title
             n.scMeta = "Live now · " + ScHourText(p.scStart)
         end if
-        n.scThumb = ScGrab(p)
+        n.scThumb = ScNowGrab(sched, p)
         n.scPct = ScProgress(p.scStart, p.scEnd)
     end if
     n.scTick = n.scTick + 1

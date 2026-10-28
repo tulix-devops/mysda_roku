@@ -248,7 +248,7 @@ sub showHero()
     end if
 
     thumb = ""
-    if p <> invalid then thumb = ScGrab(p)
+    if p <> invalid then thumb = ScNowGrab(ScSched(ch.scStream), p)
     m.backdrop.visible = (thumb <> "")
     if thumb <> "" and m.backdrop.uri <> thumb then m.backdrop.uri = thumb
     if thumb <> ""

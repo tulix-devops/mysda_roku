@@ -4,7 +4,7 @@
 '
 ' SLIDING, NOT SWAPPING (owner, 2026-10-28: "horizontal scrolling can have a
 ' good smooth animation"). Seven slots sit at positions -3..+3 round the
-' middle; a move glides every slot one position over (place, size, opacity)
+' middle; a move glides every slot one position over (place, size, veil)
 ' in 0.32 s. The slot leaving at one edge is already invisible there (+-3 has
 ' opacity 0) and re-enters at the other edge with the next station. Each slot
 ' is authored at the middle's full 600x426 and SCALED to its position, so a
@@ -67,6 +67,15 @@ sub init()
         logo.width = Int(m.W * 0.88)
         logo.height = Int(m.H * 0.88)
         logo.translation = [Int(m.W * 0.06), Int(m.H * 0.06)]
+        ' Dimming is ONE ground-coloured veil over the whole card: group
+        ' opacity fades the plate and the logo's own white background apart
+        ' and draws a grey frame round the logo (owner, 2026-10-28).
+        veil = g.createChild("Poster")
+        veil.id = "veil" + i.toStr()
+        veil.uri = ScShape("r22")
+        veil.blendColor = m.t.cGround
+        veil.width = m.W
+        veil.height = m.H
         tr = m.anim.createChild("Vector2DFieldInterpolator")
         tr.key = [0.0, 1.0]
         tr.fieldToInterp = g.id + ".translation"
@@ -75,9 +84,9 @@ sub init()
         scl.fieldToInterp = g.id + ".scale"
         opa = m.anim.createChild("FloatFieldInterpolator")
         opa.key = [0.0, 1.0]
-        opa.fieldToInterp = g.id + ".opacity"
+        opa.fieldToInterp = veil.id + ".opacity"
         ' pos: where it is (or is going); k: the station it shows.
-        m.slots.push({ group: g, shadow: sh, logo: logo, tr: tr, scl: scl, opa: opa, pos: i - 3, k: 0 })
+        m.slots.push({ group: g, shadow: sh, logo: logo, veil: veil, tr: tr, scl: scl, opa: opa, pos: i - 3, k: 0 })
     end for
 
     m.listen = m.top.findNode("listenRow").createChild("ScPill")
@@ -116,7 +125,7 @@ sub place(slot as object, p as integer)
     s = m.sc[posKey(p)]
     g.translation = [m.cx[posKey(p)] - m.W / 2, 460 - m.H / 2]
     g.scale = [s, s]
-    g.opacity = m.op[posKey(p)]
+    slot.veil.opacity = 1.0 - m.op[posKey(p)]
     slot.shadow.visible = (p = 0)
 end sub
 
@@ -190,12 +199,12 @@ sub move(dir as integer)
             bind(slot, wrapIndex(m.index + p))
             slot.tr.keyValue = [slot.group.translation, slot.group.translation]
             slot.scl.keyValue = [slot.group.scale, slot.group.scale]
-            slot.opa.keyValue = [slot.group.opacity, slot.group.opacity]
+            slot.opa.keyValue = [slot.veil.opacity, slot.veil.opacity]
         else
             s = m.sc[posKey(p)]
             slot.tr.keyValue = [slot.group.translation, [m.cx[posKey(p)] - m.W / 2, 460 - m.H / 2]]
             slot.scl.keyValue = [slot.group.scale, [s, s]]
-            slot.opa.keyValue = [slot.group.opacity, m.op[posKey(p)]]
+            slot.opa.keyValue = [slot.veil.opacity, 1.0 - m.op[posKey(p)]]
             slot.pos = p
             ' The shadow belongs to the middle only; it follows on arrival.
             slot.shadow.visible = false

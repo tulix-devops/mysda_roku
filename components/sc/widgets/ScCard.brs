@@ -19,6 +19,8 @@ sub init()
     m.inMeta = m.top.findNode("inMeta")
     m.title = m.top.findNode("title")
     m.meta = m.top.findNode("meta")
+    m.veil = m.top.findNode("veil")
+    m.logoPlate = m.top.findNode("logoPlate")
 
     m.shadow.uri = ScShape("shadow14")
     m.shadow.blendColor = "0x000000D0"
@@ -26,6 +28,10 @@ sub init()
     ' A focused logo card's hairline ring: white at 40 %, 1 px outside.
     m.ring.uri = ScShape("r14")
     m.ring.blendColor = "0xFFFFFF66"
+    m.veil.uri = ScShape("r14")
+    m.veil.blendColor = m.t.cGround
+    m.logoPlate.uri = ScShape("r14")
+    m.logoPlate.blendColor = m.t.cPlate
     m.caps.uri = ScShape("caps14")
     m.caps.blendColor = m.t.cGround
     m.fade.blendColor = m.t.cGround
@@ -80,6 +86,8 @@ sub draw()
     m.plate.height = h
     m.caps.width = w
     m.caps.height = h
+    m.veil.width = w
+    m.veil.height = h
     m.ring.translation = [-2, -2]
     m.ring.width = w + 4
     m.ring.height = h + 4
@@ -119,10 +127,25 @@ sub draw()
     ' fallback until a grab exists.
     showLogo = isLogo or isLater or (isFrame and c.scThumb = "")
     m.logo.visible = showLogo and c.scLogo <> ""
+    ' A frame with no grab: the logo full-strength on its own white plate in
+    ' the middle (owner, 2026-10-28: the first row read "really dry" with
+    ' dim logos on dark boxes).
+    fallback = isFrame and c.scThumb = "" and c.scLogo <> ""
+    m.logoPlate.visible = fallback
+    if fallback
+        lw = Int(w * 0.50)
+        lh = Int(lw / 1.41)
+        m.logoPlate.width = lw
+        m.logoPlate.height = lh
+        m.logoPlate.translation = [Int((w - lw) / 2), Int((h - lh) / 2)]
+    end if
     if m.logo.visible
         if isLogo
             pw = Int(w * 0.86)
             ph = Int(h * 0.86)
+        else if fallback
+            pw = Int(w * 0.46)
+            ph = Int(pw / 1.41)
         else
             pw = Int(w * 0.36)
             ph = Int(h * 0.44)
@@ -132,7 +155,7 @@ sub draw()
         m.logo.translation = [Int((w - pw) / 2), Int((h - ph) / 2)]
         m.logo.loadWidth = 450
         m.logo.loadHeight = 320
-        if isLogo then m.logo.opacity = 1.0 else m.logo.opacity = 0.55
+        if isLater then m.logo.opacity = 0.55 else m.logo.opacity = 1.0
         if m.logo.uri <> c.scLogo then m.logo.uri = c.scLogo
     end if
 
@@ -218,7 +241,7 @@ end sub
 ' FOCUS, from the list's own focusPercent (gated on the list-set booleans,
 ' knowledge/dev-roku/list-owned-focus-fields-not-parent-walk).
 ' Every card keeps its size. In the row (or grid) that holds focus the cards
-' at rest dim to 60 % with a grey caption; the focused one is full brightness,
+' at rest dim under a 42 % ground veil, with a grey caption; the focused one is full brightness,
 ' lifted 5 % from its bottom-left with a shadow and a white caption. The lift
 ' follows focusPercent, so it glides with the list's own move. Brightness
 ' carries focus on this plane
@@ -233,7 +256,8 @@ sub onFocus()
         ' The Radio carousel: the station in the middle is the big one.
         s = 0.62 + 0.38 * fpRaw
         m.art.scale = [s, s]
-        m.art.opacity = 0.55 + 0.45 * fpRaw
+        m.veil.visible = (fpRaw < 0.99)
+        m.veil.opacity = 0.45 * (1.0 - fpRaw)
         m.shadow.visible = (fpRaw > 0.05)
         m.shadow.opacity = fpRaw
         m.title.visible = false
@@ -244,7 +268,8 @@ sub onFocus()
         fp = fpRaw
         s = 1.0 + 0.05 * fp
         m.art.scale = [s, s]
-        m.art.opacity = 0.6 + 0.4 * fp
+        m.veil.visible = (fp < 0.99)
+        m.veil.opacity = 0.42 * (1.0 - fp)
         m.shadow.visible = (fp > 0.05)
         m.shadow.opacity = fp
         lit = (fp > 0.5)
@@ -253,7 +278,7 @@ sub onFocus()
         m.ring.visible = (m.kind = "logo" and lit)
     else
         m.art.scale = [1.0, 1.0]
-        m.art.opacity = 1.0
+        m.veil.visible = false
         m.shadow.visible = false
         m.title.color = m.t.cText1
         m.title.opacity = 1.0
