@@ -155,14 +155,17 @@ end sub
 ' from its logo, source/ScBrand.brs), or - where the logo has too little
 ' colour - in a hue hashed from its title, as the other Tulix Roku apps' tone
 ' cards do (wpa_live_roku WpToneFor). { a: top-left, b: bottom-right,
-' mid: between them, white: the logo's own background is white }.
+' mid: between them, white: the logo's own background is white, edge: the
+' logo's border colour, which its plate is painted }.
 function ScToneFor(ch as object) as object
     hue = -1
     white = true
+    edge = "0xFFFFFFFF"
     row = ScBrandTable()[ch.id]
-    if type(row) = "roArray" and row.count() = 2
+    if type(row) = "roArray" and row.count() >= 2
         hue = row[0]
         white = row[1]
+        if row.count() >= 3 then edge = row[2]
     end if
     if hue < 0
         key = ch.title
@@ -171,7 +174,8 @@ function ScToneFor(ch as object) as object
             hue = (31 * hue + Asc(Mid(key, i, 1))) mod 360
         end for
     end if
-    return { a: ScHsl(hue, 0.62, 0.36), b: ScHsl(hue + 12, 0.70, 0.13), mid: ScHsl(hue + 6, 0.66, 0.24), white: white }
+    if white then edge = "0xFFFFFFFF"
+    return { a: ScHsl(hue, 0.62, 0.36), b: ScHsl(hue + 12, 0.70, 0.13), mid: ScHsl(hue + 6, 0.66, 0.24), white: white, edge: edge }
 end function
 
 ' A channel card: its logo, whole, on a gradient in the channel's own colour
@@ -180,7 +184,7 @@ end function
 function ScLogoCard(ch as object, action as string, w as integer, h as integer) as object
     n = ScCardNode("logo", { w: w, h: h, logo: ch.scLogo, title: ch.title, action: action, ref: ch })
     t = ScToneFor(ch)
-    n.addFields({ scToneA: t.a, scToneB: t.b, scToneMid: t.mid, scLogoWhite: t.white })
+    n.addFields({ scToneA: t.a, scToneB: t.b, scToneMid: t.mid, scLogoWhite: t.white, scToneEdge: t.edge })
     return n
 end function
 

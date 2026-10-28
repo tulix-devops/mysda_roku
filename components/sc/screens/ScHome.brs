@@ -267,9 +267,7 @@ sub showHero()
         m.previewBadge.visible = true
         m.top.findNode("previewBadgeLogo").uri = ch.scLogo
     else
-        ' No grab yet: the channel's tone with its logo whole in the middle -
-        ' on a white plate when the logo sits on white, edge to edge with
-        ' rounded corners when not (no white rim; owner, 2026-10-28).
+        ' No grab yet: the channel's tone with its logo whole in the middle.
         t = ScToneFor(ch)
         m.previewPlate.blendColor = t.b
         ramp = m.top.findNode("previewRamp")
@@ -278,17 +276,19 @@ sub showHero()
         m.previewImage.visible = false
         lp = m.top.findNode("previewLogoPlate")
         lc = m.top.findNode("previewLogoCaps")
-        lp.visible = t.white
-        lc.visible = not t.white
-        lc.blendColor = t.mid
+        ' The logo on a plate in its own border colour, set inside it - no
+        ' caps over the gradient, no seam (as ScCard; owner, 2026-10-29).
+        lp.visible = true
+        lp.blendColor = t.edge
+        lc.visible = false
         if t.white
             m.previewLogo.width = 268
             m.previewLogo.height = 190
             m.previewLogo.translation = [106, 40]
         else
-            m.previewLogo.width = 298
-            m.previewLogo.height = 211
-            m.previewLogo.translation = [91, 30]
+            m.previewLogo.width = 286
+            m.previewLogo.height = 199
+            m.previewLogo.translation = [97, 36]
         end if
         m.previewLogo.uri = ch.scLogo
         m.previewLogo.visible = true

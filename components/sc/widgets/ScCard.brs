@@ -159,7 +159,12 @@ sub draw()
     ' corners rounded by caps in the tone's middle colour - never a white rim
     ' round a dark logo.
     toneOnWhite = isTone and c.scLogoWhite
-    m.logoPlate.visible = fallback or toneOnWhite
+    ' On a tone card the logo ALWAYS sits on a plate in its own border colour
+    ' (white for a logo on white, black for SUM TV, ...), set 6 px inside it:
+    ' plate and logo edge match, so there is no seam, and the plate's round
+    ' corners need no caps over the gradient - caps of one colour notched it
+    ' (owner, 2026-10-29, SUM TV Latino).
+    m.logoPlate.visible = fallback or isTone
     if fallback
         lw = Int(w * 0.50)
         lh = Int(lw / 1.41)
@@ -172,26 +177,20 @@ sub draw()
         ih = Int(iw / 1.41)
         ix = Int((w - iw) / 2)
         iy = Int((h - ih) / 2)
-        if toneOnWhite
-            m.logoPlate.width = iw
-            m.logoPlate.height = ih
-            m.logoPlate.translation = [ix, iy]
-        else if c.scLogo <> ""
-            m.logoCaps.visible = true
-            m.logoCaps.blendColor = c.scToneMid
-            m.logoCaps.width = iw
-            m.logoCaps.height = ih
-            m.logoCaps.translation = [ix, iy]
-        end if
+        m.logoPlate.width = iw
+        m.logoPlate.height = ih
+        m.logoPlate.translation = [ix, iy]
+        m.logoPlate.blendColor = c.scToneEdge
     end if
     if m.logo.visible
         if isTone
             if toneOnWhite
                 pw = Int(w * 0.62 * 0.9)
+                ph = Int(pw / 1.41)
             else
-                pw = Int(w * 0.62)
+                pw = Int(w * 0.62) - 12
+                ph = Int(w * 0.62 / 1.41) - 12
             end if
-            ph = Int(pw / 1.41)
         else if kind = "logo"
             ' Edge to edge: channel logos are 1.41 like the card, so the
             ' whole logo fills it - no white rim round a dark logo (owner,
@@ -216,7 +215,7 @@ sub draw()
         ' Edge to edge means FILL: scaleToFit left a 1-px gap beside a 1.406
         ' logo in a 1.41 box, a hairline at its edge (owner, 2026-10-28). The
         ' stretch is under 0.5 %, invisible; nothing is cropped.
-        edge = (isTone and not toneOnWhite) or (kind = "logo" and not isTone)
+        edge = (kind = "logo" and not isTone)
         if edge then m.logo.loadDisplayMode = "scaleToFill" else m.logo.loadDisplayMode = "scaleToFit"
         if isLater then m.logo.opacity = 0.55 else m.logo.opacity = 1.0
         if m.logo.uri <> c.scLogo then m.logo.uri = c.scLogo
@@ -314,7 +313,11 @@ sub draw()
     m.dim = [[m.plate, plateColor]]
     if m.ramp.visible then m.dim.push([m.ramp, c.scToneA])
     if m.thumb.visible then m.dim.push([m.thumb, "0xFFFFFFFF"])
-    if m.logoPlate.visible then m.dim.push([m.logoPlate, m.t.cPlate])
+    if m.logoPlate.visible
+        lpColor = m.t.cPlate
+        if isTone then lpColor = c.scToneEdge
+        m.dim.push([m.logoPlate, lpColor])
+    end if
     if m.logo.visible then m.dim.push([m.logo, "0xFFFFFFFF"])
     if m.logoCaps.visible then m.dim.push([m.logoCaps, c.scToneMid])
     if m.badge.visible
