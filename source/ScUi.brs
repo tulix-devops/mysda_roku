@@ -125,6 +125,7 @@ end function
 ' titled channel, else the channel's name and "Live now · 3 PM hour".
 function ScOnNowCard(ch as object) as object
     n = ScCardNode("frame", { w: 384, h: 216, logo: ch.scLogo, action: "live", ref: ch })
+    n.addFields({ scToneEdge: ScToneFor(ch).edge })
     ScFillOnNow(n, ch)
     return n
 end function
@@ -193,6 +194,8 @@ function ScRecordingCard(p as object, ch as dynamic, w as integer, h as integer,
     logo = ""
     if ch <> invalid then logo = ch.scLogo
     n = ScCardNode("frame", { w: w, h: h, thumb: p.scThumb, logo: logo, title: ScProgLabel(p), tag: tag, meta: meta, action: "catchup", ref: p, ref2: ch })
+    ' The badge plate in the logo's own border colour (no white rim).
+    if ch <> invalid then n.addFields({ scToneEdge: ScToneFor(ch).edge })
     return n
 end function
 

@@ -7,6 +7,8 @@ sub init()
     m.ring = m.top.findNode("ring")
     m.thumb = m.top.findNode("thumb")
     m.logo = m.top.findNode("logo")
+    m.logoClip = m.top.findNode("logoClip")
+    m.badgeColor = m.t.cPlate
     m.fade = m.top.findNode("fade")
     m.caps = m.top.findNode("caps")
     m.badge = m.top.findNode("badge")
@@ -189,7 +191,7 @@ sub draw()
                 ph = Int(pw / 1.41)
             else
                 pw = Int(w * 0.62) - 12
-                ph = Int(w * 0.62 / 1.41) - 12
+                ph = Int(pw / 1.41)
             end if
         else if kind = "logo"
             ' Edge to edge: channel logos are 1.41 like the card, so the
@@ -207,16 +209,36 @@ sub draw()
             pw = Int(w * 0.36)
             ph = Int(h * 0.44)
         end if
-        m.logo.width = pw
-        m.logo.height = ph
-        m.logo.translation = [Int((w - pw) / 2), Int((h - ph) / 2)]
         m.logo.loadWidth = 450
         m.logo.loadHeight = 320
         ' Edge to edge means FILL: scaleToFit left a 1-px gap beside a 1.406
         ' logo in a 1.41 box, a hairline at its edge (owner, 2026-10-28). The
-        ' stretch is under 0.5 %, invisible; nothing is cropped.
+        ' stretch is under 0.5 %, invisible.
         edge = (kind = "logo" and not isTone)
-        if edge then m.logo.loadDisplayMode = "scaleToFill" else m.logo.loadDisplayMode = "scaleToFit"
+        ' A logo on a plate of its own border colour, or edge to edge, loses
+        ' its outer 3 %: some logos carry white lines on their own edges
+        ' (SUM TV, owner 2026-11-12).
+        clip = edge or (isTone and not toneOnWhite) or fallback
+        lx = Int((w - pw) / 2)
+        ly = Int((h - ph) / 2)
+        if clip
+            ox = Int(pw * 0.03 + 0.5)
+            oy = Int(ph * 0.03 + 0.5)
+            m.logoClip.translation = [lx, ly]
+            m.logoClip.clippingRect = [0, 0, pw, ph]
+            m.logo.translation = [-ox, -oy]
+            m.logo.width = pw + 2 * ox
+            m.logo.height = ph + 2 * oy
+            m.logo.loadDisplayMode = "scaleToFill"
+        else
+            m.logoClip.translation = [0, 0]
+            ' The card's own box: [0, 0, 0, 0] clips EVERYTHING on device.
+            m.logoClip.clippingRect = [0, 0, w, h]
+            m.logo.translation = [lx, ly]
+            m.logo.width = pw
+            m.logo.height = ph
+            m.logo.loadDisplayMode = "scaleToFit"
+        end if
         if isLater then m.logo.opacity = 0.55 else m.logo.opacity = 1.0
         if m.logo.uri <> c.scLogo then m.logo.uri = c.scLogo
     end if
@@ -224,6 +246,13 @@ sub draw()
     ' Every frame card carries its channel's logo (data-brief rule).
     m.badge.visible = isFrame and c.scThumb <> "" and c.scLogo <> ""
     if m.badge.visible then m.top.findNode("badgeLogo").uri = c.scLogo
+    ' The badge's plate, and a grab-less frame's logo plate, in the logo's own
+    ' border colour: a white plate drew a white rim round a dark logo (SUM TV,
+    ' owner 2026-11-12).
+    m.badgeColor = m.t.cPlate
+    if c.hasField("scToneEdge") and c.scToneEdge <> "" then m.badgeColor = c.scToneEdge
+    m.top.findNode("badgePlate").blendColor = m.badgeColor
+    if fallback then m.logoPlate.blendColor = m.badgeColor
 
     ' -- tag --------------------------------------------------------------
     tag = c.scTag
@@ -316,12 +345,13 @@ sub draw()
     if m.logoPlate.visible
         lpColor = m.t.cPlate
         if isTone then lpColor = c.scToneEdge
+        if fallback then lpColor = m.badgeColor
         m.dim.push([m.logoPlate, lpColor])
     end if
     if m.logo.visible then m.dim.push([m.logo, "0xFFFFFFFF"])
     if m.logoCaps.visible then m.dim.push([m.logoCaps, c.scToneMid])
     if m.badge.visible
-        m.dim.push([m.top.findNode("badgePlate"), m.t.cPlate])
+        m.dim.push([m.top.findNode("badgePlate"), m.badgeColor])
         m.dim.push([m.top.findNode("badgeLogo"), "0xFFFFFFFF"])
     end if
     if m.tag.visible

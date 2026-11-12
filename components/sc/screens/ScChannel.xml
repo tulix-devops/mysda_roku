@@ -25,12 +25,14 @@
     <Poster id="fadeBottom" uri="pkg:/images/png/shapes/fade_bottom.png" width="1920" height="540" />
 
     <Poster id="plateShadow" uri="" />
+    <!-- The plate is painted the logo's own border colour and the logo sits
+         12 px inside it, its outer 3 % clipped away: some logos carry white
+         lines on their own edges (SUM TV, owner 2026-11-12). -->
     <Poster id="plate" uri="" translation="[184, 130]" width="360" height="256" />
-    <!-- The logo edge to edge (it is 1.41 like the plate), corners rounded by
-         caps: no white rim round a dark logo (owner, 2026-10-28). -->
-    <Poster id="logo" uri="" translation="[184, 130]" width="360" height="256" loadDisplayMode="scaleToFit"
-            loadWidth="450" loadHeight="320" />
-    <Poster id="logoCaps" uri="" translation="[184, 130]" width="360" height="256" />
+    <Group id="logoClip" translation="[196, 139]" clippingRect="[0, 0, 336, 238]">
+      <Poster id="logo" uri="" translation="[-5, -4]" width="346" height="246" loadDisplayMode="scaleToFill"
+              loadWidth="450" loadHeight="320" />
+    </Group>
 
     <Label id="name" text="" translation="[588, 130]" width="1236" height="84" vertAlign="center"
            wrap="false" ellipsisText="..." />
@@ -43,7 +45,17 @@
     <Label id="title" text="" />
     <Label id="subtitle" text="" />
 
+    <!-- While the schedule loads: the two rows' shapes, pulsing (owner,
+         2026-11-12: a text line then rows popping in read badly). -->
+    <Group id="skeleton" visible="false" />
     <RowList id="rows" />
     <Label id="note" text="" translation="[184, 520]" width="1600" height="40" vertAlign="center" />
+
+    <Animation id="pulseAnim" duration="1.2" repeat="true" easeFunction="inOutQuad">
+      <FloatFieldInterpolator key="[0.0, 0.5, 1.0]" keyValue="[0.45, 1.0, 0.45]" fieldToInterp="skeleton.opacity" />
+    </Animation>
+    <Animation id="rowsIn" duration="0.3" repeat="false" easeFunction="outCubic">
+      <FloatFieldInterpolator key="[0.0, 1.0]" keyValue="[0.0, 1.0]" fieldToInterp="rows.opacity" />
+    </Animation>
   </children>
 </component>

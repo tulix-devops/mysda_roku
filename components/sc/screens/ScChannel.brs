@@ -17,9 +17,6 @@ sub init()
     m.note = m.top.findNode("note")
 
     m.plate.uri = ScShape("r22")
-    caps = m.top.findNode("logoCaps")
-    caps.uri = ScShape("caps18")
-    caps.blendColor = m.t.cGround
     m.plate.blendColor = m.t.cPlate
     sh = m.top.findNode("plateShadow")
     sh.uri = ScShape("shadow14")
@@ -48,6 +45,11 @@ sub init()
     m.zone = "buttons"
     m.placed = false
 
+    m.skeleton = m.top.findNode("skeleton")
+    m.pulseAnim = m.top.findNode("pulseAnim")
+    m.rowsIn = m.top.findNode("rowsIn")
+    buildSkeleton()
+
     ScInitRowList(m.rows, 470)
     m.rows.observeField("rowItemSelected", "onCardSelected")
     m.top.observeField("focusedChild", "onFocusChild")
@@ -62,6 +64,7 @@ sub onChannel()
     m.btnIndex = 0
     m.placed = false
     m.logo.uri = ch.scLogo
+    m.plate.blendColor = ScToneFor(ch).edge
     m.nameLabel.text = ch.title
     kind = "Television"
     if ch.scKind = "lang" then kind = "Languages"
@@ -138,11 +141,12 @@ sub drawRows()
     if ch = invalid then return
     sched = ScSched(ch.scStream)
     if sched = invalid
-        m.note.text = "Loading today's schedule" + Chr(8230)
-        m.note.visible = true
+        showSkeleton(true)
         return
     end if
     m.note.visible = false
+    fadeIn = m.skeleton.visible
+    showSkeleton(false)
     now = ScNowSecs()
     today = []
     liveAt = 0
@@ -175,6 +179,60 @@ sub drawRows()
     if not m.placed and today.count() > 0
         m.rows.jumpToRowItem = [0, liveAt]
         m.placed = true
+    end if
+    if fadeIn and m.rows.visible
+        m.rows.opacity = 0
+        m.rowsIn.control = "start"
+    end if
+end sub
+
+' The loading state: each row's label and five cards with their caption
+' lines, where the real rows will land (the list's y 470, a 43-px label
+' band, 12 px of headroom), pulsing until the schedule arrives.
+sub buildSkeleton()
+    tone = m.t.cSurface2
+    rowsAt = [470, 845]
+    for r = 0 to 1
+        y = rowsAt[r]
+        bar = m.skeleton.createChild("Poster")
+        bar.uri = ScShape("r7")
+        bar.blendColor = tone
+        bar.translation = [184, y + 6]
+        bar.width = 380 - r * 80
+        bar.height = 30
+        for i = 0 to 4
+            x = 184 + i * 364
+            card = m.skeleton.createChild("Poster")
+            card.uri = ScShape("r14")
+            card.blendColor = tone
+            card.translation = [x, y + 55]
+            card.width = 340
+            card.height = 191
+            if r = 0
+                l1 = m.skeleton.createChild("Poster")
+                l1.uri = ScShape("r7")
+                l1.blendColor = tone
+                l1.translation = [x, y + 55 + 191 + 16]
+                l1.width = 260
+                l1.height = 22
+                l2 = m.skeleton.createChild("Poster")
+                l2.uri = ScShape("r7")
+                l2.blendColor = tone
+                l2.translation = [x, y + 55 + 191 + 50]
+                l2.width = 150
+                l2.height = 18
+            end if
+        end for
+    end for
+end sub
+
+sub showSkeleton(on as boolean)
+    if on = m.skeleton.visible then return
+    m.skeleton.visible = on
+    if on
+        m.pulseAnim.control = "start"
+    else
+        m.pulseAnim.control = "stop"
     end if
 end sub
 
