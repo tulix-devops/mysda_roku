@@ -29,6 +29,9 @@ sub init()
 
     m.shadow.uri = ScShape("shadow14")
     m.shadow.blendColor = "0x000000D0"
+    m.glow = m.top.findNode("glow")
+    m.glow.uri = ScShape("glow14")
+    m.glow.blendColor = "0xFFFFFF8C"
     m.plate.uri = ScShape("r14")
     ' A focused logo card's hairline ring: white at 40 %, 1 px outside.
     m.ring.uri = ScShape("r14")
@@ -114,6 +117,10 @@ sub draw()
     m.shadow.translation = [-b, -b + 16]
     m.shadow.width = w + 2 * b
     m.shadow.height = h + 2 * b
+    g = 30
+    m.glow.translation = [-g, -g + 6]
+    m.glow.width = w + 2 * g
+    m.glow.height = h + 2 * g
 
     ' Headroom above the art for the focus lift: a RowList clips its items,
     ' and a card lifted 5 % from its bottom edge lost its top corners
@@ -399,6 +406,7 @@ sub onFocus()
     inFocus = m.top.gridHasFocus or (m.top.rowListHasFocus and m.top.rowHasFocus)
     m.veil.visible = false
     m.ring.visible = false
+    m.glow.visible = false
     if m.kind = "station"
         ' The Radio carousel: the station in the middle is the big one.
         s = 0.62 + 0.38 * fpRaw
@@ -410,8 +418,13 @@ sub onFocus()
         m.meta.visible = false
         return
     end if
-    style = ""
-    if m.c <> invalid then style = m.c.scFocus
+    ' Every card's focus is the white splash unless its screen asks for
+    ' another (owner, 2026-11-12: "on every item").
+    ' A list can report focus before the card has content (device,
+    ' 2026-11-12: a crash in focusStyled on m.c.scW).
+    if m.c = invalid then return
+    style = "glow"
+    if m.c.scFocus <> "" then style = m.c.scFocus
     if style <> ""
         focusStyled(style, inFocus, fpRaw)
         return
@@ -447,7 +460,13 @@ sub focusStyled(style as string, inFocus as boolean, fpRaw as float)
     fp = 0.0
     if inFocus then fp = fpRaw
     lit = (fp > 0.5)
-    if style = "spot"
+    if style = "glow"
+        s = 1.0 + 0.04 * fp
+        applyDim(1.0)
+        m.shadow.visible = false
+        m.glow.visible = (fp > 0.02)
+        m.glow.opacity = fp
+    else if style = "spot"
         s = 1.0 + 0.06 * fp
         if inFocus then applyDim(0.35 + 0.65 * fp) else applyDim(1.0)
         m.shadow.visible = (fp > 0.05)

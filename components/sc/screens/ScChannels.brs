@@ -9,7 +9,7 @@ sub init()
     m.chipsGroup = m.top.findNode("chips")
     m.grid = m.top.findNode("grid")
     ' Room above the top row and right of the last column for the lift.
-    m.grid.clippingRect = [-40, -40, 6 * 276 + 60, 3 * 262 + 40]
+    m.grid.clippingRect = [-40, -40, 6 * 276 + 60, 3 * 291 + 40]
     m.grid.observeField("itemSelected", "onSelected")
     m.top.observeField("focusedChild", "onFocusChild")
     m.global.observeField("catVersion", "rebuild")

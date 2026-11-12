@@ -85,7 +85,7 @@ end function
 ' The headroom every ScCard keeps above its art for the focus lift (a lift
 ' of 5 % on a 216-px card is 11 px); row and grid item heights include it.
 function ScCardPad() as integer
-    return 12
+    return 40
 end function
 
 ' CSS hsl() to "0xRRGGBBFF" (h in degrees, s and l in 0..1). Ported from

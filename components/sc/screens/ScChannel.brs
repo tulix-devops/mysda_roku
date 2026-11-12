@@ -190,13 +190,14 @@ end sub
 ' band, 12 px of headroom), pulsing until the schedule arrives.
 sub buildSkeleton()
     tone = m.t.cSurface2
-    rowsAt = [470, 845]
+    pad = ScCardPad()
+    rowsAt = [470, 470 + 267 + pad + 96]
     for r = 0 to 1
         y = rowsAt[r]
         bar = m.skeleton.createChild("Poster")
         bar.uri = ScShape("r7")
         bar.blendColor = tone
-        bar.translation = [184, y + 6]
+        bar.translation = [184, y + 34]
         bar.width = 380 - r * 80
         bar.height = 30
         for i = 0 to 4
@@ -204,20 +205,20 @@ sub buildSkeleton()
             card = m.skeleton.createChild("Poster")
             card.uri = ScShape("r14")
             card.blendColor = tone
-            card.translation = [x, y + 55]
+            card.translation = [x, y + 43 + pad]
             card.width = 340
             card.height = 191
             if r = 0
                 l1 = m.skeleton.createChild("Poster")
                 l1.uri = ScShape("r7")
                 l1.blendColor = tone
-                l1.translation = [x, y + 55 + 191 + 16]
+                l1.translation = [x, y + 43 + pad + 191 + 16]
                 l1.width = 260
                 l1.height = 22
                 l2 = m.skeleton.createChild("Poster")
                 l2.uri = ScShape("r7")
                 l2.blendColor = tone
-                l2.translation = [x, y + 55 + 191 + 50]
+                l2.translation = [x, y + 43 + pad + 191 + 50]
                 l2.width = 150
                 l2.height = 18
             end if

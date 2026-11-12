@@ -115,7 +115,7 @@ end sub
 ' "spot" (a bigger lift, the rest dimmed hard), "bar" (an accent bar under
 ' the card, nothing dimmed). Options for the owner to choose (2026-11-12).
 function CATCHUP_FOCUS() as string
-    return "ring"
+    return "glow"
 end function
 
 function sortNewest(list as object) as object

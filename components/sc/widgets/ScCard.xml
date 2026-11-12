@@ -37,6 +37,8 @@
   <script type="text/brightscript" uri="pkg:/components/sc/widgets/ScCard.brs" />
   <children>
     <Group id="art">
+      <!-- The focus: a soft white splash behind the card (owner, 2026-11-12). -->
+      <Poster id="glow" uri="" visible="false" />
       <Poster id="shadow" uri="" visible="false" />
       <Poster id="ring" uri="" visible="false" />
       <Poster id="plate" uri="" />

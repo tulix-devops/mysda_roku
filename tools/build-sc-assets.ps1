@@ -124,11 +124,11 @@ function New-CornerCaps([int]$r, [string]$path) {
 # A soft drop shadow for a card of corner radius r: black, peak alpha at the
 # card, falling off over $blur px. Drawn at the card's rect grown by $blur
 # on every side (and nudged down by the caller).
-function New-Shadow([int]$r, [int]$blur, [double]$peak, [string]$path) {
+function New-Shadow([int]$r, [int]$blur, [double]$peak, [string]$path, [int]$rgb = 0) {
     $half = $blur + $r
     $content = 2 * $half + 1
     $out = New-Bitmap ($content + 2) ($content + 2)
-    Set-Clear $out 0 0 0
+    Set-Clear $out $rgb $rgb $rgb
     $sigma = $blur / 2.6
     for ($y = 0; $y -lt $content; $y++) {
         for ($x = 0; $x -lt $content; $x++) {
@@ -142,7 +142,7 @@ function New-Shadow([int]$r, [int]$blur, [double]$peak, [string]$path) {
             $d = [math]::Sqrt($ex * $ex + $ey * $ey) - $r
             if ($d -le 0) { $a = $peak } else { $a = $peak * [math]::Exp(-($d * $d) / (2 * $sigma * $sigma)) }
             $ai = [int][math]::Round(255 * $a)
-            if ($ai -gt 0) { $out.SetPixel($x + 1, $y + 1, [System.Drawing.Color]::FromArgb($ai, 0, 0, 0)) }
+            if ($ai -gt 0) { $out.SetPixel($x + 1, $y + 1, [System.Drawing.Color]::FromArgb($ai, $rgb, $rgb, $rgb)) }
         }
     }
     Set-Markers $out ($half + 1)
@@ -223,6 +223,11 @@ Write-Host "focus ring   -> ring21 (+ _hd): stroke 4"
 New-Shadow 14 36 0.70 (Join-Path $scDir 'shadow14.9.png')
 New-Shadow 9 24 0.70 (Join-Path $scDir 'shadow14_hd.9.png')
 Write-Host "shadow       -> shadow14 (+ _hd): blur 36 plane px"
+# The focus splash: the same falloff in WHITE, tinted by alpha (owner,
+# 2026-11-12: a white splash behind the focused card).
+New-Shadow 14 30 0.80 (Join-Path $scDir 'glow14.9.png') 255
+New-Shadow 9 20 0.80 (Join-Path $scDir 'glow14_hd.9.png') 255
+Write-Host "glow         -> glow14 (+ _hd): white, blur 30 plane px"
 
 # -- 4. Glyphs (the boards' SVG on a 40-unit grid) ----------------------------
 $SS = 8

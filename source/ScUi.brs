@@ -45,7 +45,9 @@ sub ScInitRowList(list as object, y as integer)
     ' The label sits in a band the RowList reserves ABOVE each row's items
     ' (about 43 px for a 32-px face, measured on device 2026-10-25): the list's
     ' y is the first label's top, and rowHeights include the band.
-    list.rowLabelOffset = [[off, 0]]
+    ' The cards' 40 px of headroom holds the focus glow; the label sits 28 px (a NEGATIVE y moves it down)
+    ' down into it so it stays close to its row.
+    list.rowLabelOffset = [[off, -28]]
     list.rowLabelFont = ScFont(t.fXB, 32)
     list.rowLabelColor = t.cText
     list.drawFocusFeedback = false

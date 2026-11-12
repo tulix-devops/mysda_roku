@@ -26,10 +26,10 @@
     <Label id="title" text="" />
     <Label id="subtitle" text="" />
     <Group id="chips" translation="[184, 150]" />
-    <MarkupGrid id="grid" translation="[184, 250]"
+    <MarkupGrid id="grid" translation="[184, 222]"
                 itemComponentName="ScCard"
                 numColumns="6" numRows="3"
-                itemSize="[252, 233]"
+                itemSize="[252, 261]"
                 itemSpacing="[24, 30]"
                 columnSpacings="[24, 24, 24, 24, 24, 60]"
                 vertFocusAnimationStyle="fixedFocus"
