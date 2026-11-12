@@ -184,6 +184,41 @@ foreach ($r in @(14, 18)) {
 }
 Write-Host "corner caps  -> caps14, caps18 (+ _hd)"
 
+# -- 2b. A focus ring: a hollow rounded frame of outer radius r, stroke s,
+# drawn a few px OUTSIDE a card so it never meets the picture's corner caps
+# (Catch-up focus option A, owner 2026-11-12).
+function In-RoundRect([double]$px, [double]$py, [double]$x0, [double]$y0, [double]$x1, [double]$y1, [double]$r) {
+    if ($px -lt $x0 -or $py -lt $y0 -or $px -gt $x1 -or $py -gt $y1) { return $false }
+    $cx = [math]::Min([math]::Max($px, $x0 + $r), $x1 - $r)
+    $cy = [math]::Min([math]::Max($py, $y0 + $r), $y1 - $r)
+    return ((($px - $cx) * ($px - $cx) + ($py - $cy) * ($py - $cy)) -le $r * $r)
+}
+function New-RingPatch([int]$r, [int]$s, [string]$path) {
+    $content = 2 * $r + 1
+    $out = New-Bitmap ($content + 2) ($content + 2)
+    Set-Clear $out 255 255 255
+    $ss = 8
+    for ($y = 0; $y -lt $content; $y++) {
+        for ($x = 0; $x -lt $content; $x++) {
+            $n = 0
+            for ($sy = 0; $sy -lt $ss; $sy++) {
+                for ($sx = 0; $sx -lt $ss; $sx++) {
+                    $px = $x + ($sx + 0.5) / $ss; $py = $y + ($sy + 0.5) / $ss
+                    if ((In-RoundRect $px $py 0 0 $content $content $r) -and -not (In-RoundRect $px $py $s $s ($content - $s) ($content - $s) ($r - $s))) { $n++ }
+                }
+            }
+            $a = [int][math]::Round(255 * $n / ($ss * $ss))
+            if ($a -gt 0) { $out.SetPixel($x + 1, $y + 1, [System.Drawing.Color]::FromArgb($a, 255, 255, 255)) }
+        }
+    }
+    Set-Markers $out ($r + 1)
+    Save-Png $out $path
+    $out.Dispose()
+}
+New-RingPatch 21 4 (Join-Path $scDir 'ring21.9.png')
+New-RingPatch 14 3 (Join-Path $scDir 'ring21_hd.9.png')
+Write-Host "focus ring   -> ring21 (+ _hd): stroke 4"
+
 # -- 3. The lifted card's shadow ----------------------------------------------
 New-Shadow 14 36 0.70 (Join-Path $scDir 'shadow14.9.png')
 New-Shadow 9 24 0.70 (Join-Path $scDir 'shadow14_hd.9.png')

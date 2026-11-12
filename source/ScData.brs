@@ -265,6 +265,7 @@ function ScCardNode(kind as string, f as object) as object
         scInside: false
         scAction: ""
         scTick: 0
+        scFocus: ""
     })
     ' Node fields by declaration: addFields cannot infer a type from invalid.
     n.addField("scRef", "node", false)

@@ -78,6 +78,7 @@ sub rebuild()
         n = ScRecordingCard(e.p, e.ch, 318, 179, ScDurBadge(e.p.scEnd - e.p.scStart), "")
         n.title = label
         n.scTagPos = "br"
+        n.scFocus = CATCHUP_FOCUS()
         earlierCards.push(n)
     end for
 
@@ -94,6 +95,7 @@ sub rebuild()
             n.scTagPos = "br"
             n.scAction = "episode"
             n.scRef2 = e.ch
+            n.scFocus = CATCHUP_FOCUS()
             cards.push(n)
         end for
         rows.push({ title: e.s.title + " · " + e.s.scCount.toStr() + " recordings in the last 21 days", items: cards, w: 318, h: 219, gap: 90, series: e.s })
@@ -107,6 +109,14 @@ sub rebuild()
     m.note.visible = not has
     if not has then m.note.text = "Loading recordings" + Chr(8230)
 end sub
+
+' How a Catch-up card shows focus (ScCard onFocus): "" the Showcase default
+' (lift, the rest dimmed), "ring" (a white ring with a gap, nothing dimmed),
+' "spot" (a bigger lift, the rest dimmed hard), "bar" (an accent bar under
+' the card, nothing dimmed). Options for the owner to choose (2026-11-12).
+function CATCHUP_FOCUS() as string
+    return "ring"
+end function
 
 function sortNewest(list as object) as object
     out = []

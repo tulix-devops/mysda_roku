@@ -42,6 +42,16 @@ sub init()
     m.fade.blendColor = m.t.cGround
     m.top.findNode("badgePlate").uri = ScShape("r7")
     m.top.findNode("badgePlate").blendColor = m.t.cPlate
+    ' Decode the badge logo at the pixels it covers on THIS screen (the
+    ' plane is 1080p; a 720p device draws it at 2/3).
+    bl = m.top.findNode("badgeLogo")
+    if Instr(1, ScShape("r7"), "_hd") > 0
+        bl.loadWidth = 60
+        bl.loadHeight = 42
+    else
+        bl.loadWidth = 90
+        bl.loadHeight = 63
+    end if
     m.tagPlate.uri = ScShape("r14")
     m.tagText.font = ScFont(m.t.fXB, 15)
     m.tagText.color = m.t.cText
@@ -400,6 +410,12 @@ sub onFocus()
         m.meta.visible = false
         return
     end if
+    style = ""
+    if m.c <> invalid then style = m.c.scFocus
+    if style <> ""
+        focusStyled(style, inFocus, fpRaw)
+        return
+    end if
     if inFocus
         fp = fpRaw
         s = 1.0 + 0.05 * fp
@@ -415,6 +431,59 @@ sub onFocus()
         applyDim(1.0)
         m.shadow.visible = false
         m.title.color = m.t.cText1
+        m.title.opacity = 1.0
+    end if
+end sub
+
+' Catch-up's focus options (CATCHUP_FOCUS in ScCatchup.brs), all following
+' focusPercent like the default:
+'   ring  a white ring 3 px outside the card (so it never meets the corner
+'         caps), a 3 % lift, nothing dimmed
+'   spot  a 6 % lift (inside the 24-px gap) and a deep shadow, the rest of the row dimmed to 35 %
+'   bar   an accent bar under the card, a 3 % lift, nothing dimmed
+sub focusStyled(style as string, inFocus as boolean, fpRaw as float)
+    w = m.c.scW
+    h = m.c.scH
+    fp = 0.0
+    if inFocus then fp = fpRaw
+    lit = (fp > 0.5)
+    if style = "spot"
+        s = 1.0 + 0.06 * fp
+        if inFocus then applyDim(0.35 + 0.65 * fp) else applyDim(1.0)
+        m.shadow.visible = (fp > 0.05)
+        m.shadow.opacity = fp
+    else
+        s = 1.0 + 0.03 * fp
+        applyDim(1.0)
+        m.shadow.visible = (fp > 0.05)
+        m.shadow.opacity = fp * 0.6
+        m.ring.visible = (fp > 0.02)
+        m.ring.opacity = fp
+        if style = "ring"
+            if m.ring.uri <> ScShape("ring21") then m.ring.uri = ScShape("ring21")
+            m.ring.blendColor = "0xFFFFFFFF"
+            m.ring.translation = [-7, -7]
+            m.ring.width = w + 14
+            m.ring.height = h + 14
+        else
+            if m.ring.uri <> ScShape("r2") then m.ring.uri = ScShape("r2")
+            m.ring.blendColor = m.t.cAccent
+            m.ring.translation = [0, h + 6]
+            m.ring.width = w
+            m.ring.height = 5
+        end if
+    end if
+    m.art.scale = [s, s]
+    if lit
+        m.title.color = m.t.cText
+    else if inFocus
+        m.title.color = m.t.cText2
+    else
+        m.title.color = m.t.cText1
+    end if
+    if style = "spot" and inFocus
+        m.title.opacity = 0.6 + 0.4 * fp
+    else
         m.title.opacity = 1.0
     end if
 end sub

@@ -33,8 +33,8 @@ sub init()
     liveTag.color = m.t.cLive
     tagW = ScTextW("● LIVE", 25, "xb")
     liveTag.width = tagW + 4
-    m.liveLine.translation = [588 + tagW + 14, 222]
-    m.metaLabel.font = ScFont(m.t.fSemi, 22)
+    m.liveLine.translation = [588 + tagW + 14, 256]
+    m.metaLabel.font = ScFont(m.t.fXB, 20)
     m.metaLabel.color = m.t.cText2
     m.note.font = ScFont(m.t.fSemi, 24)
     m.note.color = m.t.cText2
@@ -68,8 +68,7 @@ sub onChannel()
     m.nameLabel.text = ch.title
     kind = "Television"
     if ch.scKind = "lang" then kind = "Languages"
-    m.metaLabel.text = kind + " · " + ch.scLang + " · 21 days of recordings"
-    ScSetTitle(m.top.findNode("title"), m.top.findNode("subtitle"), "Channels", "/ " + ch.title)
+    m.metaLabel.text = UCase(kind + "  ·  " + ch.scLang + "  ·  21 days of recordings")
     m.rows.content = invalid
     m.rows.visible = false
     ScWantSched(ch)

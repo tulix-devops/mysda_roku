@@ -55,9 +55,12 @@
       <Poster id="fade" uri="pkg:/images/png/shapes/fade_bottom.png" visible="false" />
       <Poster id="caps" uri="" />
       <Group id="badge" translation="[12, 12]" visible="false">
-        <Poster id="badgePlate" uri="" width="72" height="51" />
-        <Group translation="[3, 2]" clippingRect="[0, 0, 66, 47]">
-          <Poster id="badgeLogo" uri="" translation="[-2, -2]" width="70" height="51" loadDisplayMode="scaleToFill" />
+        <!-- 92 x 65 and decoded at the size it is drawn (ScCard init): a
+             450-px logo squeezed by the GPU into 44 device px went soft and
+             jagged (owner, 2026-11-12). -->
+        <Poster id="badgePlate" uri="" width="92" height="65" />
+        <Group translation="[4, 3]" clippingRect="[0, 0, 84, 59]">
+          <Poster id="badgeLogo" uri="" translation="[-3, -2]" width="90" height="63" loadDisplayMode="scaleToFill" />
         </Group>
       </Group>
       <Group id="tag" visible="false">

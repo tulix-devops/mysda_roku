@@ -34,12 +34,14 @@
               loadWidth="450" loadHeight="320" />
     </Group>
 
-    <Label id="name" text="" translation="[588, 130]" width="1236" height="84" vertAlign="center"
+    <!-- No "Channels / <name>" breadcrumb (owner, 2026-11-12): a kicker
+         above the name says what the channel is. -->
+    <Label id="meta" text="" translation="[588, 136]" width="1236" height="30" vertAlign="center" />
+    <Label id="name" text="" translation="[588, 166]" width="1236" height="84" vertAlign="center"
            wrap="false" ellipsisText="..." />
-    <Label id="liveTag" text="● LIVE" translation="[588, 222]" width="140" height="36" vertAlign="center" />
-    <Label id="liveLine" text="" translation="[700, 222]" width="1124" height="36" vertAlign="center"
+    <Label id="liveTag" text="● LIVE" translation="[588, 256]" width="140" height="36" vertAlign="center" />
+    <Label id="liveLine" text="" translation="[700, 256]" width="1124" height="36" vertAlign="center"
            wrap="false" ellipsisText="..." />
-    <Label id="meta" text="" translation="[588, 266]" width="1236" height="32" vertAlign="center" />
     <Group id="buttons" translation="[588, 316]" />
 
     <Label id="title" text="" />
