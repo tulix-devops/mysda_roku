@@ -44,7 +44,12 @@
       <Poster id="plate" uri="" />
       <!-- A channel card's tone: the diagonal ramp over the plate. -->
       <Poster id="ramp" uri="pkg:/images/png/sc/ramp_diag.png" visible="false" />
-      <Poster id="thumb" uri="" loadDisplayMode="scaleToZoom" visible="false" />
+      <!-- A frame grab trimmed at its own edges: grabs often carry a black
+           line there, which read as an outline against the focus glow
+           (owner, 2026-11-12). -->
+      <Group id="thumbClip">
+        <Poster id="thumb" uri="" loadDisplayMode="scaleToZoom" visible="false" />
+      </Group>
       <!-- A frame card with no grab yet: its logo on a white plate. -->
       <Poster id="logoPlate" uri="" visible="false" />
       <!-- A logo drawn to its plate's colour is clipped at its own outer 3 %:

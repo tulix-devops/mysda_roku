@@ -131,6 +131,17 @@ function ScScaleColor(hex as string, f as float) as string
     return "0x" + ScHex2(r / 255) + ScHex2(g / 255) + ScHex2(b / 255) + Mid(hex, 9, 2)
 end function
 
+' "0xRRGGBBAA" colour a moved a fraction t of the way to colour b (opaque).
+function ScMixColor(a as string, b as string, t as float) as string
+    out = "0x"
+    for i = 0 to 2
+        ca = Val(Mid(a, 3 + 2 * i, 2), 16)
+        cb = Val(Mid(b, 3 + 2 * i, 2), 16)
+        out = out + ScHex2((ca + (cb - ca) * t) / 255)
+    end for
+    return out + "FF"
+end function
+
 function ScHex2(v as float) as string
     n = Int(v * 255 + 0.5)
     if n < 0 then n = 0

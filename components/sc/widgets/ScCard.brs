@@ -31,7 +31,8 @@ sub init()
     m.shadow.blendColor = "0x000000D0"
     m.glow = m.top.findNode("glow")
     m.glow.uri = ScShape("glow14")
-    m.glow.blendColor = "0xFFFFFF8C"
+    m.glow.blendColor = "0xFFFFFF66"
+    m.capsAt = ""
     m.plate.uri = ScShape("r14")
     ' A focused logo card's hairline ring: white at 40 %, 1 px outside.
     m.ring.uri = ScShape("r14")
@@ -152,8 +153,13 @@ sub draw()
 
     m.thumb.visible = isFrame and c.scThumb <> ""
     if m.thumb.visible
-        m.thumb.width = w
-        m.thumb.height = h
+        ' 2 % past every edge, clipped back to the card.
+        tx = Int(w * 0.02 + 0.5)
+        ty = Int(h * 0.02 + 0.5)
+        m.top.findNode("thumbClip").clippingRect = [0, 0, w, h]
+        m.thumb.translation = [-tx, -ty]
+        m.thumb.width = w + 2 * tx
+        m.thumb.height = h + 2 * ty
         ' Grabs are 320x180 at the source; never decode bigger than that.
         m.thumb.loadWidth = 320
         m.thumb.loadHeight = 180
@@ -460,12 +466,19 @@ sub focusStyled(style as string, inFocus as boolean, fpRaw as float)
     fp = 0.0
     if inFocus then fp = fpRaw
     lit = (fp > 0.5)
+    ' The corner caps are painted the ground's colour to round a square
+    ' picture; over the glow that read as black notches at the corners
+    ' (owner, 2026-11-12). They take the colour the glow makes over the
+    ' ground there instead: its peak alpha (0.8 in the image x the 0.40
+    ' tint) times focus.
+    capsColor = m.t.cGround
     if style = "glow"
         s = 1.0 + 0.04 * fp
         applyDim(1.0)
         m.shadow.visible = false
         m.glow.visible = (fp > 0.02)
         m.glow.opacity = fp
+        if fp > 0.0 then capsColor = ScMixColor(m.t.cGround, "0xFFFFFFFF", 0.32 * fp)
     else if style = "spot"
         s = 1.0 + 0.06 * fp
         if inFocus then applyDim(0.35 + 0.65 * fp) else applyDim(1.0)
@@ -493,6 +506,10 @@ sub focusStyled(style as string, inFocus as boolean, fpRaw as float)
         end if
     end if
     m.art.scale = [s, s]
+    if m.capsAt <> capsColor
+        m.caps.blendColor = capsColor
+        m.capsAt = capsColor
+    end if
     if lit
         m.title.color = m.t.cText
     else if inFocus
