@@ -1,9 +1,9 @@
 sub init()
     ScEnsureGlobals()
     m.t = ScTheme()
-    m.names = ["home", "channels", "radio", "catchup", "account"]
-    m.labels = ["Home", "Channels", "Radio", "Catch-up", "Account"]
-    m.glyphs = ["nav_home", "nav_channels", "nav_radio", "nav_catchup", "nav_account"]
+    m.names = ["home", "channels", "radio", "catchup", "churches", "account"]
+    m.labels = ["Home", "Channels", "Radio", "Catch-up", "Churches", "Account"]
+    m.glyphs = ["nav_home", "nav_channels", "nav_radio", "nav_catchup", "nav_churches", "nav_account"]
     m.focusIndex = 0
     m.closedW = 104
     m.openW = 330
@@ -19,7 +19,8 @@ sub init()
     m.labelsFade = m.top.findNode("labelsFade")
     itemsGroup = m.top.findNode("items")
 
-    m.h = 16 * 2 + 5 * 72 + 4 * 12
+    m.count = m.names.count()
+    m.h = 16 * 2 + m.count * 72 + (m.count - 1) * 12
     b = 36
     m.shadow.uri = ScShape("shadow14")
     m.shadow.blendColor = "0x00000099"
@@ -35,7 +36,7 @@ sub init()
     m.labelsGroup.opacity = 0
 
     m.rows = []
-    for i = 0 to 4
+    for i = 0 to m.count - 1
         row = itemsGroup.createChild("Group")
         row.translation = [0, i * 84]
         circle = row.createChild("Poster")
@@ -125,7 +126,7 @@ end sub
 sub paint()
     open = m.top.navHasFocus
     sel = indexOf(m.top.selected)
-    for i = 0 to 4
+    for i = 0 to m.count - 1
         r = m.rows[i]
         focused = open and i = m.focusIndex
         current = (i = sel)
@@ -154,7 +155,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
     if key = "up" or key = "down"
         if press
             if key = "up" and m.focusIndex > 0 then m.focusIndex = m.focusIndex - 1
-            if key = "down" and m.focusIndex < 4 then m.focusIndex = m.focusIndex + 1
+            if key = "down" and m.focusIndex < m.count - 1 then m.focusIndex = m.focusIndex + 1
             paint()
         end if
         return true

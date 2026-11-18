@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  ScChurches - the SDA church directory (the Android apps' "YT" tab), but
+  with no player: each church's link is a QR code to scan with a phone
+  (owner, 2026-11-18; plan docs/team/tasks/2026-11-18-churches-qr/plan.md).
+
+  Three columns: the states (name + count), the focused state's churches
+  (name + city), and a panel for the focused church - its QR code on a white
+  plate, the name, "City, State", what the code opens and the link. The
+  panel follows focus (the code is drawn 0.25 s after focus settles), so no
+  OK is needed.
+
+  Up / Down move in a column; Right or OK go from the states to the
+  churches; Left goes back, and from the states opens the capsule. The list
+  loads the first time the screen is shown.
+-->
+<component name="ScChurches" extends="Group">
+  <interface>
+    <field id="active" type="boolean" onChange="onActive" />
+  </interface>
+  <script type="text/brightscript" uri="pkg:/source/ScGlobals.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScTheme.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScMetrics.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScTime.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScData.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScBrand.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScUi.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScQr.brs" />
+  <script type="text/brightscript" uri="pkg:/components/sc/screens/ScChurches.brs" />
+  <children>
+    <Label id="title" text="" />
+    <Label id="subtitle" text="" />
+
+    <Group id="states" translation="[184, 170]" />
+    <Group id="churches" translation="[548, 170]" />
+
+    <Group id="panel" translation="[1257, 159]" visible="false">
+      <Poster id="qrShadow" uri="" />
+      <Poster id="qrPlate" uri="" width="540" height="540" />
+      <Group id="qrModules" />
+      <!-- While a code is being made: a pulsing ghost of one - its three
+           corner squares and a line of text (owner, 2026-11-19). -->
+      <Group id="qrLoader" visible="false">
+        <Label id="qrLoaderText" text="" translation="[40, 240]" width="460" height="60"
+               horizAlign="center" vertAlign="center" />
+      </Group>
+      <Label id="qrNote" text="" translation="[40, 240]" width="460" height="60"
+             horizAlign="center" vertAlign="center" />
+      <Label id="name" text="" translation="[0, 572]" width="540" height="92" vertAlign="bottom"
+             wrap="true" maxLines="2" lineSpacing="2" ellipsisText="..." />
+      <Label id="place" text="" translation="[0, 668]" width="540" height="34" vertAlign="center"
+             wrap="false" ellipsisText="..." />
+      <Label id="hint" text="" translation="[0, 712]" width="540" height="32" vertAlign="center" />
+      <Label id="link" text="" translation="[0, 750]" width="540" height="30" vertAlign="center"
+             wrap="false" ellipsisText="..." />
+    </Group>
+
+    <Label id="note" text="" translation="[184, 180]" width="1000" height="40" vertAlign="center" />
+    <Timer id="qrTimer" repeat="false" duration="0.25" />
+    <Animation id="loaderPulse" duration="1.0" repeat="true" easeFunction="inOutQuad">
+      <FloatFieldInterpolator key="[0.0, 0.5, 1.0]" keyValue="[0.35, 1.0, 0.35]" fieldToInterp="qrLoader.opacity" />
+    </Animation>
+  </children>
+</component>

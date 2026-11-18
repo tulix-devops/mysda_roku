@@ -35,6 +35,7 @@
       <ScChannels id="channels" visible="false" />
       <ScRadio    id="radio"    visible="false" />
       <ScCatchup  id="catchup"  visible="false" />
+      <ScChurches id="churches" visible="false" />
       <ScAccount  id="account"  visible="false" />
       <ScChannel  id="channelPage" visible="false" />
     </Group>

@@ -26,7 +26,7 @@ sub init()
     m.clock.font = ScFont(m.t.fSemi, 27)
     m.clock.color = m.t.cText2
 
-    m.screenNames = ["home", "channels", "radio", "catchup", "account"]
+    m.screenNames = ["home", "channels", "radio", "catchup", "churches", "account"]
     m.current = "home"
     m.player = invalid
     m.pendingPlay = invalid

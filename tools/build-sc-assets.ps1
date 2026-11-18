@@ -293,6 +293,15 @@ New-Glyph 'nav_account' {
     $g.DrawEllipse($pen, [single](13.5*$u), [single](6*$u), [single](13*$u), [single](13*$u))
     $g.DrawArc($pen, [single](7*$u), [single](22.5*$u), [single](26*$u), [single](23*$u), 180, 180)
 } 36
+# Churches (2026-11-18): a chapel - cross, pitched roof, walls, a door.
+New-Glyph 'nav_churches' {
+    param($g, $pen, $brush, $u)
+    $g.DrawLine($pen, (pt 20 3 $u), (pt 20 11 $u))
+    $g.DrawLine($pen, (pt 16.5 6.5 $u), (pt 23.5 6.5 $u))
+    $g.DrawLines($pen, [System.Drawing.PointF[]]@((pt 6 21 $u), (pt 20 12 $u), (pt 34 21 $u)))
+    $g.DrawLines($pen, [System.Drawing.PointF[]]@((pt 10 18.5 $u), (pt 10 35 $u), (pt 30 35 $u), (pt 30 18.5 $u)))
+    $g.DrawLines($pen, [System.Drawing.PointF[]]@((pt 16.5 35 $u), (pt 16.5 28 $u), (pt 23.5 28 $u), (pt 23.5 35 $u)))
+} 36
 
 # Buttons and the player transport.
 New-Glyph 'play' {
