@@ -10,9 +10,11 @@ sub work()
     out.addField("scToday", "node", false)
     out.addField("scWeek", "node", false)
     out.addField("scSeries", "node", false)
+    out.addField("scRecent", "node", false)
     out.scToday = CreateObject("roSGNode", "ContentNode")
     out.scWeek = CreateObject("roSGNode", "ContentNode")
     out.scSeries = CreateObject("roSGNode", "ContentNode")
+    out.scRecent = CreateObject("roSGNode", "ContentNode")
 
     res = ScHttp("GET", m.top.url, "", [["Accept", "application/json"]], 20000)
     if res.code = 200 or res.code = 206
@@ -75,14 +77,15 @@ sub build(out as object, arr as object, stream as string)
     else
         ' The real grab of what is on can take well over 10 minutes to
         ' arrive (still the placeholder 22 min in, 2026-10-28): probe what is
-        ' on now and the programme before it, and drop a placeholder so the
-        ' screens fall back to the last real picture.
+        ' on now and the two programmes before it (the live player's
+        ' Recordings row starts with them), and drop a placeholder so the
+        ' screens fall back to the last real picture or the logo.
         k = 0
         for each p in progs
             if p.st <= now and p.thumb <> ""
                 if isPlaceholderGrab(p.thumb, stream) then p.thumb = ""
                 k = k + 1
-                if k >= 2 then exit for
+                if k >= 3 then exit for
             end if
         end for
     end if
@@ -91,6 +94,14 @@ sub build(out as object, arr as object, stream as string)
     for i = progs.count() - 1 to 0 step -1
         p = progs[i]
         if p.en > dayStart and p.st < dayEnd then out.scToday.appendChild(toNode(p, now, stream))
+    end for
+
+    ' Recordings, newest first: every aired programme with its own stream,
+    ' 48 at most (about two days of an hourly channel) - the live player's
+    ' Recordings row for a subscribed viewer.
+    for each p in progs
+        if out.scRecent.getChildCount() >= 48 then exit for
+        if p.en <= now and p.url <> "" then out.scRecent.appendChild(toNode(p, now, stream))
     end for
 
     ' Earlier this week, newest first; one per title on a titled channel.
@@ -150,11 +161,13 @@ end sub
 ' The feed's placeholder grab is one file served at every programme's own
 ' grab URL until (or unless) a real one exists: 6542 bytes, the same md5
 ' across channels (measured 2026-10-25 and 2026-10-28). Probe the newest
-' programme that ended over half an hour ago.
+' programme that ended over two hours ago: a real grab can still be the
+' placeholder 32 min after its programme ended (3ABN, 2026-11-19), which
+' flagged the whole channel as having none.
 function grabsArePlaceholders(progs as object, now as integer, stream as string) as boolean
     probe = invalid
     for each p in progs
-        if p.en <= now - 1800 and p.thumb <> ""
+        if p.en <= now - 7200 and p.thumb <> ""
             probe = p
             exit for
         end if

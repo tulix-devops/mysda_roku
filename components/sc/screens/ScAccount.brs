@@ -17,19 +17,9 @@ sub init()
     m.body.font = ScFont(m.t.fSemi, 27)
     m.body.color = m.t.cText2
     m.body.lineSpacing = 10
-    gp = m.top.findNode("givePlate")
-    gp.uri = ScShape("r22")
-    gp.blendColor = "0x12141BEB"
-    qp = m.top.findNode("qrPlate")
-    qp.uri = ScShape("r14")
-    qp.blendColor = m.t.cPlate
-    gt = m.top.findNode("giveTitle")
-    gt.font = ScFont(m.t.fXB, 26)
-    gt.color = m.t.cText
-    gb = m.top.findNode("giveBody")
-    gb.font = ScFont(m.t.fSemi, 20)
-    gb.color = m.t.cText2
-    gb.lineSpacing = 6
+    m.joinCard = m.top.findNode("joinCard")
+    m.giveCard = m.top.findNode("giveCard")
+    ScQrCardsFill(m.joinCard, m.giveCard)
 
     m.pills = []
     m.actions = []
@@ -43,6 +33,8 @@ sub onActive()
     if m.top.active
         draw()
         buildWall()
+        ' The codes are made the first time the page shows, not at boot.
+        ScQrCardsArm(m.joinCard, m.giveCard)
         ' Signed in with access unknown: ask, so the screen can say.
         if m.global.viewerSignedIn and m.global.catchupAccess = "" then m.global.checkAccess = m.global.checkAccess + 1
     end if
@@ -57,7 +49,7 @@ sub draw()
         access = m.global.catchupAccess
         status = "Catch-up is checked the first time you play a recording."
         if access = "yes" then status = "Catch-up is on this account: 21 days of every channel."
-        if access = "no" then status = "Catch-up isn't on this account yet. Subscribe at mysdatv.com, or give instead."
+        if access = "no" then status = "Catch-up isn't on this account yet: subscribe or donate with a code below."
         m.body.text = "Logged in as " + who + ". " + status
         labels = ["Watch catch-up", "Log out"]
         m.actions = ["catchup", "logout"]

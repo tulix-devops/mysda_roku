@@ -44,6 +44,10 @@ sub init()
     m.keyboard.observeField("text", "onTyped")
     m.keyboard.showTextEditBox = false
 
+    m.joinCard = m.top.findNode("joinCard")
+    m.giveCard = m.top.findNode("giveCard")
+    ScQrCardsFill(m.joinCard, m.giveCard)
+
     m.email = ""
     m.password = ""
     ' 0 = email, 1 = password, 2 = Log in. The keyboard, when it holds
@@ -66,6 +70,9 @@ sub onActiveChanged()
         setKeyboardText("")
         secure(false)
         repaint()
+        ' The codes are made once, just after the page first shows (each
+        ' encode holds the render thread 0.1-0.3 s).
+        ScQrCardsArm(m.joinCard, m.giveCard)
     else
         m.password = ""
         m.email = ""

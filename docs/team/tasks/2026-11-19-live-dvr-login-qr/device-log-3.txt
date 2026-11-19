@@ -1,0 +1,15 @@
+﻿11-19 16:57:29.547 sdkl [beacon.signal] |AppLaunchChainComplete ----> Duration(675 ms)
+[ScScene] init
+[ScFeedTask] radio <-  206 ( 10 channels)
+[ScFeedTask] lang <-  206 ( 16 channels)
+[ScFeedTask] tv <-  206 ( 24 channels)
+11-19 16:57:31.477 sdkl [beacon.signal] |AppLaunchComplete ---------> Pending Render Pass
+11-19 16:57:31.572 sdkl [beacon.signal] |AppLaunchComplete ---------> Duration(2297 ms : 2074 ms)
+[ScScheduleTask] 3abn2_pro_live ok=true today= 32 series= 8
+[ScScheduleTask] 3abn2_live ok=true today= 43 series= 8
+[ScScheduleTask] 3abn2_d2d_live ok=true today= 46 series= 8
+[ScScheduleTask] 3abn2_praisehim_live ok=true today= 49 series= 8
+11-19 16:58:14.275 sdkl [beacon.signal] |VODStartInitiate ----------> TimeBase(41062 ms)
+11-19 16:58:14.275 sdkl [beacon.signal] |VODStartComplete ----------> Duration(3711 ms)
+[ScSignIn] codes drawn in  240 ms; keyboard x= 160  w= 1416  h= 380 
+

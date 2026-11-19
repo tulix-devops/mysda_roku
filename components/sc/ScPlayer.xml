@@ -6,6 +6,10 @@
     live     C6: title top-left, the clock, and a strip of channel logo cards
              at the bottom - Left / Right move along it, OK switches to the
              highlighted channel, or opens the page of the one playing.
+             A viewer whose account has catch-up (check-purchase "yes") sees
+             this channel's recordings there instead; Down / Up swap between
+             "Recordings" and "Live channels". OK on a recording plays it,
+             and Back from it comes back to this live channel.
     radio    a now-playing card (the video plane is black for audio); Left /
              Right change station.
     catchup  C7: logo + "3ABN · Sat, Oct 4 · 5:00 PM · recording", the title,
@@ -59,8 +63,17 @@
       </Group>
       <Label id="clock" text="" translation="[1424, 60]" width="400" height="44" horizAlign="right" vertAlign="center" />
 
+      <!-- A subscribed viewer's two rows, one on screen at a time: the
+           channel's recordings (getdvr.php, newest first) or the other live
+           channels. Without catch-up there is no tab line, only the strip. -->
+      <Group id="tabs" translation="[96, 646]" visible="false">
+        <Label id="tabRec" text="RECORDINGS" height="34" vertAlign="center" />
+        <Label id="tabLive" text="LIVE CHANNELS" height="34" vertAlign="center" />
+        <Poster id="tabBar" uri="" translation="[0, 38]" width="0" height="4" />
+      </Group>
       <Label id="stripHint" text="Left / Right to switch · OK for the channel page" translation="[96, 700]" width="1400" height="34" vertAlign="center" />
       <Group id="strip" translation="[96, 0]" />
+      <Group id="recRow" translation="[96, 0]" visible="false" />
 
       <Group id="vod" visible="false">
         <Group id="vodHead" translation="[96, 0]">

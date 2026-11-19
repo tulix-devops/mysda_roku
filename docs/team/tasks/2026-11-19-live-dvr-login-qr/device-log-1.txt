@@ -1,0 +1,141 @@
+﻿11-18 20:26:00.513 sdkl [beacon.signal] |AppLaunchChainComplete ----> Duration(824 ms)
+[ScScene] init
+[ScFeedTask] radio <-  206 ( 10 channels)
+[ScFeedTask] lang <-  206 ( 16 channels)
+[ScFeedTask] tv <-  206 ( 24 channels)
+11-18 20:26:02.422 sdkl [beacon.signal] |AppLaunchComplete ---------> Pending Render Pass
+11-18 20:26:02.510 sdkl [beacon.signal] |AppLaunchComplete ---------> Duration(2244 ms : 2041 ms)
+[ScScheduleTask] 3abn2_pro_live ok=true today= 14 series= 8
+[ScScheduleTask] 3abn2_live ok=true today= 18 series= 8
+[ScScheduleTask] 3abn2_d2d_live ok=true today= 19 series= 8
+[ScScheduleTask] 3abn2_praisehim_live ok=true today= 19 series= 8
+[ScChurchTask] <-  200 ( 39 states)
+11-18 22:36:00.911 app  [scrpt.ctx.run.exit] UI: Exiting 'mySDAtv', id 'dev', EXIT_IDLE_AUTO_EXIT, thrd 30159
+11-18 22:36:00.913 app  [beacon.signal] |AppExitComplete -----------> Duration(145 ms)
+11-18 22:36:00.913 app  [beacon.header] __________________________________________
+11-18 22:36:00.913 app  [beacon.report] |AppLaunchInitiate ---------> TimeBase(0 ms), InstantOn
+11-18 22:36:00.913 app  [beacon.report] |AppLaunchComplete ---------> Pended without Render
+11-18 22:36:00.913 app  [beacon.report] |AppSplashInitiate ---------> TimeBase(11 ms)
+11-18 22:36:00.913 app  [beacon.report] |AppSplashComplete ---------> Duration(54 ms)
+11-18 22:36:00.913 app  [beacon.report] |AppExitInitiate -----------> TimeBase(7801283 ms)
+11-18 22:36:00.914 app  [beacon.report] |AppExitComplete -----------> Duration(145 ms)
+11-18 22:36:00.914 app  [beacon.report] |AppLaunchChainInitiate ----> TimeBase(NotApplicable)
+11-18 22:36:00.914 app  [beacon.footer] __________________________________________
+11-19 16:55:35.217 app  [beacon.signal] |AppLaunchInitiate ---------> TimeBase(0 ms)
+11-19 16:55:35.226 app  [beacon.signal] |AppCompileInitiate --------> TimeBase(9 ms)
+11-19 16:55:35.229 app  [scrpt.cmpl] Compiling 'mySDAtv', id 'dev'
+11-19 16:55:35.238 app  [scrpt.load.mkup] Loading markup dev 'mySDAtv'
+11-19 16:55:35.245 app  [scrpt.unload.mkup] Unloading markup dev 'mySDAtv'
+11-19 16:55:35.269 app  [scrpt.parse.mkup.time] Parsed markup dev 'mySDAtv' in 30 milliseconds
+
+------ Compiling dev 'mySDAtv' ------
+11-19 16:55:35.271 app  [scrpt.ctx.app.skip] 'dev' v3.5.10: UI entry point found in source/main.brs - compiling nothing else for 'mySDAtv'
+11-19 16:55:35.271 app  [scrpt.ctx.cmpl.time] Compiled 'mySDAtv', id 'dev' in 1 ms (BCVer:0), thrd 2315
+11-19 16:55:35.271 app  [scrpt.proc.mkup.time] Processed markup dev 'mySDAtv' in 0 milliseconds
+11-19 16:55:35.341 app  [beacon.signal] |AppCompileComplete --------> Duration(116 ms)
+11-19 16:55:35.401 app  [beacon.signal] |AppLaunchInitiate ---------> TimeBase(0 ms)
+11-19 16:55:35.401 app  [beacon.signal] |AppLaunchChainInitiate ----> TimeBase(NotApplicable)
+11-19 16:55:35.417 app  [beacon.signal] |AppSplashInitiate ---------> TimeBase(16 ms)
+11-19 16:55:35.426 app  [scrpt.ctx.run.enter] UI: Entering 'mySDAtv', id 'dev', thrd 17850
+11-19 16:55:35.613 app  [beacon.signal] |AppSplashComplete ---------> Duration(195 ms)
+11-19 16:55:36.404 sdkl [beacon.signal] |AppLaunchInitiate ---------> TimeBase(0 ms)
+11-19 16:55:36.418 sdkl [scrpt.cmpl] Compiling 'mySDAtv', id 'dev'
+11-19 16:55:36.426 sdkl [scrpt.load.mkup] Loading markup dev 'mySDAtv'
+11-19 16:55:36.431 sdkl [scrpt.unload.mkup] Unloading markup dev 'mySDAtv'
+11-19 16:55:36.448 sdkl [scrpt.parse.mkup.time] Parsed markup dev 'mySDAtv' in 21 milliseconds
+
+------ Compiling dev 'mySDAtv' ------
+*** ERROR compiling pkg:/source/ScQr.brs:
+Syntax Error. Builtin function call expected. (compile error &h9d) in pkg:/source/ScQr.brs(449)
+Syntax Error. Builtin function call expected. (compile error &h9d) in pkg:/source/ScQr.brs(451)
+
+
+=================================================================
+An error occurred while attempting to compile the application's components:
+-------> Compilation Failed.
+pkg:/source/ScQr.brs
+Syntax Error. Builtin function call expected. (compile error &h9d) in pkg:/source/ScQr.brs(449)
+Syntax Error. Builtin function call expected. (compile error &h9d) in pkg:/source/ScQr.brs(451)
+
+11-19 16:55:36.620 app  [scrpt.ctx.run.exit] UI: Exiting 'mySDAtv', id 'dev', EXIT_APP_ERROR, thrd 17850
+11-19 16:55:36.621 app  [beacon.signal] |AppExitInitiate -----------> TimeBase(1220 ms)
+11-19 16:55:36.621 app  [beacon.signal] |AppExitComplete -----------> Duration(0 ms)
+11-19 16:55:36.621 app  [beacon.header] __________________________________________
+11-19 16:55:36.621 app  [beacon.report] |AppLaunchInitiate ---------> TimeBase(0 ms), InstantOn
+11-19 16:55:36.621 app  [beacon.report] |AppSplashInitiate ---------> TimeBase(16 ms)
+11-19 16:55:36.621 app  [beacon.report] |AppSplashComplete ---------> Duration(195 ms)
+11-19 16:55:36.621 app  [beacon.report] |AppExitInitiate -----------> TimeBase(1220 ms)
+11-19 16:55:36.621 app  [beacon.report] |AppExitComplete -----------> Duration(0 ms)
+11-19 16:55:36.621 app  [beacon.report] |AppLaunchChainInitiate ----> TimeBase(NotApplicable)
+11-19 16:55:36.621 app  [beacon.footer] __________________________________________
+11-19 16:56:02.853 app  [beacon.signal] |AppLaunchInitiate ---------> TimeBase(0 ms)
+11-19 16:56:02.853 app  [beacon.signal] |AppLaunchChainInitiate ----> TimeBase(NotApplicable)
+11-19 16:56:02.862 app  [beacon.signal] |AppSplashInitiate ---------> TimeBase(8 ms)
+11-19 16:56:02.868 app  [scrpt.ctx.run.enter] UI: Entering 'mySDAtv', id 'dev', thrd 17850
+11-19 16:56:02.904 app  [beacon.signal] |AppSplashComplete ---------> Duration(43 ms)
+11-19 16:56:03.445 sdkl [beacon.signal] |AppLaunchInitiate ---------> TimeBase(0 ms)
+11-19 16:56:03.468 sdkl [scrpt.cmpl] Compiling 'mySDAtv', id 'dev'
+11-19 16:56:03.477 sdkl [scrpt.load.mkup] Loading markup dev 'mySDAtv'
+11-19 16:56:03.482 sdkl [scrpt.unload.mkup] Unloading markup dev 'mySDAtv'
+
+------ Compiling dev 'mySDAtv' ------
+11-19 16:56:03.503 sdkl [scrpt.parse.mkup.time] Parsed markup dev 'mySDAtv' in 26 milliseconds
+*** ERROR compiling pkg:/source/ScQr.brs:
+Syntax Error. Builtin function call expected. (compile error &h9d) in pkg:/source/ScQr.brs(449)
+Syntax Error. Builtin function call expected. (compile error &h9d) in pkg:/source/ScQr.brs(451)
+
+
+=================================================================
+An error occurred while attempting to compile the application's components:
+-------> Compilation Failed.
+pkg:/source/ScQr.brs
+Syntax Error. Builtin function call expected. (compile error &h9d) in pkg:/source/ScQr.brs(449)
+Syntax Error. Builtin function call expected. (compile error &h9d) in pkg:/source/ScQr.brs(451)
+
+11-19 16:56:03.641 app  [scrpt.ctx.run.exit] UI: Exiting 'mySDAtv', id 'dev', EXIT_APP_ERROR, thrd 17850
+11-19 16:56:03.642 app  [beacon.signal] |AppExitInitiate -----------> TimeBase(789 ms)
+11-19 16:56:03.642 app  [beacon.signal] |AppExitComplete -----------> Duration(0 ms)
+11-19 16:56:03.642 app  [beacon.header] __________________________________________
+11-19 16:56:03.642 app  [beacon.report] |AppLaunchInitiate ---------> TimeBase(0 ms), InstantOn
+11-19 16:56:03.642 app  [beacon.report] |AppSplashInitiate ---------> TimeBase(8 ms)
+11-19 16:56:03.642 app  [beacon.report] |AppSplashComplete ---------> Duration(43 ms)
+11-19 16:56:03.642 app  [beacon.report] |AppExitInitiate -----------> TimeBase(789 ms)
+11-19 16:56:03.642 app  [beacon.report] |AppExitComplete -----------> Duration(0 ms)
+11-19 16:56:03.642 app  [beacon.report] |AppLaunchChainInitiate ----> TimeBase(NotApplicable)
+11-19 16:56:03.642 app  [beacon.footer] __________________________________________
+11-19 16:56:32.492 app  [beacon.signal] |AppLaunchInitiate ---------> TimeBase(0 ms)
+11-19 16:56:32.492 app  [beacon.signal] |AppLaunchChainInitiate ----> TimeBase(NotApplicable)
+11-19 16:56:32.503 app  [scrpt.ctx.run.enter] UI: Entering 'mySDAtv', id 'dev', thrd 17850
+11-19 16:56:32.504 app  [beacon.signal] |AppSplashInitiate ---------> TimeBase(13 ms)
+11-19 16:56:32.536 app  [beacon.signal] |AppSplashComplete ---------> Duration(32 ms)
+11-19 16:56:33.074 sdkl [beacon.signal] |AppLaunchInitiate ---------> TimeBase(0 ms)
+11-19 16:56:33.099 sdkl [scrpt.cmpl] Compiling 'mySDAtv', id 'dev'
+11-19 16:56:33.107 sdkl [scrpt.load.mkup] Loading markup dev 'mySDAtv'
+11-19 16:56:33.111 sdkl [scrpt.unload.mkup] Unloading markup dev 'mySDAtv'
+11-19 16:56:33.138 sdkl [scrpt.parse.mkup.time] Parsed markup dev 'mySDAtv' in 31 milliseconds
+
+------ Compiling dev 'mySDAtv' ------
+*** ERROR compiling pkg:/source/ScQr.brs:
+Syntax Error. Builtin function call expected. (compile error &h9d) in pkg:/source/ScQr.brs(449)
+Syntax Error. Builtin function call expected. (compile error &h9d) in pkg:/source/ScQr.brs(451)
+
+
+=================================================================
+An error occurred while attempting to compile the application's components:
+-------> Compilation Failed.
+pkg:/source/ScQr.brs
+Syntax Error. Builtin function call expected. (compile error &h9d) in pkg:/source/ScQr.brs(449)
+Syntax Error. Builtin function call expected. (compile error &h9d) in pkg:/source/ScQr.brs(451)
+
+11-19 16:56:33.268 app  [scrpt.ctx.run.exit] UI: Exiting 'mySDAtv', id 'dev', EXIT_APP_ERROR, thrd 17850
+11-19 16:56:33.269 app  [beacon.signal] |AppExitInitiate -----------> TimeBase(778 ms)
+11-19 16:56:33.269 app  [beacon.signal] |AppExitComplete -----------> Duration(0 ms)
+11-19 16:56:33.269 app  [beacon.header] __________________________________________
+11-19 16:56:33.269 app  [beacon.report] |AppLaunchInitiate ---------> TimeBase(0 ms), InstantOn
+11-19 16:56:33.269 app  [beacon.report] |AppSplashInitiate ---------> TimeBase(13 ms)
+11-19 16:56:33.269 app  [beacon.report] |AppSplashComplete ---------> Duration(32 ms)
+11-19 16:56:33.269 app  [beacon.report] |AppExitInitiate -----------> TimeBase(778 ms)
+11-19 16:56:33.269 app  [beacon.report] |AppExitComplete -----------> Duration(0 ms)
+11-19 16:56:33.269 app  [beacon.report] |AppLaunchChainInitiate ----> TimeBase(NotApplicable)
+11-19 16:56:33.269 app  [beacon.footer] __________________________________________
+

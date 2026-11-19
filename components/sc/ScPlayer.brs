@@ -52,8 +52,20 @@ sub init()
     nc.uri = ScShape("caps14")
     nc.blendColor = "0x12141BFF"
 
+    lab(m.top.findNode("tabRec"), m.t.fXB, 20, m.t.cText2)
+    lab(m.top.findNode("tabLive"), m.t.fXB, 20, m.t.cText2)
+    tb = m.top.findNode("tabBar")
+    tb.uri = ScShape("r2")
+    tb.blendColor = m.t.cAccent
+
     buildControls()
     m.stripPool = []
+    m.recPool = []
+    m.recs = []
+    m.recIndex = 0
+    m.recList = invalid
+    m.row = "live"
+    m.rowPicked = false
     m.mode = ""
     m.errored = false
     m.ended = false
@@ -101,8 +113,19 @@ sub onItem()
         m.stripIndex = m.playingIndex
         ScWantSched(m.channel)
         m.global.observeFieldScoped("schedVersion", "onSched")
+        m.global.observeFieldScoped("sessionVersion", "onSession")
+        ' Signed in but catch-up not known (or the last check failed): ask
+        ' once per player. The strip shows meanwhile; the answer arrives as
+        ' sessionVersion (no dialog) (review L1).
+        access = m.global.catchupAccess
+        if m.global.viewerSignedIn and (access = "" or access = "error") then m.global.checkAccess = m.global.checkAccess + 1
+        m.row = "live"
+        m.rowPicked = false
+        ' Back from a recording: highlight the one just watched (review L2).
+        m.recKeep = item.scRec
+        refreshRecs()
         drawLiveTop()
-        drawStrip()
+        drawRows()
     else if isRadio
         m.stations = ScChildren(m.global.catRadio)
         m.stationIndex = 0
@@ -147,6 +170,7 @@ sub teardown()
     m.video.unobserveField("state")
     m.video.unobserveField("position")
     m.global.unobserveFieldScoped("schedVersion")
+    m.global.unobserveFieldScoped("sessionVersion")
     m.video.control = "stop"
 end sub
 
@@ -224,8 +248,16 @@ end sub
 
 sub onSched()
     if m.mode <> "live" then return
+    refreshRecs()
     drawLiveTop()
-    drawStrip()
+    drawRows()
+end sub
+
+' Sign-in, sign-out or the catch-up answer changed.
+sub onSession()
+    if m.mode <> "live" then return
+    refreshRecs()
+    drawRows()
 end sub
 
 ' ------------------------------------------------------------------- live --
@@ -317,10 +349,201 @@ sub drawStrip()
         end if
     end for
     if m.stripIndex = m.playingIndex
-        m.top.findNode("stripHint").text = "Left / Right to switch · OK for the channel page"
+        hint = "Left / Right to switch · OK for the channel page"
     else
-        m.top.findNode("stripHint").text = "OK to watch " + m.stripChannels[m.stripIndex].title
+        hint = "OK to watch " + m.stripChannels[m.stripIndex].title
     end if
+    if m.recs.count() > 0 then hint = hint + " · Up for recordings"
+    m.top.findNode("stripHint").text = hint
+end sub
+
+' --------------------------------------------------------- recordings row --
+
+' Catch-up is on this account: signed in and check-purchase said yes.
+function canWatchRecordings() as boolean
+    return (m.global.viewerSignedIn = true and m.global.catchupAccess = "yes")
+end function
+
+' The playing channel's recordings (schedule node scRecent, newest first),
+' or none when the viewer has no catch-up. Keeps the highlighted recording
+' across a reload; shows the Recordings row unless the viewer has already
+' used the strip (it never swaps under a moving hand).
+sub refreshRecs()
+    keep = ""
+    if m.recIndex < m.recs.count() then keep = m.recs[m.recIndex].scRec
+    if keep = "" and m.recKeep <> invalid then keep = m.recKeep
+    m.recs = []
+    m.recList = invalid
+    if m.channel <> invalid and canWatchRecordings()
+        sched = ScSched(m.channel.scStream)
+        if sched <> invalid and sched.hasField("scRecent") and sched.scRecent <> invalid
+            m.recList = sched.scRecent
+            m.recs = ScChildren(sched.scRecent)
+        end if
+    end if
+    m.recIndex = 0
+    for i = 0 to m.recs.count() - 1
+        if keep <> "" and m.recs[i].scRec = keep
+            m.recIndex = i
+            m.recKeep = ""
+        end if
+    end for
+    if m.recs.count() = 0
+        m.row = "live"
+    else if not m.rowPicked
+        m.row = "rec"
+    end if
+end sub
+
+sub drawRows()
+    hasRecs = (m.recs.count() > 0)
+    m.top.findNode("tabs").visible = hasRecs
+    m.top.findNode("strip").visible = (m.row = "live")
+    m.top.findNode("recRow").visible = (m.row = "rec")
+    if hasRecs then drawTabs()
+    if m.row = "rec" then drawRecRow() else drawStrip()
+end sub
+
+' "RECORDINGS   LIVE CHANNELS": the shown row white over an accent bar.
+sub drawTabs()
+    a = m.top.findNode("tabRec")
+    b = m.top.findNode("tabLive")
+    wa = ScTextW(a.text, 20, "xb")
+    wb = ScTextW(b.text, 20, "xb")
+    a.width = wa + 4
+    b.width = wb + 4
+    b.translation = [wa + 40, 0]
+    bar = m.top.findNode("tabBar")
+    if m.row = "rec"
+        a.color = m.t.cText
+        b.color = m.t.cText2
+        bar.translation = [0, 38]
+        bar.width = wa
+    else
+        a.color = m.t.cText2
+        b.color = m.t.cText
+        bar.translation = [wa + 40, 38]
+        bar.width = wb
+    end if
+end sub
+
+' Up to six recording cards, the highlighted one big (336x189) with the
+' app's focus - a soft white glow behind it, no border (owner, 2026-11-12,
+' "on every card") - and the rest 240x135, darkened. Bottom-aligned 150 px
+' above the edge, title and when under each, at sizes that hold at 720p
+' (review M2, M3).
+sub drawRecRow()
+    row = m.top.findNode("recRow")
+    n = m.recs.count()
+    if n = 0 then return
+    shown = 6
+    if n < shown then shown = n
+    first = m.recIndex - 2
+    if first > n - shown then first = n - shown
+    if first < 0 then first = 0
+    while m.recPool.count() < shown
+        g = row.createChild("Group")
+        sh = g.createChild("Poster")
+        sh.uri = ScShape("glow14")
+        sh.blendColor = "0xFFFFFF66"
+        plate = g.createChild("Poster")
+        plate.uri = ScShape("r14")
+        thumb = g.createChild("Poster")
+        thumb.loadDisplayMode = "scaleToZoom"
+        thumb.loadWidth = 320
+        thumb.loadHeight = 180
+        logo = g.createChild("Poster")
+        logo.loadDisplayMode = "scaleToFit"
+        logo.loadWidth = 450
+        logo.loadHeight = 320
+        cap = g.createChild("Label")
+        cap.wrap = false
+        cap.ellipsisText = "..."
+        cap.height = 32
+        meta = g.createChild("Label")
+        meta.wrap = false
+        meta.ellipsisText = "..."
+        meta.height = 28
+        m.recPool.push({ group: g, shadow: sh, plate: plate, thumb: thumb, logo: logo, cap: cap, meta: meta })
+    end while
+    chLogo = ""
+    if m.channel <> invalid then chLogo = m.channel.scLogo
+    x = 0
+    for i = 0 to m.recPool.count() - 1
+        it = m.recPool[i]
+        k = first + i
+        if i >= shown or k >= n
+            it.group.visible = false
+        else
+            p = m.recs[k]
+            on = (k = m.recIndex)
+            if on
+                w = 336 : h = 189 : fs = 23 : ms = 20
+            else
+                w = 240 : h = 135 : fs = 20 : ms = 19
+            end if
+            it.group.visible = true
+            it.group.translation = [x, 930 - h]
+            shade = "0xFFFFFFFF"
+            if not on then shade = ScScaleColor("0xFFFFFFFF", 0.72)
+            hasThumb = (p.scThumb <> "")
+            ' A grab sits on a dark plate 3 px bigger (round corners over the
+            ' video); a logo card (no grab yet) on the white plate.
+            if hasThumb
+                it.plate.blendColor = m.t.cSurface
+            else
+                it.plate.blendColor = shade
+            end if
+            it.plate.width = w
+            it.plate.height = h
+            it.shadow.visible = on
+            it.shadow.translation = [-30, -30 + 6]
+            it.shadow.width = w + 60
+            it.shadow.height = h + 60
+            it.thumb.visible = hasThumb
+            it.logo.visible = not hasThumb
+            if hasThumb
+                it.thumb.translation = [3, 3]
+                it.thumb.width = w - 6
+                it.thumb.height = h - 6
+                it.thumb.blendColor = shade
+                if it.thumb.uri <> p.scThumb then it.thumb.uri = p.scThumb
+            else
+                it.logo.width = Int(w * 0.8)
+                it.logo.height = Int(h * 0.8)
+                it.logo.translation = [Int(w * 0.1), Int(h * 0.1)]
+                it.logo.blendColor = shade
+                if it.logo.uri <> chLogo then it.logo.uri = chLogo
+            end if
+            it.cap.font = ScFont(m.t.fBold, fs)
+            it.meta.font = ScFont(m.t.fSemi, ms)
+            if on
+                it.cap.color = m.t.cText
+                it.meta.color = m.t.cText1
+            else
+                it.cap.color = m.t.cText2
+                it.meta.color = m.t.cText3
+            end if
+            it.cap.translation = [0, h + 8]
+            it.cap.width = w
+            it.cap.text = ScProgLabel(p)
+            it.meta.translation = [0, h + 40]
+            it.meta.width = w
+            it.meta.text = ScWhen(p.scStart)
+            x = x + w + 22
+        end if
+    end for
+    m.top.findNode("stripHint").text = "Left / Right to choose · OK to watch this recording · Down for live channels"
+end sub
+
+' OK on a recording: the catch-up player, through the scene's gate; Back
+' from it comes back to this channel live.
+sub playRecording()
+    if m.recIndex >= m.recs.count() then return
+    p = m.recs[m.recIndex]
+    item = ScCatchupItem(p, m.channel, m.recList)
+    item.scBackTo = m.channel
+    m.global.playItem = item
 end sub
 
 ' ------------------------------------------------------------------ radio --
@@ -537,6 +760,9 @@ function onKeyEvent(key as string, press as boolean) as boolean
         m.global.closeOverlay = m.global.closeOverlay + 1
         return true
     end if
+    ' Any key, even the one that only brings the chrome back, means the
+    ' viewer is here: a late catch-up answer no longer swaps the row (L3).
+    if m.mode = "live" then m.rowPicked = true
     ' The first key while the chrome is down only brings it up.
     if not m.chrome.visible and m.mode <> "radio"
         showChrome()
@@ -549,6 +775,24 @@ function onKeyEvent(key as string, press as boolean) as boolean
     showChrome()
 
     if m.mode = "live"
+        if m.recs.count() > 0 and (key = "up" or key = "down")
+            if key = "down" then m.row = "live" else m.row = "rec"
+            drawRows()
+            return true
+        end if
+        if m.row = "rec"
+            nr = m.recs.count()
+            if key = "left" and m.recIndex > 0
+                m.recIndex = m.recIndex - 1
+                drawRecRow()
+            else if key = "right" and m.recIndex < nr - 1
+                m.recIndex = m.recIndex + 1
+                drawRecRow()
+            else if key = "OK"
+                playRecording()
+            end if
+            return true
+        end if
         n = m.stripChannels.count()
         if key = "left" and m.stripIndex > 0
             m.stripIndex = m.stripIndex - 1
@@ -563,8 +807,13 @@ function onKeyEvent(key as string, press as boolean) as boolean
                 m.playingIndex = m.stripIndex
                 m.channel = m.stripChannels[m.playingIndex]
                 ScWantSched(m.channel)
+                ' Another channel's recordings: nothing to keep (recording
+                ' ids are start times and repeat across channels).
+                m.recs = []
+                m.recKeep = ""
+                refreshRecs()
                 drawLiveTop()
-                drawStrip()
+                drawRows()
                 playUrl(m.channel.url, m.channel.title, true)
             end if
         end if

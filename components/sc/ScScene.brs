@@ -108,6 +108,9 @@ sub finishBoot()
     m.top.findNode("bootWatchdog").control = "stop"
     ' AppLaunchComplete marks the channel ready for input, once.
     m.top.signalBeacon("AppLaunchComplete")
+    ' A stored session: learn now whether it has catch-up, so the live
+    ' player can offer recordings from its first frame.
+    if m.global.viewerSignedIn then startAccessCheck()
     applyPendingDeepLink()
 end sub
 
@@ -483,9 +486,11 @@ sub startPlayer(item as object)
     ' Whatever was waiting on the catch-up check is overtaken: a late "yes"
     ' must not replace what is playing now (review C3).
     m.pendingPlay = invalid
+    ' A player replacing a player (a recording opened from the live player,
+    ' or Back from it to live) keeps the first one's way home.
+    if m.player = invalid then m.playerReturnNav = m.nav.navHasFocus
     destroyPlayer()
     closeDialog()
-    m.playerReturnNav = m.nav.navHasFocus
     m.player = m.playerHost.createChild("ScPlayer")
     m.player.item = item
     showChrome(false)
@@ -506,6 +511,14 @@ end sub
 ' the channel page closes onto its destination.
 sub onCloseOverlay()
     if m.player <> invalid
+        ' A recording opened from the live player goes back to that channel.
+        item = m.player.item
+        if item <> invalid and item.hasField("scBackTo") and item.scBackTo <> invalid
+            live = ScLiveItem(item.scBackTo)
+            if item.scProg <> invalid then live.scRec = item.scProg.scRec
+            startPlayer(live)
+            return
+        end if
         destroyPlayer()
         showChrome(true)
         if m.playerReturnNav = true then openNav() else focusPage()

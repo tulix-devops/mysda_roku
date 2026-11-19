@@ -2,8 +2,8 @@
 <!--
   ScAccount - C8. Signed out: "Never miss a programme again", what catch-up
   gives, Log in / Not now. Signed in: who, whether catch-up is on the
-  account, Watch catch-up / Log out. Always: the donation QR card ("Give
-  instead"). Behind, a tilted wall of today's frame grabs at 32 %, faded
+  account, Watch catch-up / Log out. Always: two QR cards in a row below,
+  sign up and subscribe at mysdatv.com and donate (ScLinks.brs). Behind, a tilted wall of today's frame grabs at 32 %, faded
   out to the left.
 -->
 <component name="ScAccount" extends="Group">
@@ -17,6 +17,7 @@
   <script type="text/brightscript" uri="pkg:/source/ScData.brs" />
   <script type="text/brightscript" uri="pkg:/source/ScBrand.brs" />
   <script type="text/brightscript" uri="pkg:/source/ScUi.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScLinks.brs" />
   <script type="text/brightscript" uri="pkg:/components/sc/screens/ScAccount.brs" />
   <children>
     <Group id="wall" translation="[1020, 160]" rotation="0.1396" opacity="0.32" />
@@ -29,16 +30,12 @@
     <Label id="heading" text="" translation="[184, 170]" width="900" height="196" wrap="true" maxLines="2" />
     <Label id="body" text="" translation="[184, 384]" width="860" height="124" wrap="true" maxLines="3" />
     <Group id="perks" translation="[184, 530]" />
-    <Group id="buttons" translation="[184, 716]" />
+    <Group id="buttons" translation="[184, 702]" />
 
-    <Group id="give" translation="[1240, 640]">
-      <Poster id="givePlate" uri="" width="560" height="244" />
-      <Poster id="qrPlate" uri="" translation="[22, 22]" width="200" height="200" />
-      <Poster id="qr" uri="pkg:/images/png/donation.PNG" translation="[30, 30]" width="184" height="184"
-              loadDisplayMode="scaleToFit" />
-      <Label id="giveTitle" text="Give instead" translation="[246, 40]" width="296" height="36" vertAlign="center" />
-      <Label id="giveBody" text="A tax-deductible donation unlocks catch-up for a year. Temporary promotion."
-             translation="[246, 82]" width="296" height="120" wrap="true" maxLines="4" />
-    </Group>
+    <!-- The two mySDAtv pages as codes, in a row under the buttons (owner,
+         2026-11-19: on the Profile screen too, "below, horizontally"). They
+         replace the old donation.PNG card. On multiples of 3 plane px. -->
+    <ScQrCard id="joinCard" translation="[186, 801]" />
+    <ScQrCard id="giveCard" translation="[822, 801]" />
   </children>
 </component>

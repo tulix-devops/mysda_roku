@@ -216,6 +216,9 @@ sub ScAddPlayFields(item as object, kind as string, rec as string)
     item.addField("scChannel", "node", false)
     item.addField("scProg", "node", false)
     item.addField("scList", "node", false)
+    ' The live channel a recording was opened from in the live player: Back
+    ' (or the end of the last recording) goes back to it.
+    item.addField("scBackTo", "node", false)
 end sub
 
 ' A play request for a channel, live (TV, Languages or Radio).

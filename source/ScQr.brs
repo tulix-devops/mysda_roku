@@ -435,3 +435,38 @@ function ScQrPenalty(st as object) as integer
     if k > 0 then p = p + k * 10
     return p
 end function
+
+' Draws text's code into group, one Rectangle per run of dark modules in a
+' row, centred in a plateW-px square plate with quiet modules each side. The
+' module size and the offset are multiples of 3 plane px, so the code lands
+' on whole pixels at 720p too (place the group on a multiple of 3).
+' Returns false (and draws nothing) when the text is too long for a code.
+function ScQrDraw(group as object, text as string, plateW as integer, quiet as integer) as boolean
+    group.removeChildrenIndex(group.getChildCount(), 0)
+    mx = ScQrMatrix(text)
+    if mx = invalid then return false
+    n = mx.size + 2 * quiet
+    unit = (plateW \ n) \ 3 * 3
+    if unit < 3 then unit = 3
+    origin = (plateW - n * unit) \ 2 \ 3 * 3 + quiet * unit
+    for y = 0 to mx.size - 1
+        row = mx.dark[y]
+        x = 0
+        while x < mx.size
+            if row[x]
+                x0 = x
+                while x < mx.size and row[x]
+                    x = x + 1
+                end while
+                r = group.createChild("Rectangle")
+                r.color = "0x000000FF"
+                r.translation = [origin + x0 * unit, origin + y * unit]
+                r.width = (x - x0) * unit
+                r.height = unit
+            else
+                x = x + 1
+            end if
+        end while
+    end for
+    return true
+end function

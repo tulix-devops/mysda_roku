@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  ScQrCard - a link as a QR code on a white plate, with words beside it, on
+  a dark card: 600 x 222. Two of them sit side by side, below the content,
+  on Log in and on Account (owner, 2026-11-19: "below, horizontally").
+
+  The code is made on the device (ScQr) 0.1 s after url is set, so the page
+  draws first; one encode holds the render thread for 0.1-0.3 s
+  (knowledge/dev-roku/on-device-qr-encoder-in-brightscript). Place the card
+  on a multiple of 3 plane px: the 6-px modules then land on whole pixels at
+  720p too.
+-->
+<component name="ScQrCard" extends="Group">
+  <interface>
+    <field id="url" type="string" onChange="onUrl" />
+    <field id="kicker" type="string" onChange="onText" />
+    <field id="title" type="string" onChange="onText" />
+    <field id="body" type="string" onChange="onText" />
+  </interface>
+  <script type="text/brightscript" uri="pkg:/source/ScTheme.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScMetrics.brs" />
+  <script type="text/brightscript" uri="pkg:/source/ScQr.brs" />
+  <script type="text/brightscript" uri="pkg:/components/sc/widgets/ScQrCard.brs" />
+  <children>
+    <Poster id="card" uri="" width="600" height="222" />
+    <Poster id="qrPlate" uri="" width="222" height="222" />
+    <Group id="modules" />
+    <Label id="kickerLabel" text="" translation="[246, 20]" width="330" height="28" vertAlign="center" />
+    <Label id="titleLabel" text="" translation="[246, 52]" width="330" height="72"
+           wrap="true" maxLines="2" lineSpacing="0" ellipsisText="..." />
+    <Label id="bodyLabel" text="" translation="[246, 128]" width="330" height="84"
+           wrap="true" maxLines="3" lineSpacing="2" ellipsisText="..." />
+    <Timer id="encodeTimer" repeat="false" duration="0.1" />
+  </children>
+</component>
