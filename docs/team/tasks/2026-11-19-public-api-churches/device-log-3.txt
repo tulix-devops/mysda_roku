@@ -1,0 +1,44 @@
+﻿11-19 17:52:02.914 sdkl [beacon.signal] |AppLaunchChainComplete ----> Duration(665 ms)
+[ScScene] init
+[ScFeedTask] radio <-  206 ( 10 channels)
+[ScFeedTask] lang <-  206 ( 16 channels)
+[ScFeedTask] tv <-  206 ( 24 channels)
+11-19 17:52:05.026 sdkl [beacon.signal] |AppLaunchComplete ---------> Pending Render Pass
+11-19 17:52:05.111 sdkl [beacon.signal] |AppLaunchComplete ---------> Duration(2479 ms : 2247 ms)
+11-19 17:52:10.364 app  [scrpt.ctx.run.exit] UI: Exiting 'mySDAtv', id 'dev', EXIT_USER_NAV, thrd 8949
+11-19 17:52:10.366 app  [beacon.signal] |AppExitComplete -----------> Duration(154 ms)
+11-19 17:52:10.366 app  [beacon.header] __________________________________________
+11-19 17:52:10.366 app  [beacon.report] |AppLaunchInitiate ---------> TimeBase(0 ms), InstantOn
+11-19 17:52:10.366 app  [beacon.report] |AppLaunchComplete ---------> Pended without Render
+11-19 17:52:10.366 app  [beacon.report] |AppSplashInitiate ---------> TimeBase(25 ms)
+11-19 17:52:10.366 app  [beacon.report] |AppSplashComplete ---------> Duration(69 ms)
+11-19 17:52:10.366 app  [beacon.report] |AppCompileInitiate --------> TimeBase(0 ms)
+11-19 17:52:10.366 app  [beacon.report] |AppCompileComplete --------> Duration(231 ms)
+11-19 17:52:10.367 app  [beacon.report] |AppExitInitiate -----------> TimeBase(8207 ms)
+11-19 17:52:10.367 app  [beacon.report] |AppExitComplete -----------> Duration(154 ms)
+11-19 17:52:10.367 app  [beacon.report] |AppLaunchChainInitiate ----> TimeBase(NotApplicable)
+11-19 17:52:10.367 app  [beacon.report] |AppLaunchChainComplete ----> Duration(897 ms)
+11-19 17:52:10.367 app  [beacon.footer] __________________________________________
+11-19 17:52:12.298 app  [beacon.signal] |AppLaunchInitiate ---------> TimeBase(0 ms)
+11-19 17:52:12.298 app  [beacon.signal] |AppLaunchChainInitiate ----> TimeBase(NotApplicable)
+11-19 17:52:12.310 app  [beacon.signal] |AppSplashInitiate ---------> TimeBase(12 ms)
+11-19 17:52:12.312 app  [scrpt.ctx.run.enter] UI: Entering 'mySDAtv', id 'dev', thrd 8949
+11-19 17:52:12.319 app  [beacon.signal] |AppSplashComplete ---------> Duration(9 ms)
+11-19 17:52:12.904 sdkl [beacon.signal] |AppLaunchInitiate ---------> TimeBase(0 ms)
+11-19 17:52:12.925 sdkl [scrpt.cmpl] Compiling 'mySDAtv', id 'dev'
+11-19 17:52:12.955 sdkl [beacon.signal] |AppCompileComplete --------> Duration(50 ms)
+
+------ Running dev 'mySDAtv' main ------
+11-19 17:52:13.160 sdkl [beacon.signal] |AppLaunchChainComplete ----> Duration(648 ms)
+[ScScene] init
+[ScFeedTask] radio <-  206 ( 10 channels)
+[ScFeedTask] lang <-  206 ( 16 channels)
+[ScFeedTask] tv <-  206 ( 24 channels)
+11-19 17:52:15.329 sdkl [beacon.signal] |AppLaunchComplete ---------> Pending Render Pass
+11-19 17:52:15.411 sdkl [beacon.signal] |AppLaunchComplete ---------> Duration(2508 ms : 2295 ms)
+[ScChurchTask] state='' page  1/ 5 <-  200 ( 50 churches)
+[ScScheduleTask] 3abn2_pro_live ok=true today= 32 series= 8
+[ScScheduleTask] 3abn2_live ok=true today= 43 series= 8
+[ScScheduleTask] 3abn2_d2d_live ok=true today= 46 series= 8
+[ScScheduleTask] 3abn2_praisehim_live ok=true today= 49 series= 8
+

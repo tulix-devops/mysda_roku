@@ -1,18 +1,31 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!--
-  ScChurchTask - the SDA church directory (the Android apps' "YT" tab data,
-  as the mysda session described it on 2026-11-18): GET
-  livetv.mysdatv.com/api/getfavoritechurch.php, no auth, a RAW JSON array of
-  { state, city, church, link } (a { data: [...] } envelope is accepted too).
-  Grouped by state in the order states first appear, churches in their own
-  order. result: a ContentNode whose children are states
-    title (title case)  scCount
-  and whose grandchildren are churches
-    title (the church)  scCity  scLink  scState
-  `done` is set last.
+  ScChurchTask - one page of the SDA church directory from the public API
+  (owner, 2026-11-19; contract docs/team/tasks/2026-11-19-public-api-churches/api-contract.md):
+
+    GET https://mysda.itulix.com/api/public/churches?page=&per_page=&state=
+    -> { churches: [{ name, state, city, description, youtube_url, image_url }],
+         states:   [{ state, churches }],          (all states, whatever the filter)
+         paging:   { page, per_page, total, pages } }
+
+  No auth. A page past the end returns the LAST page again, so the caller
+  stops on pages, never on an empty page; per_page other than 12/24/50/100
+  silently becomes 50, so the answer's paging is what counts.
+
+  In:  stateName ("" = no filter; not "state", which is the Task node's own run status), page, perPage, gen (echoed back so the screen
+       can tell which request this was).
+  Out: result - a ContentNode whose children are churches
+         title (the name)  scCity  scLink  scState
+       with fields scState (as asked), scPage, scPages, scTotal, scGen and
+       scStates (an array of { state, count }, in the API's order).
+       ok is false on any failure (after one retry). `done` is set last.
 -->
 <component name="ScChurchTask" extends="Task">
   <interface>
+    <field id="stateName" type="string" />
+    <field id="page" type="integer" value="1" />
+    <field id="perPage" type="integer" value="50" />
+    <field id="gen" type="integer" />
     <field id="result" type="node" />
     <field id="ok" type="boolean" />
     <field id="done" type="boolean" alwaysNotify="true" />

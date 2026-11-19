@@ -11,8 +11,11 @@
   OK is needed.
 
   Up / Down move in a column; Right or OK go from the states to the
-  churches; Left goes back, and from the states opens the capsule. The list
-  loads the first time the screen is shown.
+  churches; Left goes back, and from the states opens the capsule.
+
+  Data: the public, paged API (ScChurchTask). The first call, the first time
+  the screen is shown, brings every state with its count; then each state
+  loads when focus rests on it, the next one ahead (ScChurches.brs, pump).
 -->
 <component name="ScChurches" extends="Group">
   <interface>
@@ -57,6 +60,8 @@
 
     <Label id="note" text="" translation="[184, 180]" width="1000" height="40" vertAlign="center" />
     <Timer id="qrTimer" repeat="false" duration="0.25" />
+    <!-- A state loads once focus has rested on it this long. -->
+    <Timer id="restTimer" repeat="false" duration="0.3" />
     <Animation id="loaderPulse" duration="1.0" repeat="true" easeFunction="inOutQuad">
       <FloatFieldInterpolator key="[0.0, 0.5, 1.0]" keyValue="[0.35, 1.0, 0.35]" fieldToInterp="qrLoader.opacity" />
     </Animation>
